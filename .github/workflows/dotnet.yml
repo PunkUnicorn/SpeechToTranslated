@@ -26,7 +26,7 @@ jobs:
     - name: Build
       run: dotnet build --no-restore
     - name: Publish
-      run: dotnet publish
+      run: dotnet publish -r win-x64
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
