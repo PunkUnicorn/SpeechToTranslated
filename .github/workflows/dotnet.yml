@@ -24,7 +24,7 @@ jobs:
     - name: Restore dependencies
       run: dotnet restore
     - name: Build
-      run: dotnet build  -r win-x64 --self-contained --no-restore
+      run: dotnet build --no-restore
     - name: Publish
       run: dotnet publish -r win-x64 --self-contained 
     - name: Upload build artifacts
