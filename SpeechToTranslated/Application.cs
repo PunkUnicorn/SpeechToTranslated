@@ -21,16 +21,19 @@ namespace ChurchSpeechToTranslateor
         private readonly Translator translator;
 
         private static string GetTicks() => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);
-        private readonly string englishFilename = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_english.txt";
-        private readonly string bulgarianFilename = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_bulgarian.txt";
+        private readonly string englishFilename = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_en.txt";
+        private readonly string bulgarianFilenameFormatString = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_{{0}}.txt";
+        private readonly string outputLanguage;
 
-        public Application()
+        public Application(string outputLanguage)
         {
             speechToText = new SpeechToText(config);
             speechToText.WordsReady += SpeechToText_WordsReady;
 
             translator = new Translator(config["deepl.key"]);
             Console.OutputEncoding = Encoding.UTF8;
+
+            this.outputLanguage = outputLanguage;
         }
 
         public async Task RunAsync() => await speechToText.RunSpeechToTextForever();
@@ -52,7 +55,7 @@ namespace ChurchSpeechToTranslateor
                 var result = translator.TranslateTextAsync(
                     words,
                     LanguageCode.English,
-                    LanguageCode.Bulgarian).Result;
+                    outputLanguage).Result;
 
                 var bulgarianTextNoLinefeed = result.Text.Replace("\n\n", "");
 
@@ -64,7 +67,7 @@ namespace ChurchSpeechToTranslateor
                 Console.WriteLine(formatString, bulgarianTextNoLinefeed.PadRight(column, ' '), words.PadRight(column, ' '));
 
                 File.AppendAllText(englishFilename, words);
-                File.AppendAllText(bulgarianFilename, result.Text);
+                File.AppendAllText(string.Format(bulgarianFilenameFormatString, outputLanguage), result.Text);
             }
             catch (Exception e)
             {
