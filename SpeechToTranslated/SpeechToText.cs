@@ -80,7 +80,12 @@ namespace ChurchSpeechToTranslator
 
         private void SpeechRecognizer_Recognizing(object sender, SpeechRecognitionEventArgs e)
         {
-            var @new = e.Result.Text.Substring(knownSentance.Length);
+            var @new = knownSentance.Length < e.Result.Text.Length
+                ? e.Result.Text.Substring(knownSentance.Length)
+                : "";
+
+            if (@new.Length == 0)
+                return;
 
             var isPartialWord = !@new.StartsWith(' ') || knownSentance.Length == 0;
 
@@ -88,9 +93,12 @@ namespace ChurchSpeechToTranslator
 
             if (isPartialWord)
             {
-                var newNew = $"{toTranslateCandidate.Last()}{@new}";
-                toTranslateCandidate.RemoveAt(toTranslateCandidate.Count - 1);
-                toTranslateCandidate.Add(newNew);
+                if (toTranslateCandidate.Any())
+                { 
+                    @new = $"{toTranslateCandidate.Last()}{@new}";
+                    toTranslateCandidate.RemoveAt(toTranslateCandidate.Count - 1);
+                }
+                toTranslateCandidate.Add(@new);
             }
             else
             {

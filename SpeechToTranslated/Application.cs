@@ -54,12 +54,14 @@ namespace ChurchSpeechToTranslateor
                     LanguageCode.English,
                     LanguageCode.Bulgarian).Result;
 
+                var bulgarianTextNoLinefeed = result.Text.Replace("\n\n", "");
+
                 var width = Console.WindowWidth;
                 var column = width / 5;
                 var bulgarian = 5;
                 var english = bulgarian + column;
                 var formatString = $"{{0,{-bulgarian}}}{{1,{-english}}}";
-                Console.WriteLine(formatString, result.Text.PadRight(column, ' '), words.PadRight(column, ' '));
+                Console.WriteLine(formatString, bulgarianTextNoLinefeed.PadRight(column, ' '), words.PadRight(column, ' '));
 
                 File.AppendAllText(englishFilename, words);
                 File.AppendAllText(bulgarianFilename, result.Text);
