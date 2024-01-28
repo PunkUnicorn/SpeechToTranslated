@@ -1,8 +1,10 @@
 ﻿using Microsoft.CognitiveServices.Speech;
 using Microsoft.CognitiveServices.Speech.Audio;
 using Microsoft.Extensions.Configuration;
+using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -27,10 +29,11 @@ namespace ChurchSpeechToTranslator
         private AudioConfig audioConfig;
         private SpeechRecognizer speechRecognizer;
         private readonly TaskCompletionSource<int> stopRecognition = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
-
+        private bool speechToTextLog;
         public SpeechToText(IConfiguration config)
         {
             this.config = config;
+            speechToTextLog = bool.Parse(config["speechtotext.log"]);
         }
 
         private SpeechConfig InternalSetup()
@@ -41,6 +44,8 @@ namespace ChurchSpeechToTranslator
             var speechConfig = SpeechConfig.FromSubscription(speechKey, speechRegion);
             speechConfig.SpeechRecognitionLanguage = "en-GB";
             speechConfig.SetProfanity(ProfanityOption.Raw);
+            speechConfig.OutputFormat = OutputFormat.Detailed;
+
             return speechConfig;
         }
 
@@ -63,6 +68,11 @@ namespace ChurchSpeechToTranslator
         private void SpeechRecognizer_Recognized(object sender, SpeechRecognitionEventArgs e)
         {
             //Console.WriteLine("SpeechRecognized\n");
+            Recognized();
+        }
+
+        private void Recognized()
+        {
             toTranslateCandidate.Add("\n\n");
             DumpAndFlushTranslateCandidates(toTranslateCandidate);
             knownSentance.Clear();
@@ -75,13 +85,24 @@ namespace ChurchSpeechToTranslator
 
         private void SpeechRecognizer_SpeechEndDetected(object sender, RecognitionEventArgs e)
         {
-            //Console.WriteLine("SpeechEndDetected\n");
+            Recognized();
         }
 
         private void SpeechRecognizer_Recognizing(object sender, SpeechRecognitionEventArgs e)
         {
-            var @new = knownSentance.Length < e.Result.Text.Length
-                ? e.Result.Text.Substring(knownSentance.Length)
+            Recognizing(e.Result.Text);
+
+            if (speechToTextLog)
+            {
+                var dump = new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), e.Result };
+                File.AppendAllText($"{Application.logpath}SpeechToText.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
+            }
+        }
+
+        private void Recognizing(string resultText)
+        {
+            var @new = knownSentance.Length < resultText.Length
+                ? resultText.Substring(knownSentance.Length)
                 : "";
 
             if (@new.Length == 0)
@@ -94,7 +115,7 @@ namespace ChurchSpeechToTranslator
             if (isPartialWord)
             {
                 if (toTranslateCandidate.Any())
-                { 
+                {
                     @new = $"{toTranslateCandidate.Last()}{@new}";
                     toTranslateCandidate.RemoveAt(toTranslateCandidate.Count - 1);
                 }

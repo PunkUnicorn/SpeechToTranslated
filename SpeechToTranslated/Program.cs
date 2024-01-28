@@ -1,12 +1,23 @@
-﻿using System.Threading.Tasks;
+﻿using System.Linq;
+using System.Threading.Tasks;
 using DeepL;
 
 class Program
 {
     async static Task Main(string[] args)
     {
-        var outputLanguage = args.Length > 0 ? args[0] : LanguageCode.Bulgarian.ToString();
-        var app = new ChurchSpeechToTranslateor.Application(outputLanguage);
+        var defaultLanguage = LanguageCode.Bulgarian.ToString();
+        var noEnglishSwitch = "--no-english";
+
+        var outputLanguage = args.Length > 0 
+            ? args.Where(a => !a.StartsWith("--")).FirstOrDefault() ?? defaultLanguage
+            : defaultLanguage;
+
+        var wantEnglish = args.Length > 0
+            ? !(args.Any(a => a == noEnglishSwitch)) 
+            : true;
+
+        var app = new ChurchSpeechToTranslator.Application(outputLanguage, wantEnglish);
         await app.RunAsync();
     }
 }
