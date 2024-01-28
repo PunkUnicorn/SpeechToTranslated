@@ -1,5 +1,4 @@
 ﻿using DeepL;
-using DeepL.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 using SpeechToTranslated;

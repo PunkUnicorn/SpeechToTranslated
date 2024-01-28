@@ -56,13 +56,13 @@ namespace Tests
         [TestMethod]
         public void CatchesSwearing2()
         {
-            var swearing = "Fucking shitty bollocks";
+            var swearing = "Shitty";
 
             var sf = new SwearingFilter();
 
             var actual = sf.IsSweary(swearing);
 
-            Assert.IsFalse(actual);
+            Assert.IsTrue(actual);
         }
     }
 }

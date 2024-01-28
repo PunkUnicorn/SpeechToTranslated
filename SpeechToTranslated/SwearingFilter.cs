@@ -1,6 +1,4 @@
-﻿using Microsoft.CognitiveServices.Speech;
-using System;
-using System.Collections.Generic;
+﻿using System;
 using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
@@ -19,7 +17,7 @@ namespace SpeechToTranslated
                     .Split(new [] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries)
                     .Select(word => word.Trim().ToLower())
                     .ToArray()
-                : new string[] { };
+                : throw new InvalidProgramException("No swear filter detected.");
 
             FilterWords = FilterWords.Where(w => w.Length > 0).ToArray();
             FilterWords = FilterWords.Union(FilterWords).ToArray(); /*de-dup hack*/
