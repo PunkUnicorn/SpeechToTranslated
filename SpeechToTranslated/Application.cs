@@ -127,38 +127,22 @@ namespace ChurchSpeechToTranslator
 
         private static void RestoreDevotionalUtterance(string words, string word)
         {
+            /* And they were filled with the Holy Ghost, and began to speak with other tongues, as the Spirit gave them utterance
+             * — Acts 2:4.
+             */
+
             // Speech to text makes speaking in tounges come out as blah blah blah. Technically this makes sense... but is too irreverent, so tweak this.
             if (word == " blah" || word == "blah")
-                words.Replace("blah", "(utterance)");
+                if (words.IndexOf("blah") > 0)
+                    words.Replace("blah", "(utterance)");
         }
 
         private void SmiteProfanity(string words, string word)
         {
             // Remove accidental swear words.
-            // Typically caused by a speech to text mis-hear, but since this is primarily for Church this is particularly unfortunate.
+            // Typically caused by a speech to text mis-hear, but since this is primarily for Church this is particularly unfortunate lol. Smite them.
             if (swearingFilter.IsSweary(word.Trim()))
                 words.Replace(word, "*".PadLeft(word.Length));
         }
-
-        //private void OutputTranslation(string englishWords, string translatedWords)
-        //{
-        //    var otherLanguageTextNoLinefeed = translatedWords.Replace("\n\n", "");
-
-        //    var width = Console.WindowWidth;
-        //    var column = width / 4;
-        //    var otherLanguage = column;
-        //    var english = otherLanguage + column;
-
-        //    var formatString = wantEnglish
-        //        ? $"{{0,{-otherLanguage}}}{{1,{-english}}}"
-        //        : $"{{0,{-otherLanguage}}}";
-
-        //    Console.WriteLine(formatString, otherLanguageTextNoLinefeed.PadRight(column, ' '), englishWords.PadRight(column, ' '));
-        //}
-
-        //private void OutputLineBreak()
-        //{
-        //    Console.WriteLine();
-        //}
     }
 }

@@ -19,28 +19,29 @@ namespace SpeechToTranslated
 
         public void OutputTranslation(string englishWords, string translatedWords)
         {
-            var otherLanguageTextNoLinefeed = wantEnglish ? translatedWords.Replace("\n\n", "") : translatedWords;
+            var otherLanguageTextOutput = wantEnglish ? translatedWords.Replace("\n\n", "") : translatedWords;
 
             var width = Console.WindowWidth;
-            var column = width / 2;
-            var otherLanguage = 5;
-            var english = width - column;
-
-            var formatString = wantEnglish
-                ? $"{{0,{-otherLanguage}}}{{1,{english}}}\n"
-                : $"{{0}}";
-
-            paragraphBreakIndex += otherLanguageTextNoLinefeed.Length;
-            if (paragraphBreakIndex > width-20)
+            if (wantEnglish) 
             { 
-                Console.WriteLine();
-                paragraphBreakIndex = 0;
-            }
+                var column = width / 2;
+                var otherLanguage = 5;
+                var english = width - column;
 
-            if (wantEnglish)
-                Console.Write(formatString, otherLanguageTextNoLinefeed.PadRight(column, ' '), englishWords.PadRight(column, ' '));
+                var formatString = $"{{0,{-otherLanguage}}}{{1,{english}}}\n";
+                Console.Write(formatString, otherLanguageTextOutput.PadRight(width / 2, ' '), englishWords.PadRight(width / 2, ' '));
+            }
             else
-                Console.Write(formatString, otherLanguageTextNoLinefeed);
+            { 
+                paragraphBreakIndex += otherLanguageTextOutput.Length;
+                if (paragraphBreakIndex > width-20)
+                { 
+                    Console.WriteLine();
+                    paragraphBreakIndex = 0;
+                }
+                var formatString = $"{{0}}";
+                Console.Write(formatString, otherLanguageTextOutput);
+            }
         }
     }
 }

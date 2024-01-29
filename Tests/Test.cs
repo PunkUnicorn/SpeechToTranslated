@@ -8,11 +8,9 @@ namespace Tests
         [TestMethod]
         public void CatchesSwearing1()
         {
-            var swearing = "Fuck";
-            
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary(swearing);
+            var actual = sf.IsSweary("Fuck");
 
             Assert.IsTrue(actual);
         }
@@ -20,11 +18,9 @@ namespace Tests
         [TestMethod]
         public void AllowsTheWordSnatch()
         {
-            var swearing = "Snatch";
-
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary(swearing);
+            var actual = sf.IsSweary("Snatch");
 
             Assert.IsFalse(actual);
         }
@@ -32,11 +28,9 @@ namespace Tests
         [TestMethod]
         public void AllowsTheWordPuppies()
         {
-            var swearing = "They were like two puppies fighting to get out.";
-
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary(swearing);
+            var actual = sf.IsSweary("Puppies");
 
             Assert.IsFalse(actual);
         }
@@ -44,11 +38,19 @@ namespace Tests
         [TestMethod]
         public void AllowsTheWordCock()
         {
-            var swearing = "Cock";
-
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary(swearing);
+            var actual = sf.IsSweary("Cock");
+
+            Assert.IsFalse(actual);
+        }
+
+        [TestMethod]
+        public void AllowsTheWordPussy()
+        {
+            var sf = new SwearingFilter();
+
+            var actual = sf.IsSweary("Pussy");
 
             Assert.IsFalse(actual);
         }
@@ -56,11 +58,9 @@ namespace Tests
         [TestMethod]
         public void CatchesSwearing2()
         {
-            var swearing = "Shitty";
-
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary(swearing);
+            var actual = sf.IsSweary("Shitty");
 
             Assert.IsTrue(actual);
         }
