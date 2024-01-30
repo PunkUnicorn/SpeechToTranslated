@@ -1,13 +1,13 @@
 ﻿using System;
 
-namespace SpeechToTranslated
+namespace SpeechToTranslatedCommon
 {
-    public class ConsoleOutputTranslation : IOutputTranslation
+    public class ConsoleOutput : IOutputStuff
     {
         private readonly bool wantEnglish;
         private int paragraphBreakIndex;
 
-        public ConsoleOutputTranslation(bool wantEnglish)
+        public ConsoleOutput(bool wantEnglish)
         {
             this.wantEnglish = wantEnglish;
         }
@@ -17,19 +17,24 @@ namespace SpeechToTranslated
             Console.WriteLine();
         }
 
-        public void OutputTranslation(string englishWords, string translatedWords)
+        public void OutputFlow(string translatedWords) => OutputEverything(false, "", translatedWords);
+
+        public void OutputColumns(string column1, string column2) => OutputEverything(wantEnglish, column1, column2);
+
+        private void OutputEverything(bool wantColumns, string column1, string column2)
         {
-            var otherLanguageTextOutput = wantEnglish ? translatedWords.Replace("\n\n", "") : translatedWords;
+            var otherLanguageTextOutput = wantColumns ? column2.Replace("\n\n", "") : column2;
 
             var width = Console.WindowWidth;
-            if (wantEnglish) 
-            { 
+            if (wantColumns) 
+            {
+                paragraphBreakIndex = 0;
                 var column = width / 2;
                 var otherLanguage = 5;
                 var english = width - column;
 
                 var formatString = $"{{0,{-otherLanguage}}}{{1,{english}}}\n";
-                Console.Write(formatString, otherLanguageTextOutput.PadRight(width / 2, ' '), englishWords.PadRight(width / 2, ' '));
+                Console.Write(formatString, otherLanguageTextOutput.PadRight(width / 2, ' '), column1.PadRight(width / 2, ' '));
             }
             else
             { 

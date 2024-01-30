@@ -2,6 +2,7 @@
 Bloody
 Bugger
 Crap
+Crapy
 Crapola
 Goddam
 
@@ -9,6 +10,7 @@ Arsehole
 Bitch
 Bitchy
 Bollocks
+Bollock
 Bullshit
 Feck
 Pissed
@@ -22,6 +24,7 @@ Dickhead
 Prick
 Punani
 Twat
+Shat
 
 Cunt
 Fuck
@@ -40,8 +43,10 @@ Jizz
 Ho
 Nonce
 Prickteaser
+Pricktease
 Slag
 Slut
 Wanker
 Wank
+Wanking
 Whore

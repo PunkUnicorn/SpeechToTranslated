@@ -5,7 +5,11 @@ VisualStudioVersion = 17.7.34024.191
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SpeechToTranslated", "SpeechToTranslated\SpeechToTranslated.csproj", "{285455FE-F30D-41C9-B06C-DE9F43387293}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Tests", "Tests\Tests.csproj", "{08B4F0BB-644E-4C61-8E3B-C8E41CC5190D}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Tests", "Tests\Tests.csproj", "{08B4F0BB-644E-4C61-8E3B-C8E41CC5190D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "TranslateWordsProcess", "TranslateWordsProcess\TranslateWordsProcess.csproj", "{0E4B2DCA-7F10-4BFE-B220-60C398157171}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SpeechToTranslatorCommon", "ConsoleOutput\SpeechToTranslatorCommon.csproj", "{4052F0A6-3A8B-4B59-A2BF-792D534DAE36}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -21,6 +25,14 @@ Global
 		{08B4F0BB-644E-4C61-8E3B-C8E41CC5190D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{08B4F0BB-644E-4C61-8E3B-C8E41CC5190D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{08B4F0BB-644E-4C61-8E3B-C8E41CC5190D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0E4B2DCA-7F10-4BFE-B220-60C398157171}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0E4B2DCA-7F10-4BFE-B220-60C398157171}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0E4B2DCA-7F10-4BFE-B220-60C398157171}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0E4B2DCA-7F10-4BFE-B220-60C398157171}.Release|Any CPU.Build.0 = Release|Any CPU
+		{4052F0A6-3A8B-4B59-A2BF-792D534DAE36}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{4052F0A6-3A8B-4B59-A2BF-792D534DAE36}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{4052F0A6-3A8B-4B59-A2BF-792D534DAE36}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{4052F0A6-3A8B-4B59-A2BF-792D534DAE36}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

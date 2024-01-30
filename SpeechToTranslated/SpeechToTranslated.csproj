@@ -6,12 +6,16 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="DeepL.net" Version="1.8.0" />
     <PackageReference Include="Microsoft.CognitiveServices.Speech" Version="1.34.1" />
     <PackageReference Include="Microsoft.Extensions.Configuration" Version="8.0.0" />
     <PackageReference Include="Microsoft.Extensions.Configuration.Json" Version="8.0.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.3" />
     <PackageReference Include="SymSpell" Version="6.7.2" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\ConsoleOutput\SpeechToTranslatorCommon.csproj" />
+    <ProjectReference Include="..\TranslateWordsProcess\TranslateWordsProcess.csproj" />
   </ItemGroup>
 
   <ItemGroup>
@@ -31,6 +35,9 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="OpeningPicture.txt">
+      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
+    </None>
+    <None Update="run.cmd">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
     <None Update="Swearwords.txt">

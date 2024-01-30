@@ -1,0 +1,1 @@
+﻿SpeechToTranslated.exe bg es pl

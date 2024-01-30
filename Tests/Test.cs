@@ -1,4 +1,4 @@
-using SpeechToTranslated;
+using SpeechToTranslatedCommon;
 
 namespace Tests
 {
@@ -60,7 +60,7 @@ namespace Tests
         {
             var sf = new SwearingFilter();
 
-            var actual = sf.IsSweary("Shitty");
+            var actual = sf.IsSweary(" Shitty");
 
             Assert.IsTrue(actual);
         }

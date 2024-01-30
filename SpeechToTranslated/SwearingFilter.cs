@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
-namespace SpeechToTranslated
+namespace SpeechToTranslatedCommon
 {
     public class SwearingFilter
     {
@@ -25,7 +25,7 @@ namespace SpeechToTranslated
         }
 
         public bool IsSweary(string swearyCheck) => swearyCheck.Length > 0
-            ? FilterWords.Contains(swearyCheck.ToLower())
+            ? FilterWords.Contains(swearyCheck.Trim().ToLower())
             : false;
     }
 }

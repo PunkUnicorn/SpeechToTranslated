@@ -11,17 +11,9 @@ using System.Threading.Tasks;
 
 namespace ChurchSpeechToTranslator
 {
-    public class SpeechToText :IDisposable
+    public class SpeechToText :IDisposable, IDoSpeechToText
     {
-        public class WordsEventArgs
-        {
-            public WordsEventArgs(IEnumerable<string> words) => this.words.AddRange(words);
-            private List<string> words = new List<string>();
-            public IEnumerable<string> Words => words;
-        }
-
-        public delegate void WordsReadyHandler(WordsEventArgs args);
-        public event WordsReadyHandler WordsReady;
+        public event WordsEventArgs.WordsReadyHandler WordsReady;
 
         private readonly IConfiguration config;
         private readonly StringBuilder knownSentance = new StringBuilder();
@@ -49,7 +41,7 @@ namespace ChurchSpeechToTranslator
             return speechConfig;
         }
 
-        public async Task RunSpeechToTextForever()
+        public async Task RunSpeechToTextForeverAsync()
         {
             var speechConfig = InternalSetup();
             audioConfig = AudioConfig.FromDefaultMicrophoneInput();
@@ -57,7 +49,6 @@ namespace ChurchSpeechToTranslator
 
             speechRecognizer.Recognizing += SpeechRecognizer_Recognizing;
             speechRecognizer.SpeechEndDetected += SpeechRecognizer_SpeechEndDetected;
-            speechRecognizer.SpeechStartDetected += SpeechRecognizer_SpeechStartDetected;
             speechRecognizer.Recognized += SpeechRecognizer_Recognized;
 
             await speechRecognizer.StartContinuousRecognitionAsync();
@@ -67,7 +58,6 @@ namespace ChurchSpeechToTranslator
 
         private void SpeechRecognizer_Recognized(object sender, SpeechRecognitionEventArgs e)
         {
-            //Console.WriteLine("SpeechRecognized\n");
             Recognized();
         }
 
@@ -76,11 +66,6 @@ namespace ChurchSpeechToTranslator
             toTranslateCandidate.Add("\n\n");
             DumpAndFlushTranslateCandidates(toTranslateCandidate);
             knownSentance.Clear();
-        }
-
-        private void SpeechRecognizer_SpeechStartDetected(object sender, RecognitionEventArgs e)
-        {
-            //Console.WriteLine("SpeechStartDetected\n");
         }
 
         private void SpeechRecognizer_SpeechEndDetected(object sender, RecognitionEventArgs e)

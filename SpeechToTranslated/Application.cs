@@ -1,8 +1,9 @@
-﻿using DeepL;
-using Microsoft.Extensions.Configuration;
-using Newtonsoft.Json;
+﻿using Microsoft.Extensions.Configuration;
 using SpeechToTranslated;
+using SpeechToTranslatedCommon;
+using SpeechToTranslatorCommon;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -12,80 +13,56 @@ namespace ChurchSpeechToTranslator
 {
     public class Application
     {
-        private readonly IConfiguration config = new ConfigurationBuilder()
-            .AddJsonFile("appsettings.json")
-            .AddJsonFile($"appsettings.{Environment.MachineName}.json", optional: true)
-            .AddJsonFile($"appsettings.Church.json", optional: true)
-            .Build();
+        private readonly IConfiguration config = ConfigurationLoader.Load(); 
 
         private readonly SpeechToText speechToText;
-        //private readonly SpellingHelper spellingHelper = new SpellingHelper();
-        private readonly Translator translator;
 
         private static string GetTicks() => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);
         private readonly string englishFilename = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_en.txt";
-        private readonly string otherLanguageFilenameFormatString = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_{{0}}.txt";
-        private readonly string outputLanguage;
-        private readonly bool wantEnglish;
-        private readonly bool deepLLog;
         private readonly SwearingFilter swearingFilter = new SwearingFilter();
-        private const string version = "0.0.0.7";
-        private IOutputTranslation outputter;
-
+        private const string version = "0.0.0.8";
+        private IOutputStuff outputter;
+        private readonly List<TranslationSubProcess> translationSubProcesses = new List<TranslationSubProcess>();
         public const string logpath = ".\\Logs\\";
 
-        public Application(string outputLanguage, bool wantEnglish)
+        public Application(string[] outputLanguages, bool wantEnglishShownWithTheTranslation)
         {
             speechToText = new SpeechToText(config);
             speechToText.WordsReady += SpeechToText_WordsReady;
 
-            translator = new Translator(config["deepl.key"]);
             Console.OutputEncoding = Encoding.UTF8;
 
-            this.outputLanguage = outputLanguage;
-            this.wantEnglish = wantEnglish;
-
-            deepLLog = bool.Parse(config["deepl.log"]);
-
             Console.WriteLine(File.ReadAllText("OpeningPicture.txt"));
-            Console.WriteLine($"Church Translator, version {version}\nConfiguration: {config["keys_description"]}\nTranslation language: {outputLanguage}\n\nListening...");
+            Console.WriteLine($"Church Translator, version {version}\nConfiguration: {config["keys_description"]}\nTranslation language: {string.Join(",", outputLanguages)}\n\nListening...");
 
             if (!Directory.Exists(logpath))
                 Directory.CreateDirectory(logpath);
 
-            outputter = new ConsoleOutputTranslation(wantEnglish);
+            foreach (var language in outputLanguages)
+                translationSubProcesses.Add(new TranslationSubProcess(language, wantEnglishShownWithTheTranslation));
+
+            outputter = new ConsoleOutput(false);
         }
 
-        public async Task RunAsync() => await speechToText.RunSpeechToTextForever();
+        public async Task RunAsync() => await speechToText.RunSpeechToTextForeverAsync();
 
-        private void SpeechToText_WordsReady(SpeechToText.WordsEventArgs args)
+        private void SpeechToText_WordsReady(WordsEventArgs args)
         {
             var words = string.Join("", args.Words);
 
             if (!EvenWorthBothering(words))
                 return;
 
-            Consicrate(words);
-
             try
             {
-                var result = translator.TranslateTextAsync(
-                    words,
-                    LanguageCode.English,
-                    outputLanguage).Result;
+                Consicrate(ref words);
 
-                if (deepLLog)
-                {
-                    var dump = new { Time = DateTime.Now.ToString(), Input = words, Result = result };
-                    File.AppendAllText($"{logpath}deepl.log", JsonConvert.SerializeObject(dump, Formatting.Indented));
-                }
+                outputter.OutputFlow(words);
 
-                outputter.OutputTranslation(words, result.Text);
+                foreach (var subTranslator in translationSubProcesses)
+                    subTranslator.TranslateWords(words);
 
-                if (wantEnglish)
-                    File.AppendAllText($"{logpath}{englishFilename}", words);
-
-                File.AppendAllText(string.Format($"{logpath}{otherLanguageFilenameFormatString}", outputLanguage), result.Text);
+                File.AppendAllText($"{logpath}{englishFilename}", words);
             }
             catch (Exception e)
             {
@@ -102,15 +79,6 @@ namespace ChurchSpeechToTranslator
             }
         }
 
-        private void Consicrate(string words)
-        {
-            foreach (var word in words.Split())
-            {
-                SmiteProfanity(words, word);
-                RestoreDevotionalUtterance(words, word);
-            }
-        }
-
         private bool EvenWorthBothering(string words)
         {
             if (words.Length == 0)
@@ -119,30 +87,68 @@ namespace ChurchSpeechToTranslator
             if (words == "\n\n")
             {
                 outputter.OutputLineBreak();
+                foreach (var subTranslator in translationSubProcesses)
+                    subTranslator.OutputLineBreak();
+
                 return false;
             }
 
             return true;
         }
 
-        private static void RestoreDevotionalUtterance(string words, string word)
+        private void Consicrate(ref string words)
+        {
+            foreach (var word in words.Split())
+            {
+                SmiteProfanity(ref words, word);
+                RestoreDevotionalUtterance(ref words, word);
+                CapitaliseHolyWords(ref words, word);
+            }
+        }
+
+        private static void RestoreDevotionalUtterance(ref string words, string word)
         {
             /* And they were filled with the Holy Ghost, and began to speak with other tongues, as the Spirit gave them utterance
              * — Acts 2:4.
              */
 
             // Speech to text makes speaking in tounges come out as blah blah blah. Technically this makes sense... but is too irreverent, so tweak this.
-            if (word == " blah" || word == "blah")
-                if (words.IndexOf("blah") > 0)
-                    words.Replace("blah", "(utterance)");
+            if (word.StartsWith(" blah") || word.StartsWith("blah"))
+                if (words.IndexOf("blah") > -1)
+                    words = words.Replace("blah", "(utterance)");
         }
 
-        private void SmiteProfanity(string words, string word)
+        private void SmiteProfanity(ref string words, string word)
         {
             // Remove accidental swear words.
             // Typically caused by a speech to text mis-hear, but since this is primarily for Church this is particularly unfortunate lol. Smite them.
-            if (swearingFilter.IsSweary(word.Trim()))
-                words.Replace(word, "*".PadLeft(word.Length));
+            if (swearingFilter.IsSweary(word))
+                words = words.Replace(word, " ".PadLeft(word.Length, '*'));
+        }
+
+        private void CapitaliseHolyWords(ref string words, string word)
+        {
+            if (word.StartsWith("jesus") || word.StartsWith(" jesus"))
+                if (words.IndexOf("jesus") > -1)
+                    words = words.Replace("jesus", "Jesus");
+
+            if (word.StartsWith("christ") || word.StartsWith(" christ"))
+                if (words.IndexOf("christ") > -1)
+                    words = words.Replace("christ", "Christ");
+
+            if (word.StartsWith("god") || word.StartsWith(" god"))
+                if (words.IndexOf("god") > -1)
+                    words = words.Replace("god", "God");
+
+            if (word.StartsWith("holy") || word.StartsWith(" holy"))
+                if (words.IndexOf("holy") > -1)
+                    words = words.Replace("holy", "Holy");
+        }
+        
+        public void OnProcessExit(object sender, EventArgs e)
+        {
+            foreach (var proc in translationSubProcesses)
+                proc.Kill();
         }
     }
 }
