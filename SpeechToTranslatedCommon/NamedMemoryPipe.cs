@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace SpeechToTranslatorCommon
+namespace SpeechToTranslatedCommon
 {
     public static class NamedMemoryPipe
     {
@@ -49,6 +49,17 @@ namespace SpeechToTranslatorCommon
             ioStream.Flush();
 
             return outBuffer.Length + 2;
+        }
+
+        public void WriteStringWithOffset(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
+        { 
+            var codeChar = isAddTo 
+                ? "i" 
+                : isFinalParagraph
+                    ? "p"
+                    : "f";
+
+            WriteString($"{codeChar}:offset:{offset}:{englishWords}");
         }
     }
 }

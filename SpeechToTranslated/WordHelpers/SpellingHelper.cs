@@ -1,10 +1,7 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
-namespace ChurchSpeechToTranslator
+namespace ChurchSpeechToTranslated.WordHelpers
 {
     public class SpellingHelper
     {
@@ -33,12 +30,12 @@ namespace ChurchSpeechToTranslator
             var suggestionVerbosity = SymSpell.Verbosity.Closest; //Top, Closest, All
             var suggestions = symSpell.Lookup(inputTerm, suggestionVerbosity, maxEditDistanceLookup);
 
-            //display suggestions, edit distance and term frequency
-            foreach (var suggestion in suggestions)
-            {
+            ////display suggestions, edit distance and term frequency
+            //foreach (var suggestion in suggestions)
+            //{
             //    retval.Add(suggestion.term);
-                Console.WriteLine(suggestion.term + " " + suggestion.distance.ToString() + " " + suggestion.count.ToString("N0"));
-            }
+            //    Console.WriteLine(suggestion.term + " " + suggestion.distance.ToString() + " " + suggestion.count.ToString("N0"));
+            //}
             return $" {suggestions.FirstOrDefault()?.term ?? inputTerm.Trim()}";
             //return retval;
         }

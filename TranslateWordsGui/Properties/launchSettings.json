@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "TranslateWordsGui": {
+      "commandName": "Project",
+      "commandLineArgs": "bg en"
+    }
+  }
+}

@@ -14,8 +14,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\ConsoleOutput\SpeechToTranslatorCommon.csproj" />
-    <ProjectReference Include="..\TranslateWordsProcess\TranslateWordsProcess.csproj" />
+    <ProjectReference Include="..\SpeechToTranslatedCommon\SpeechToTranslatedCommon.csproj" />
   </ItemGroup>
 
   <ItemGroup>

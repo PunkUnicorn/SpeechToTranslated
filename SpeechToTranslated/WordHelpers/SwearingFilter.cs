@@ -3,7 +3,7 @@ using System.Collections.Immutable;
 using System.IO;
 using System.Linq;
 
-namespace SpeechToTranslatedCommon
+namespace SpeechToTranslatedCommon.WordHelpers
 {
     public class SwearingFilter
     {

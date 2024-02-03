@@ -1,5 +1,4 @@
 ﻿using SpeechToTranslatedCommon;
-using SpeechToTranslatorCommon;
 using System;
 using System.Diagnostics;
 using System.IO;
@@ -7,18 +6,16 @@ using System.IO.Pipes;
 
 namespace SpeechToTranslated
 {
-    public class TranslationSubProcess : IDoTranslation
+    public class TranslationSubProcess : ITranslate
     {
         private Process process;
         private NamedPipeServerStream namedPipeServer;
         private StreamString namedPipeServerWriter;
         private readonly string languageCode;
-        private readonly bool wantEnglish;
 
-        public TranslationSubProcess(string languageCode, bool wantEnglish) 
+        public TranslationSubProcess(string languageCode) 
         { 
             this.languageCode = languageCode;
-            this.wantEnglish = wantEnglish;
             CreateProcess();
             CreateNamedPipe();
         }
@@ -34,6 +31,29 @@ namespace SpeechToTranslated
                 var fg = Console.ForegroundColor;
                 try
                 {
+                    Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
+                    CreateProcess();
+                    CreateNamedPipe();
+                }
+                finally
+                {
+                    Console.ForegroundColor = fg;
+                }
+            }
+        }
+
+        public void TranslateWords(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
+        {
+            try
+            {
+                namedPipeServerWriter.WriteStringWithOffset(isFinalParagraph, isAddTo, offset, englishWords);
+            }
+            catch (Exception e)
+            {
+                var fg = Console.ForegroundColor;
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
                     Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
                     CreateProcess();
                     CreateNamedPipe();
@@ -68,6 +88,9 @@ namespace SpeechToTranslated
             }
         }
 
+        public void TranslateGreenWords(string words)
+            => TranslateWords($"green:{words}");
+
         internal void Kill() 
             => process.Kill();
 
@@ -76,11 +99,11 @@ namespace SpeechToTranslated
             if (process is not null && !process.HasExited)
                 process.Kill();
 
-            var psi = new ProcessStartInfo("TranslateWordsProcess.exe")
+            var psi = new ProcessStartInfo("TranslateWordsGui.exe")
             {
                 UseShellExecute = true,
                 WorkingDirectory = Directory.GetCurrentDirectory(),
-                Arguments = $"{languageCode} {wantEnglish}"
+                Arguments = $"{languageCode}"
             };
             process = new Process { StartInfo = psi };
             process.Start();

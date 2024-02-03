@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 class Program
@@ -7,17 +9,13 @@ class Program
     async static Task Main(string[] args)
     {
         var defaultLanguage = "bg";
-        var englishSwitch = "--horizontal-with-english";
 
         var outputLanguages = args.Length > 0 
-            ? args.Where(a => !a.StartsWith("--")).ToArray() 
-            : new [] { defaultLanguage };
+            ? args
+            : new [] { defaultLanguage, "en-GB" };
 
-        var wantEnglish = args.Length > 0
-            ? (args.Any(a => a == englishSwitch)) 
-            : true;
    
-        var app = new ChurchSpeechToTranslator.Application(outputLanguages, wantEnglish);
+        var app = new ChurchSpeechToTranslated.Application(outputLanguages);
         AppDomain.CurrentDomain.ProcessExit += new EventHandler(app.OnProcessExit);
 
         await app.RunAsync();

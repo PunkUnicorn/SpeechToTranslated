@@ -1,6 +1,6 @@
 ﻿using Microsoft.Extensions.Configuration;
 
-namespace SpeechToTranslatorCommon
+namespace SpeechToTranslatedCommon
 {
     public static class ConfigurationLoader
     {

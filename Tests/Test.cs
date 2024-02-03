@@ -1,4 +1,4 @@
-using SpeechToTranslatedCommon;
+using SpeechToTranslatedCommon.WordHelpers;
 
 namespace Tests
 {

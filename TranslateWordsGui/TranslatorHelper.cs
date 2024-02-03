@@ -1,4 +1,5 @@
 ﻿using DeepL;
+using DeepL.Model;
 using Microsoft.Extensions.Configuration;
 using Newtonsoft.Json;
 
@@ -19,7 +20,7 @@ namespace TranslateWordsProcess
             deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
         }
 
-        public string TranslateWords(string words)
+        public async Task<string> TranslateWords(string words)
         {
             if (words.Length == 0) 
                 return words;
@@ -27,10 +28,13 @@ namespace TranslateWordsProcess
             if (words == "\n\n")
                 return words;
 
-            var result = translator.TranslateTextAsync(
-                                words,
-                                LanguageCode.English,
-                                outputLanguage).Result;
+            if (outputLanguage.StartsWith("en"))
+                return words;
+
+            TextResult result = await translator.TranslateTextAsync(
+                            words,
+                            LanguageCode.English,
+                            outputLanguage);
 
             if (deepLLog)
             {
