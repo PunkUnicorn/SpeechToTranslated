@@ -28,6 +28,17 @@ namespace TranslateWordsGui
             InitializeComponent();
             labels = new List<Label>() { label1, label2, label3 };
             splitContainer1.SplitterDistance = splitContainer1.Height;// - splitContainer1.Size.Height;
+            numericUpDown1.Value = (decimal)label1.Font.Size;
+            numericUpDown1.DecimalPlaces = 1;
+            numericUpDown1.Increment = 0.5m;
+            numericUpDown1.ValueChanged += NumericUpDown1_ValueChanged;
+        }
+
+        private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
+        {
+            var me = (NumericUpDown)sender;
+            foreach (var label in labels)
+                label.Font = new Font(label.Font.FontFamily, (float)me.Value);
         }
 
         private async void Form1_Load(object sender, EventArgs e)

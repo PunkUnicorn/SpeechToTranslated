@@ -34,15 +34,18 @@
             label3 = new Label();
             splitContainer1 = new SplitContainer();
             flowLayoutPanel2 = new FlowLayoutPanel();
+            numericUpDown1 = new NumericUpDown();
             label1b = new Label();
             label2b = new Label();
             label3b = new Label();
+            staticLabel4 = new Label();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
             splitContainer1.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
             // flowLayoutPanel1
@@ -54,7 +57,7 @@
             flowLayoutPanel1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(800, 434);
+            flowLayoutPanel1.Size = new Size(800, 421);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -102,24 +105,34 @@
             splitContainer1.Panel2.Controls.Add(flowLayoutPanel2);
             splitContainer1.Panel2MinSize = 0;
             splitContainer1.Size = new Size(800, 450);
-            splitContainer1.SplitterDistance = 434;
+            splitContainer1.SplitterDistance = 421;
             splitContainer1.TabIndex = 1;
             // 
             // flowLayoutPanel2
             // 
+            flowLayoutPanel2.Controls.Add(staticLabel4);
+            flowLayoutPanel2.Controls.Add(numericUpDown1);
             flowLayoutPanel2.Controls.Add(label1b);
             flowLayoutPanel2.Controls.Add(label2b);
             flowLayoutPanel2.Controls.Add(label3b);
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(0, 0);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(800, 12);
+            flowLayoutPanel2.Size = new Size(800, 25);
             flowLayoutPanel2.TabIndex = 1;
+            // 
+            // numericUpDown1
+            // 
+            numericUpDown1.AutoSize = true;
+            numericUpDown1.Location = new Point(66, 3);
+            numericUpDown1.Name = "numericUpDown1";
+            numericUpDown1.Size = new Size(41, 23);
+            numericUpDown1.TabIndex = 2;
             // 
             // label1b
             // 
             label1b.AutoSize = true;
-            label1b.Location = new Point(3, 0);
+            label1b.Location = new Point(113, 0);
             label1b.Name = "label1b";
             label1b.Size = new Size(0, 15);
             label1b.TabIndex = 0;
@@ -127,7 +140,7 @@
             // label2b
             // 
             label2b.AutoSize = true;
-            label2b.Location = new Point(9, 0);
+            label2b.Location = new Point(119, 0);
             label2b.Name = "label2b";
             label2b.Size = new Size(0, 15);
             label2b.TabIndex = 1;
@@ -135,10 +148,20 @@
             // label3b
             // 
             label3b.AutoSize = true;
-            label3b.Location = new Point(15, 0);
+            label3b.Location = new Point(125, 0);
             label3b.Name = "label3b";
             label3b.Size = new Size(0, 15);
             label3b.TabIndex = 2;
+            // 
+            // staticLabel4
+            // 
+            staticLabel4.AutoSize = true;
+            staticLabel4.Location = new Point(3, 5);
+            staticLabel4.Margin = new Padding(3, 5, 3, 0);
+            staticLabel4.Name = "staticLabel4";
+            staticLabel4.Size = new Size(57, 15);
+            staticLabel4.TabIndex = 3;
+            staticLabel4.Text = "Font Size:";
             // 
             // Form1
             // 
@@ -159,6 +182,7 @@
             splitContainer1.ResumeLayout(false);
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
 
@@ -173,5 +197,7 @@
         private Label label2b;
         private Label label3;
         private Label label3b;
+        private NumericUpDown numericUpDown1;
+        private Label staticLabel4;
     }
 }
