@@ -1,5 +1,4 @@
 using SpeechToTranslatedCommon;
-using System.ComponentModel;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text.RegularExpressions;
@@ -28,6 +27,7 @@ namespace TranslateWordsGui
         {
             InitializeComponent();
             labels = new List<Label>() { label1, label2, label3 };
+            splitContainer1.SplitterDistance = splitContainer1.Height;// - splitContainer1.Size.Height;
         }
 
         private async void Form1_Load(object sender, EventArgs e)
@@ -43,7 +43,7 @@ namespace TranslateWordsGui
             listenerTask = Task.Factory.StartNew(() => BackgroundWorker1_DoWork(null, null!));
         }
 
-        private async void BackgroundWorker1_DoWork(object? sender, System.ComponentModel.DoWorkEventArgs e)
+        private async void BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
         {
             client = new NamedPipeClientStream(".", string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.In);
 

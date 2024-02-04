@@ -54,7 +54,7 @@
             flowLayoutPanel1.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             flowLayoutPanel1.Location = new Point(0, 0);
             flowLayoutPanel1.Name = "flowLayoutPanel1";
-            flowLayoutPanel1.Size = new Size(800, 446);
+            flowLayoutPanel1.Size = new Size(800, 434);
             flowLayoutPanel1.TabIndex = 0;
             // 
             // label1
@@ -102,7 +102,7 @@
             splitContainer1.Panel2.Controls.Add(flowLayoutPanel2);
             splitContainer1.Panel2MinSize = 0;
             splitContainer1.Size = new Size(800, 450);
-            splitContainer1.SplitterDistance = 446;
+            splitContainer1.SplitterDistance = 434;
             splitContainer1.TabIndex = 1;
             // 
             // flowLayoutPanel2
@@ -113,7 +113,7 @@
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(0, 0);
             flowLayoutPanel2.Name = "flowLayoutPanel2";
-            flowLayoutPanel2.Size = new Size(800, 0);
+            flowLayoutPanel2.Size = new Size(800, 12);
             flowLayoutPanel2.TabIndex = 1;
             // 
             // label1b
@@ -145,9 +145,11 @@
             AutoScaleDimensions = new SizeF(7F, 15F);
             AutoScaleMode = AutoScaleMode.Font;
             ClientSize = new Size(800, 450);
+            ControlBox = false;
             Controls.Add(splitContainer1);
+            DoubleBuffered = true;
             Name = "Form1";
-            Text = "Form1";
+            ShowIcon = false;
             Load += Form1_Load;
             flowLayoutPanel1.ResumeLayout(false);
             flowLayoutPanel1.PerformLayout();

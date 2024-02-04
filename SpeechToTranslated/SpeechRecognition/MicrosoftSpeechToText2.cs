@@ -17,13 +17,13 @@ namespace SpeechToTranslated.SpeechRecognition
 
         private readonly IConfiguration config;
         private readonly List<string> toTranslateCandidate = new List<string>();
-        private AudioConfig audioConfig;
+        //private AudioConfig audioConfig;
         private SpeechRecognizer speechRecognizer;
         private readonly TaskCompletionSource<int> stopRecognition = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly bool speechToTextLog;
-        private ulong knownOffset;
+        //private ulong knownOffset;
         private string knownSentance = "";
-        private string clipped = "";
+        //private string clipped = "";
 
         public MicrosoftSpeechToText2(IConfiguration config)
         {
@@ -86,7 +86,7 @@ namespace SpeechToTranslated.SpeechRecognition
 
         public void Dispose()
         {
-            audioConfig.Dispose();
+            //audioConfig.Dispose();
             speechRecognizer.Dispose();
         }
     }

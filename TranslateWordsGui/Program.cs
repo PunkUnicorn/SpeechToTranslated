@@ -4,7 +4,7 @@ namespace TranslateWordsGui
 {
     internal static class Program
     {
-        public static string[]? Args;
+        public static string[] Args;
         /// <summary>
         ///  The main entry point for the application.
         /// </summary>

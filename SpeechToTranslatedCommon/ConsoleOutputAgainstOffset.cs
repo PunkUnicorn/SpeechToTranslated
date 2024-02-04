@@ -5,7 +5,6 @@ namespace SpeechToTranslatedCommon
 {
     public class ConsoleOutputAgainstOffset : IOutputStuffAgainstOffset
     {
-        private readonly int startTop = 0;
         private class OffsetDetails
         {
             public OffsetDetails(ulong offset, List<string> lines) { Offset = offset; Lines = lines; }
@@ -35,40 +34,40 @@ namespace SpeechToTranslatedCommon
                 Console.WriteLine();
 
             return;
-            var lines = isFinalParagraph
-                ? SplitLines(translatedWords).Where(s => s.Length!=0).ToList()
-                : new List<string>(new [] { translatedWords });
+            //var lines = isFinalParagraph
+            //    ? SplitLines(translatedWords).Where(s => s.Length!=0).ToList()
+            //    : new List<string>(new [] { translatedWords });
 
-            var update = offsetDetails.FirstOrDefault(o => offset == o.Offset);
+            //var update = offsetDetails.FirstOrDefault(o => offset == o.Offset);
 
-            if (update != null)
-            {
-                if (!isAddTo)
-                    update.Lines.Clear();
+            //if (update != null)
+            //{
+            //    if (!isAddTo)
+            //        update.Lines.Clear();
                 
-                update.Lines.AddRange(lines);
-            }
-            else
-            {
-                offsetDetails.Add(new OffsetDetails(offset, lines));
-            }
+            //    update.Lines.AddRange(lines);
+            //}
+            //else
+            //{
+            //    offsetDetails.Add(new OffsetDetails(offset, lines));
+            //}
 
-            if (offsetDetails.Count > 5)
-            { 
-                offsetDetails.Remove(offsetDetails.First());
-            }
+            //if (offsetDetails.Count > 5)
+            //{ 
+            //    offsetDetails.Remove(offsetDetails.First());
+            //}
 
-            if (isFinalParagraph)
-            { 
-                Console.CursorTop = startTop;
-                Console.Clear();
-            }
+            //if (isFinalParagraph)
+            //{ 
+            //    Console.CursorTop = startTop;
+            //    Console.Clear();
+            //}
 
-            foreach (var output in offsetDetails)
-                if (isFinalParagraph)
-                    Console.WriteLine(string.Join('\n', output.Lines));
-                else
-                    Console.Write(translatedWords);
+            //foreach (var output in offsetDetails)
+            //    if (isFinalParagraph)
+            //        Console.WriteLine(string.Join('\n', output.Lines));
+            //    else
+            //        Console.Write(translatedWords);
 
         }
 
