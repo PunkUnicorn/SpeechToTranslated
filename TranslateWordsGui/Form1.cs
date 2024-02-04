@@ -26,7 +26,7 @@ namespace TranslateWordsGui
         public Form1()
         {
             InitializeComponent();
-            labels = new List<Label>() { label1, label2, label3 };
+            labels = new List<Label>() { label1, label2, label3, label4, label5 };
             splitContainer1.SplitterDistance = splitContainer1.Height;// - splitContainer1.Size.Height;
             numericUpDown1.Value = (decimal)label1.Font.Size;
             numericUpDown1.DecimalPlaces = 1;
@@ -34,6 +34,15 @@ namespace TranslateWordsGui
             numericUpDown1.ValueChanged += NumericUpDown1_ValueChanged;
 
             controlsButton1.Click += ControlsButton1_Click;
+
+            previewCheckBox1.CheckedChanged += PreviewCheckBox1_CheckedChanged;
+            previewCheckBox1.Checked = true;
+        }
+
+        private void PreviewCheckBox1_CheckedChanged(object sender, EventArgs e)
+        {
+            var me = (CheckBox)sender;
+            previewLabel.Visible = me.Checked;
         }
 
         private void ControlsButton1_Click(object sender, EventArgs e)
@@ -67,7 +76,7 @@ namespace TranslateWordsGui
 
             this.Invoke(() => label2b.Text = $"\n\n{DateTime.Now.ToShortTimeString()} Connecting to server...\n\n");
             client.Connect();
-            this.Invoke(() => label2b.Text = $"\n\n{DateTime.Now.ToShortTimeString()} Connected to server!\n\n");
+            this.Invoke(() => label2b.Text = "");
 
             try
             {
@@ -100,40 +109,40 @@ namespace TranslateWordsGui
                     {
                         var translation = await translatorHelper.TranslateWords(words);
 
-                        Label useLabel;
-                        if (labelIndex >= labels.Count)
-                        {
-                            --labelIndex;
-                            var updateLabel = labels.First();
-                            foreach (var label in labels.Skip(1))
-                            {
-                                this.Invoke(() => updateLabel.Text = label.Text);
-                                updateLabel = label;
-                            }
-                            this.Invoke(() => labels[labelIndex].Text = "");
-                            useLabel = labels[labelIndex];
-                        }
-                        useLabel = labels[labelIndex];
-
                         if (isFinalParagraph)
                         {
+                            Label useLabel;
+                            if (labelIndex >= labels.Count)
+                            {
+                                --labelIndex;
+                                var updateLabel = labels.First();
+                                foreach (var label in labels.Skip(1))
+                                {
+                                    this.Invoke(() => updateLabel.Text = label.Text);
+                                    updateLabel = label;
+                                }
+                                this.Invoke(() => labels[labelIndex].Text = "");
+                                //useLabel = labels[labelIndex];
+                            }
+                            useLabel = labels[labelIndex];
+
                             this.Invoke(() => useLabel.Text = translation);
                             this.Invoke(() => label1b.Text = words);
 
                             this.Invoke(() => useLabel.Text += "\n\n");
-
+                            this.Invoke(() => previewLabel.Text = "");
                             labelIndex++;
                         }
                         else
                         {
                             if (!isIncremental)
                             {
-                                this.Invoke(() => useLabel.Text = translation);
+                                this.Invoke(() => previewLabel.Text = translation);
                                 this.Invoke(() => label1b.Text = words);
                             }
                             else
                             {
-                                this.Invoke(() => useLabel.Text += translation);
+                                this.Invoke(() => previewLabel.Text += translation);
                                 this.Invoke(() => label1b.Text += words);
                             }
                         }
