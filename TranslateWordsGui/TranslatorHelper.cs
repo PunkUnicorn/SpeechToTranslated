@@ -25,7 +25,7 @@ namespace TranslateWordsProcess
             if (words.Length == 0) 
                 return words;
 
-            if (words == "\n\n")
+            if (words == "\n\n" || words == "\n")
                 return words;
 
             if (outputLanguage.StartsWith("en"))
@@ -39,7 +39,7 @@ namespace TranslateWordsProcess
             if (deepLLog)
             {
                 var dump = new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, Result = result };
-                File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", JsonConvert.SerializeObject(dump, Formatting.Indented));
+                File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
             }
 
             return result.Text;

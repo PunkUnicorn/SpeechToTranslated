@@ -34,11 +34,12 @@
             label3 = new Label();
             splitContainer1 = new SplitContainer();
             flowLayoutPanel2 = new FlowLayoutPanel();
+            controlsButton1 = new Button();
+            staticLabel4 = new Label();
             numericUpDown1 = new NumericUpDown();
             label1b = new Label();
             label2b = new Label();
             label3b = new Label();
-            staticLabel4 = new Label();
             flowLayoutPanel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -110,6 +111,7 @@
             // 
             // flowLayoutPanel2
             // 
+            flowLayoutPanel2.Controls.Add(controlsButton1);
             flowLayoutPanel2.Controls.Add(staticLabel4);
             flowLayoutPanel2.Controls.Add(numericUpDown1);
             flowLayoutPanel2.Controls.Add(label1b);
@@ -121,10 +123,31 @@
             flowLayoutPanel2.Size = new Size(800, 25);
             flowLayoutPanel2.TabIndex = 1;
             // 
+            // controlsButton1
+            // 
+            controlsButton1.AutoSize = true;
+            controlsButton1.Location = new Point(3, 1);
+            controlsButton1.Margin = new Padding(3, 1, 3, 3);
+            controlsButton1.Name = "controlsButton1";
+            controlsButton1.Size = new Size(47, 25);
+            controlsButton1.TabIndex = 4;
+            controlsButton1.Text = "Close";
+            controlsButton1.UseVisualStyleBackColor = true;
+            // 
+            // staticLabel4
+            // 
+            staticLabel4.AutoSize = true;
+            staticLabel4.Location = new Point(56, 5);
+            staticLabel4.Margin = new Padding(3, 5, 3, 0);
+            staticLabel4.Name = "staticLabel4";
+            staticLabel4.Size = new Size(57, 15);
+            staticLabel4.TabIndex = 3;
+            staticLabel4.Text = "Font Size:";
+            // 
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
-            numericUpDown1.Location = new Point(66, 3);
+            numericUpDown1.Location = new Point(119, 3);
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(41, 23);
             numericUpDown1.TabIndex = 2;
@@ -132,7 +155,7 @@
             // label1b
             // 
             label1b.AutoSize = true;
-            label1b.Location = new Point(113, 0);
+            label1b.Location = new Point(166, 0);
             label1b.Name = "label1b";
             label1b.Size = new Size(0, 15);
             label1b.TabIndex = 0;
@@ -140,7 +163,7 @@
             // label2b
             // 
             label2b.AutoSize = true;
-            label2b.Location = new Point(119, 0);
+            label2b.Location = new Point(172, 0);
             label2b.Name = "label2b";
             label2b.Size = new Size(0, 15);
             label2b.TabIndex = 1;
@@ -148,20 +171,10 @@
             // label3b
             // 
             label3b.AutoSize = true;
-            label3b.Location = new Point(125, 0);
+            label3b.Location = new Point(178, 0);
             label3b.Name = "label3b";
             label3b.Size = new Size(0, 15);
             label3b.TabIndex = 2;
-            // 
-            // staticLabel4
-            // 
-            staticLabel4.AutoSize = true;
-            staticLabel4.Location = new Point(3, 5);
-            staticLabel4.Margin = new Padding(3, 5, 3, 0);
-            staticLabel4.Name = "staticLabel4";
-            staticLabel4.Size = new Size(57, 15);
-            staticLabel4.TabIndex = 3;
-            staticLabel4.Text = "Font Size:";
             // 
             // Form1
             // 
@@ -199,5 +212,6 @@
         private Label label3b;
         private NumericUpDown numericUpDown1;
         private Label staticLabel4;
+        private Button controlsButton1;
     }
 }

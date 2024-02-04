@@ -32,6 +32,13 @@ namespace TranslateWordsGui
             numericUpDown1.DecimalPlaces = 1;
             numericUpDown1.Increment = 0.5m;
             numericUpDown1.ValueChanged += NumericUpDown1_ValueChanged;
+
+            controlsButton1.Click += ControlsButton1_Click;
+        }
+
+        private void ControlsButton1_Click(object sender, EventArgs e)
+        {
+            Close();
         }
 
         private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -58,9 +65,9 @@ namespace TranslateWordsGui
         {
             client = new NamedPipeClientStream(".", string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.In);
 
-            Console.WriteLine($"{DateTime.Now.ToShortTimeString()} Connecting to server...");
+            this.Invoke(() => label2b.Text = $"\n\n{DateTime.Now.ToShortTimeString()} Connecting to server...\n\n");
             client.Connect();
-            Console.WriteLine($"{DateTime.Now.ToShortTimeString()} Connected to server!");
+            this.Invoke(() => label2b.Text = $"\n\n{DateTime.Now.ToShortTimeString()} Connected to server!\n\n");
 
             try
             {
@@ -107,12 +114,6 @@ namespace TranslateWordsGui
                             useLabel = labels[labelIndex];
                         }
                         useLabel = labels[labelIndex];
-                        //var isLabelInvisible = Parent == null
-                        //    ? false
-                        //    : useLabel.Bottom > Parent.Height;
-
-                        //if (isLabelInvisible)
-                        //    this.Invoke(() => useLabel.Text = "CANT SEE IT");
 
                         if (isFinalParagraph)
                         {
@@ -146,10 +147,8 @@ namespace TranslateWordsGui
             }
             catch (Exception ex)
             {
-                this.Invoke(() => label1b.Text = ex.Message);
+                this.Invoke(() => label2b.Text = $"\n\n{ex.Message}\n\n");
             }
         }
-
-
     }
 }
