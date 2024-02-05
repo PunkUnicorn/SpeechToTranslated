@@ -1,5 +1,3 @@
-using System.Diagnostics;
-
 namespace TranslateWordsGui
 {
     internal static class Program

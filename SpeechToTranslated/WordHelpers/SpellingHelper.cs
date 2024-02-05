@@ -24,7 +24,7 @@ namespace ChurchSpeechToTranslated.WordHelpers
         }
 
         public string CheckSpelling(string inputTerm)
-        { 
+        {
             //lookup suggestions for single-word input strings
             int maxEditDistanceLookup = 1; //max edit distance per lookup (maxEditDistanceLookup<=maxEditDistanceDictionary)
             var suggestionVerbosity = SymSpell.Verbosity.Closest; //Top, Closest, All

@@ -16,13 +16,13 @@ namespace TranslateWordsProcess
         public TranslatorHelper(IConfiguration appConfig, string outputLanguage)
         {
             this.outputLanguage = outputLanguage;
-            translator = new Translator(appConfig["translate.deepl.key"] ??throw new InvalidOperationException("Unable to find translate.deepl.key."));
+            translator = new Translator(appConfig["translate.deepl.key"] ?? throw new InvalidOperationException("Unable to find translate.deepl.key."));
             deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
         }
 
         public async Task<string> TranslateWords(string words)
         {
-            if (words.Length == 0) 
+            if (words.Length == 0)
                 return words;
 
             if (words == "\n\n" || words == "\n")

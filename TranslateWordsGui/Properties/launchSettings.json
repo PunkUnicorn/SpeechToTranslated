@@ -2,7 +2,7 @@
   "profiles": {
     "TranslateWordsGui": {
       "commandName": "Project",
-      "commandLineArgs": "bg en"
+      "commandLineArgs": "en-GB"
     }
   }
 }

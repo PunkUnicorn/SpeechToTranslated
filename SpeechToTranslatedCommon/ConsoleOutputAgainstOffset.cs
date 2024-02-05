@@ -1,7 +1,4 @@
-﻿using System;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace SpeechToTranslatedCommon
+﻿namespace SpeechToTranslatedCommon
 {
     public class ConsoleOutputAgainstOffset : IOutputStuffAgainstOffset
     {
@@ -44,7 +41,7 @@ namespace SpeechToTranslatedCommon
             //{
             //    if (!isAddTo)
             //        update.Lines.Clear();
-                
+
             //    update.Lines.AddRange(lines);
             //}
             //else

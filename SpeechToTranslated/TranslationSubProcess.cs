@@ -13,19 +13,19 @@ namespace SpeechToTranslated
         private StreamString namedPipeServerWriter;
         private readonly string languageCode;
 
-        public TranslationSubProcess(string languageCode) 
-        { 
+        public TranslationSubProcess(string languageCode)
+        {
             this.languageCode = languageCode;
             CreateProcess();
             CreateNamedPipe();
         }
 
         public void OutputLineBreak()
-        { 
-            try 
-            { 
-                namedPipeServerWriter.WriteString("\n\n"); 
-            } 
+        {
+            try
+            {
+                namedPipeServerWriter.WriteString("\n\n");
+            }
             catch (Exception e)
             {
                 var fg = Console.ForegroundColor;
@@ -91,7 +91,7 @@ namespace SpeechToTranslated
         public void TranslateGreenWords(string words)
             => TranslateWords($"green:{words}");
 
-        internal void Kill() 
+        internal void Kill()
             => process.Kill();
 
         private void CreateProcess()
@@ -112,7 +112,7 @@ namespace SpeechToTranslated
         private void CreateNamedPipe()
         {
             if (namedPipeServer is not null)
-                namedPipeServer.Close();    
+                namedPipeServer.Close();
 
             namedPipeServer = new NamedPipeServerStream(string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.Out);
             namedPipeServerWriter = new StreamString(namedPipeServer);

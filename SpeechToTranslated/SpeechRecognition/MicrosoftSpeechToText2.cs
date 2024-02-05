@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Text;
 using System.Threading.Tasks;
 
 namespace SpeechToTranslated.SpeechRecognition
@@ -17,13 +18,12 @@ namespace SpeechToTranslated.SpeechRecognition
 
         private readonly IConfiguration config;
         private readonly List<string> toTranslateCandidate = new List<string>();
-        //private AudioConfig audioConfig;
         private SpeechRecognizer speechRecognizer;
         private readonly TaskCompletionSource<int> stopRecognition = new TaskCompletionSource<int>(TaskCreationOptions.RunContinuationsAsynchronously);
         private readonly bool speechToTextLog;
-        //private ulong knownOffset;
         private string knownSentance = "";
-        //private string clipped = "";
+        private StringBuilder lagBuffer = new StringBuilder();
+        private bool lagBufferIsIncremental;
 
         public MicrosoftSpeechToText2(IConfiguration config)
         {
@@ -57,19 +57,31 @@ namespace SpeechToTranslated.SpeechRecognition
 
         private void SpeechRecognizer_Recognized(object sender, SpeechRecognitionEventArgs e)
         {
+            knownSentance = "";
             SentanceReady?.Invoke(new WordsEventArgs(true, e.Offset, e.Result.Text));
             LogSpeechResult(nameof(SpeechRecognizer_Recognized), e);
         }
 
         private void SpeechRecognizer_Recognizing(object sender, SpeechRecognitionEventArgs e)
         {
-            var isIncremental = e.Result.Text.StartsWith(knownSentance);
+            var isIncremental = knownSentance.Length > 0 && e.Result.Text.StartsWith(knownSentance);
 
             string passText = isIncremental
                 ? passText = e.Result.Text.Substring(knownSentance.Length)
                 : passText = e.Result.Text;
 
-            WordsReady?.Invoke(new WordsEventArgs(isIncremental, e.Offset, passText));
+            if (isIncremental && passText.StartsWith(' ') && lagBuffer.Length > 0)
+            {
+                WordsReady?.Invoke(new WordsEventArgs(lagBufferIsIncremental, e.Offset, lagBuffer.ToString()));
+                lagBuffer.Clear();
+            }
+
+            if (!isIncremental && lagBuffer.Length > 0)
+                lagBuffer.Clear();
+
+            lagBuffer.Append(passText);
+            lagBufferIsIncremental = isIncremental;
+
             LogSpeechResult(nameof(SpeechRecognizer_Recognizing), e);
 
             knownSentance = e.Result.Text;
@@ -86,7 +98,6 @@ namespace SpeechToTranslated.SpeechRecognition
 
         public void Dispose()
         {
-            //audioConfig.Dispose();
             speechRecognizer.Dispose();
         }
     }

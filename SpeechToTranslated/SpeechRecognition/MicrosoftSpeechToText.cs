@@ -114,7 +114,7 @@
 //        private void Recognizing(string resultText, string logsource)
 //        {
 //            // Use word count
-            
+
 //            var @new = knownSentance == ""
 //                ? resultText
 //                : $"{string.Join(' ', resultText.Split().Skip(knownSentance.Split().Length))}";//.Substring(knownSentance.Length)            

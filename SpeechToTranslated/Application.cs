@@ -14,7 +14,7 @@ namespace ChurchSpeechToTranslated
 {
     public class Application
     {
-        private readonly IConfiguration config = ConfigurationLoader.Load(); 
+        private readonly IConfiguration config = ConfigurationLoader.Load();
 
         private readonly ISpeechToText speechToText;
 
@@ -65,7 +65,7 @@ namespace ChurchSpeechToTranslated
 
             OutputWords(false, args.IsAddTo, args.Offset, words);
         }
-        
+
         private void OutputWords(bool isFinalParagraph, bool isAddTo, ulong offset, string words)
         {
             try
@@ -113,7 +113,7 @@ namespace ChurchSpeechToTranslated
         //    }
         //    catch (Exception e)
         //    {
-       
+
         //        var fg = Console.ForegroundColor;
         //        try
         //        {

@@ -1,7 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
-
-namespace SpeechToTranslated.SpeechRecognition
+﻿namespace SpeechToTranslated.SpeechRecognition
 {
     public class WordsEventArgs
     {

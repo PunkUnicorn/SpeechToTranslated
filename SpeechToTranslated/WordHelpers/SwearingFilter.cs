@@ -14,7 +14,7 @@ namespace SpeechToTranslatedCommon.WordHelpers
             // https://www.indy100.com/viral/british-swear-word-ranked-offensiveness-2659905092
             FilterWords = File.Exists("Swearwords.txt")
                 ? File.ReadAllText("Swearwords.txt")
-                    .Split(new [] {' ', '\n'}, StringSplitOptions.RemoveEmptyEntries)
+                    .Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(word => word.Trim().ToLower())
                     .ToArray()
                 : throw new InvalidProgramException("No swear filter detected.");

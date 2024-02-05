@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using System.Text;
 
 namespace SpeechToTranslatedCommon
 {
@@ -52,9 +48,9 @@ namespace SpeechToTranslatedCommon
         }
 
         public void WriteStringWithOffset(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
-        { 
-            var codeChar = isAddTo 
-                ? "i" 
+        {
+            var codeChar = isAddTo
+                ? "i"
                 : isFinalParagraph
                     ? "p"
                     : "f";

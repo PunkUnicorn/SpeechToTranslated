@@ -1,7 +1,4 @@
-﻿using System;
-using static System.Net.Mime.MediaTypeNames;
-
-namespace SpeechToTranslatedCommon
+﻿namespace SpeechToTranslatedCommon
 {
     public class ConsoleOutputStuff : IOutputStuff
     {
@@ -21,7 +18,7 @@ namespace SpeechToTranslatedCommon
         public void OutputGreenFlow(string translatedWords)
         {
             var fg = Console.ForegroundColor;
-            try 
+            try
             {
                 Console.ForegroundColor = ConsoleColor.Green;
 
@@ -52,7 +49,7 @@ namespace SpeechToTranslatedCommon
             var column2Use = wantColumns ? column2.Replace("\n\n", "") : column2;
 
             var width = Console.WindowWidth;
-            if (wantColumns) 
+            if (wantColumns)
             {
                 paragraphBreakIndex = 0;
                 var column = width / 2;
@@ -63,10 +60,10 @@ namespace SpeechToTranslatedCommon
                 Console.Write(formatString, column2Use.PadRight(width / 2, ' '), column1.PadRight(width / 2, ' '));
             }
             else
-            { 
+            {
                 paragraphBreakIndex += column2Use.Length;
-                if (paragraphBreakIndex > width-25)
-                { 
+                if (paragraphBreakIndex > width - 25)
+                {
                     Console.WriteLine();
                     paragraphBreakIndex = 0;
                 }
