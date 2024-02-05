@@ -30,12 +30,15 @@
         {
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
+            flowLayoutPanel8 = new FlowLayoutPanel();
             flowLayoutPanel7 = new FlowLayoutPanel();
             previewLabel = new Label();
-            flowLayoutPanel8 = new FlowLayoutPanel();
             modelLabel = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
             controlsButton1 = new Button();
+            checkBox1 = new CheckBox();
+            label1 = new Label();
+            previewNumericUpDown2 = new NumericUpDown();
             staticLabel4 = new Label();
             numericUpDown1 = new NumericUpDown();
             label1b = new Label();
@@ -51,6 +54,7 @@
             splitContainer2.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)previewNumericUpDown2).BeginInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
@@ -85,15 +89,24 @@
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(flowLayoutPanel7);
+            splitContainer2.Panel1.Controls.Add(flowLayoutPanel8);
             splitContainer2.Panel1MinSize = 0;
             // 
             // splitContainer2.Panel2
             // 
-            splitContainer2.Panel2.Controls.Add(flowLayoutPanel8);
+            splitContainer2.Panel2.Controls.Add(flowLayoutPanel7);
             splitContainer2.Size = new Size(800, 421);
-            splitContainer2.SplitterDistance = 25;
+            splitContainer2.SplitterDistance = 392;
             splitContainer2.TabIndex = 0;
+            // 
+            // flowLayoutPanel8
+            // 
+            flowLayoutPanel8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            flowLayoutPanel8.AutoScroll = true;
+            flowLayoutPanel8.Location = new Point(0, 0);
+            flowLayoutPanel8.Name = "flowLayoutPanel8";
+            flowLayoutPanel8.Size = new Size(800, 395);
+            flowLayoutPanel8.TabIndex = 10;
             // 
             // flowLayoutPanel7
             // 
@@ -117,15 +130,6 @@
             previewLabel.Size = new Size(0, 20);
             previewLabel.TabIndex = 3;
             // 
-            // flowLayoutPanel8
-            // 
-            flowLayoutPanel8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel8.AutoScroll = true;
-            flowLayoutPanel8.Location = new Point(0, -1);
-            flowLayoutPanel8.Name = "flowLayoutPanel8";
-            flowLayoutPanel8.Size = new Size(800, 394);
-            flowLayoutPanel8.TabIndex = 10;
-            // 
             // modelLabel
             // 
             modelLabel.AutoSize = true;
@@ -140,6 +144,9 @@
             // flowLayoutPanel2
             // 
             flowLayoutPanel2.Controls.Add(controlsButton1);
+            flowLayoutPanel2.Controls.Add(checkBox1);
+            flowLayoutPanel2.Controls.Add(label1);
+            flowLayoutPanel2.Controls.Add(previewNumericUpDown2);
             flowLayoutPanel2.Controls.Add(staticLabel4);
             flowLayoutPanel2.Controls.Add(numericUpDown1);
             flowLayoutPanel2.Controls.Add(label1b);
@@ -157,25 +164,55 @@
             controlsButton1.Location = new Point(3, 1);
             controlsButton1.Margin = new Padding(3, 1, 3, 3);
             controlsButton1.Name = "controlsButton1";
-            controlsButton1.Size = new Size(47, 25);
+            controlsButton1.Size = new Size(110, 25);
             controlsButton1.TabIndex = 4;
-            controlsButton1.Text = "Close";
+            controlsButton1.Text = "Forced Shutdown";
             controlsButton1.UseVisualStyleBackColor = true;
+            // 
+            // checkBox1
+            // 
+            checkBox1.AutoSize = true;
+            checkBox1.Checked = true;
+            checkBox1.CheckState = CheckState.Checked;
+            checkBox1.Location = new Point(119, 3);
+            checkBox1.Name = "checkBox1";
+            checkBox1.Size = new Size(101, 19);
+            checkBox1.TabIndex = 5;
+            checkBox1.Text = "Multicoloured";
+            checkBox1.UseVisualStyleBackColor = true;
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new Point(226, 5);
+            label1.Margin = new Padding(3, 5, 3, 0);
+            label1.Name = "label1";
+            label1.Size = new Size(101, 15);
+            label1.TabIndex = 3;
+            label1.Text = "Preview Font Size:";
+            // 
+            // previewNumericUpDown2
+            // 
+            previewNumericUpDown2.AutoSize = true;
+            previewNumericUpDown2.Location = new Point(333, 3);
+            previewNumericUpDown2.Name = "previewNumericUpDown2";
+            previewNumericUpDown2.Size = new Size(41, 23);
+            previewNumericUpDown2.TabIndex = 2;
             // 
             // staticLabel4
             // 
             staticLabel4.AutoSize = true;
-            staticLabel4.Location = new Point(56, 5);
+            staticLabel4.Location = new Point(380, 5);
             staticLabel4.Margin = new Padding(3, 5, 3, 0);
             staticLabel4.Name = "staticLabel4";
-            staticLabel4.Size = new Size(57, 15);
+            staticLabel4.Size = new Size(117, 15);
             staticLabel4.TabIndex = 3;
-            staticLabel4.Text = "Font Size:";
+            staticLabel4.Text = "Translation Font Size:";
             // 
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
-            numericUpDown1.Location = new Point(119, 3);
+            numericUpDown1.Location = new Point(503, 3);
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(41, 23);
             numericUpDown1.TabIndex = 2;
@@ -183,7 +220,7 @@
             // label1b
             // 
             label1b.AutoSize = true;
-            label1b.Location = new Point(166, 0);
+            label1b.Location = new Point(550, 0);
             label1b.Name = "label1b";
             label1b.Size = new Size(0, 15);
             label1b.TabIndex = 0;
@@ -191,7 +228,7 @@
             // label2b
             // 
             label2b.AutoSize = true;
-            label2b.Location = new Point(172, 0);
+            label2b.Location = new Point(556, 0);
             label2b.Name = "label2b";
             label2b.Size = new Size(0, 15);
             label2b.TabIndex = 1;
@@ -199,7 +236,7 @@
             // label3b
             // 
             label3b.AutoSize = true;
-            label3b.Location = new Point(178, 0);
+            label3b.Location = new Point(562, 0);
             label3b.Name = "label3b";
             label3b.Size = new Size(0, 15);
             label3b.TabIndex = 2;
@@ -221,14 +258,15 @@
             ((System.ComponentModel.ISupportInitialize)splitContainer1).EndInit();
             splitContainer1.ResumeLayout(false);
             splitContainer2.Panel1.ResumeLayout(false);
-            splitContainer2.Panel1.PerformLayout();
             splitContainer2.Panel2.ResumeLayout(false);
+            splitContainer2.Panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)splitContainer2).EndInit();
             splitContainer2.ResumeLayout(false);
             flowLayoutPanel7.ResumeLayout(false);
             flowLayoutPanel7.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
+            ((System.ComponentModel.ISupportInitialize)previewNumericUpDown2).EndInit();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
@@ -247,5 +285,8 @@
         private FlowLayoutPanel flowLayoutPanel8;
         private Label modelLabel;
         private SplitContainer splitContainer2;
+        private CheckBox checkBox1;
+        private Label label1;
+        private NumericUpDown previewNumericUpDown2;
     }
 }
