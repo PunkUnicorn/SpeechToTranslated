@@ -14,7 +14,7 @@ Click on 'Actions' (see picture)
 
 Select the top version (see picture)
 
-![Microsoft Azure, Speech Services](Github,%202%20-%20choose top build.png)
+![Microsoft Azure, Speech Services](Github,%202%20-%20choose%20top%20build.png)
 
 Then download the build results (see picture)
 
