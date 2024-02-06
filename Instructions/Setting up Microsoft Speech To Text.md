@@ -10,15 +10,15 @@ Navigate to the web page http://www.github.com/PunkUnicorn/SpeechToTranslated
 
 Click on 'Actions' (see picture)
 
-![Microsoft Azure, Speech Services](Github, 1 - actions.png)
+![Microsoft Azure, Speech Services](Github,%201%20-%20actions.png)
 
 Select the top version (see picture)
 
-![Microsoft Azure, Speech Services](Github, 2 - choose top build.png)
+![Microsoft Azure, Speech Services](Github,%202%20-%20choose top build.png)
 
 Then download the build results (see picture)
 
-![Microsoft Azure, Speech Services](Github, 3 - download.png)
+![Microsoft Azure, Speech Services](Github,%203%20-%20download.png)
 
 Unzip the file 'Build result.zip' into some folder.
 
