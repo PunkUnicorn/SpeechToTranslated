@@ -10,7 +10,7 @@ namespace SpeechToTranslated
     {
         private Process process;
         private NamedPipeServerStream namedPipeServer;
-        private StreamString namedPipeServerWriter;
+        private MessageStreamer namedPipeServerWriter;
         private readonly string languageCode;
 
         public TranslationSubProcess(string languageCode)
@@ -46,7 +46,7 @@ namespace SpeechToTranslated
         {
             try
             {
-                namedPipeServerWriter.WriteStringWithOffset(isFinalParagraph, isAddTo, offset, englishWords);
+                namedPipeServerWriter.EncodeMessage(isFinalParagraph, isAddTo, offset, englishWords);
             }
             catch (Exception e)
             {
@@ -115,7 +115,7 @@ namespace SpeechToTranslated
                 namedPipeServer.Close();
 
             namedPipeServer = new NamedPipeServerStream(string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.Out);
-            namedPipeServerWriter = new StreamString(namedPipeServer);
+            namedPipeServerWriter = new MessageStreamer(namedPipeServer);
             Console.WriteLine($"Waiting for client connection for {languageCode}...");
             namedPipeServer.WaitForConnection();
             Console.WriteLine($"Client connected for {languageCode}.");

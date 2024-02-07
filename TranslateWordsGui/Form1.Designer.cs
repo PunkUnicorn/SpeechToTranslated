@@ -30,7 +30,7 @@
         {
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
-            flowLayoutPanel8 = new FlowLayoutPanel();
+            translationFlowLayoutPanel = new FlowLayoutPanel();
             flowLayoutPanel7 = new FlowLayoutPanel();
             previewLabel = new Label();
             modelLabel = new Label();
@@ -40,9 +40,9 @@
             label1 = new Label();
             previewNumericUpDown2 = new NumericUpDown();
             staticLabel4 = new Label();
+            errorLabel = new Label();
             numericUpDown1 = new NumericUpDown();
-            label1b = new Label();
-            label2b = new Label();
+            debugPreviewLabel = new Label();
             label3b = new Label();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
@@ -89,7 +89,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(flowLayoutPanel8);
+            splitContainer2.Panel1.Controls.Add(translationFlowLayoutPanel);
             splitContainer2.Panel1MinSize = 0;
             // 
             // splitContainer2.Panel2
@@ -99,14 +99,14 @@
             splitContainer2.SplitterDistance = 392;
             splitContainer2.TabIndex = 0;
             // 
-            // flowLayoutPanel8
+            // translationFlowLayoutPanel
             // 
-            flowLayoutPanel8.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-            flowLayoutPanel8.AutoScroll = true;
-            flowLayoutPanel8.Location = new Point(0, 0);
-            flowLayoutPanel8.Name = "flowLayoutPanel8";
-            flowLayoutPanel8.Size = new Size(800, 395);
-            flowLayoutPanel8.TabIndex = 10;
+            translationFlowLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+            translationFlowLayoutPanel.AutoScroll = true;
+            translationFlowLayoutPanel.Location = new Point(0, 0);
+            translationFlowLayoutPanel.Name = "translationFlowLayoutPanel";
+            translationFlowLayoutPanel.Size = new Size(800, 395);
+            translationFlowLayoutPanel.TabIndex = 10;
             // 
             // flowLayoutPanel7
             // 
@@ -149,8 +149,8 @@
             flowLayoutPanel2.Controls.Add(previewNumericUpDown2);
             flowLayoutPanel2.Controls.Add(staticLabel4);
             flowLayoutPanel2.Controls.Add(numericUpDown1);
-            flowLayoutPanel2.Controls.Add(label1b);
-            flowLayoutPanel2.Controls.Add(label2b);
+            flowLayoutPanel2.Controls.Add(errorLabel);
+            flowLayoutPanel2.Controls.Add(debugPreviewLabel);
             flowLayoutPanel2.Controls.Add(label3b);
             flowLayoutPanel2.Dock = DockStyle.Fill;
             flowLayoutPanel2.Location = new Point(0, 0);
@@ -209,6 +209,14 @@
             staticLabel4.TabIndex = 3;
             staticLabel4.Text = "Translation Font Size:";
             // 
+            // errorLabel
+            // 
+            errorLabel.AutoSize = true;
+            errorLabel.Location = new Point(550, 0);
+            errorLabel.Name = "errorLabel";
+            errorLabel.Size = new Size(0, 15);
+            errorLabel.TabIndex = 1;
+            // 
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
@@ -217,21 +225,13 @@
             numericUpDown1.Size = new Size(41, 23);
             numericUpDown1.TabIndex = 2;
             // 
-            // label1b
+            // debugPreviewLabel
             // 
-            label1b.AutoSize = true;
-            label1b.Location = new Point(550, 0);
-            label1b.Name = "label1b";
-            label1b.Size = new Size(0, 15);
-            label1b.TabIndex = 0;
-            // 
-            // label2b
-            // 
-            label2b.AutoSize = true;
-            label2b.Location = new Point(556, 0);
-            label2b.Name = "label2b";
-            label2b.Size = new Size(0, 15);
-            label2b.TabIndex = 1;
+            debugPreviewLabel.AutoSize = true;
+            debugPreviewLabel.Location = new Point(556, 0);
+            debugPreviewLabel.Name = "debugPreviewLabel";
+            debugPreviewLabel.Size = new Size(0, 15);
+            debugPreviewLabel.TabIndex = 0;
             // 
             // label3b
             // 
@@ -274,15 +274,15 @@
         #endregion
         private SplitContainer splitContainer1;
         private FlowLayoutPanel flowLayoutPanel2;
-        private Label label1b;
-        private Label label2b;
+        private Label debugPreviewLabel;
+        private Label errorLabel;
         private Label label3b;
         private NumericUpDown numericUpDown1;
         private Label staticLabel4;
         private Button controlsButton1;
         private Label previewLabel;
         private FlowLayoutPanel flowLayoutPanel7;
-        private FlowLayoutPanel flowLayoutPanel8;
+        private FlowLayoutPanel translationFlowLayoutPanel;
         private Label modelLabel;
         private SplitContainer splitContainer2;
         private CheckBox checkBox1;
