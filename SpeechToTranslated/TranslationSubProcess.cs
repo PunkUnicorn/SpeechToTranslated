@@ -99,7 +99,11 @@ namespace SpeechToTranslated
             if (process is not null && !process.HasExited)
                 process.Kill();
 
-            var psi = new ProcessStartInfo("TranslateWordsGui.exe")
+            var program = true || OperatingSystem.IsLinux()
+                ? "TranslateWordsConsole.exe"
+                : "TranslateWordsGui.exe";
+
+            var psi = new ProcessStartInfo(program)
             {
                 UseShellExecute = true,
                 WorkingDirectory = Directory.GetCurrentDirectory(),

@@ -1,7 +1,6 @@
 using SpeechToTranslatedCommon;
 using System.Globalization;
 using System.IO.Pipes;
-using System.Text.RegularExpressions;
 using TranslateWordsProcess;
 
 namespace TranslateWordsGui
@@ -106,7 +105,7 @@ namespace TranslateWordsGui
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
             translatorHelper = new TranslatorHelper(appConfig, languageCode);
 
-            this.Text = await translatorHelper.TranslateWords($"Translation into {new CultureInfo(languageCode).DisplayName}");
+            this.Text = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
 
             listenerTask = Task.Factory.StartNew(() => BackgroundWorker1_DoWork(null, null!));
         }
@@ -143,7 +142,7 @@ namespace TranslateWordsGui
                     }
                     else
                     {
-                        var translation = await translatorHelper.TranslateWords(words);
+                        var translation = await translatorHelper.TranslateWordsAsync(words);
 
                         if (isFinalParagraph)
                         {
