@@ -93,40 +93,6 @@ namespace ChurchSpeechToTranslated
 
         public async Task RunAsync() => await speechToText.RunSpeechToTextForeverAsync();
 
-        //private void SpeechToText_WordsReady(WordsEventArgs args)
-        //{
-        //    var words = string.Join("", args.Words);
-
-        //    if (!EvenWorthBothering(words))
-        //        return;
-
-        //    try
-        //    {
-        //        Consicrate(ref words);
-
-        //        outputter.OutputFlow(words);
-
-        //        foreach (var subTranslator in translationSubProcesses)
-        //            subTranslator.TranslateWords(words);
-
-        //        File.AppendAllText($"{logpath}{englishFilename}", words);
-        //    }
-        //    catch (Exception e)
-        //    {
-
-        //        var fg = Console.ForegroundColor;
-        //        try
-        //        {
-        //            Console.ForegroundColor = ConsoleColor.Red;
-        //            Console.Error.WriteLine(e.Message);
-        //        }
-        //        finally
-        //        {
-        //            Console.ForegroundColor = fg;
-        //        }
-        //    }
-        //}
-
         private bool EvenWorthBothering(string words)
         {
             if (words.Length == 0)
@@ -200,6 +166,11 @@ namespace ChurchSpeechToTranslated
             if (word == holiness)
                 if (words.IndexOf(holiness) > -1)
                     words = words.Replace(holiness, "Holiness");
+
+            const string bible = "bible";
+            if (word == bible)
+                if (words.IndexOf(bible) > -1)
+                    words = words.Replace(bible, "Bible");
         }
 
         public void OnProcessExit(object sender, EventArgs e)

@@ -88,7 +88,7 @@ namespace TranslateWordsConsole
             catch (Exception ex)
             {
                 Console.Error.WriteLine("".PadLeft(Console.WindowWidth, '-'));
-                Console.Error.WriteLine(ex.Message);
+                Console.Error.WriteLine(ex.Message.PadLeft(Console.WindowWidth-ex.Message.Length));
                 Console.Error.WriteLine("".PadLeft(Console.WindowWidth, '-'));
             }
         }
@@ -115,7 +115,7 @@ namespace TranslateWordsConsole
             nextFreeLine = Console.CursorTop;
         }
 
-        private static void WordWrapWrite(string translation, System.Drawing.Color color)
+        private static void WordWrapWrite(string translation, Color color)
         {
             foreach (var word in translation.Split())
             {
@@ -124,9 +124,9 @@ namespace TranslateWordsConsole
                     Console.WriteLine("".PadLeft(Console.WindowWidth - left));
 
                 if (Console.CursorLeft > 0 && word.Length > 0 && !word.StartsWith(" "))
-                    Console.Write(" ");
+                    Console.Write(" ".PadLeft(Console.WindowWidth - left - 1));
 
-                Console.Write(word.Pastel(color));
+                Console.Write(word.Pastel(color).PadLeft(Console.WindowWidth - left - word.Length));
             }
 
             var x = Console.CursorLeft;

@@ -37,7 +37,7 @@ namespace TranslateWordsGui
             previewNumericUpDown2.Increment = 0.5m;
             previewNumericUpDown2.ValueChanged += PreviewNumericUpDown1_ValueChanged;
 
-            controlsButton1.Click += ControlsButton1_Click;
+            forcedRestartButton.Click += ControlsButton1_Click;
 
             translationFlowLayoutPanel.ControlAdded += FlowLayoutPanel8_ControlAdded;
             translationFlowLayoutPanel.AutoScroll = true;
@@ -185,7 +185,8 @@ namespace TranslateWordsGui
         {
             this.Invoke(() => debugPreviewLabel.Text = words);
             this.Invoke(() => previewLabel.Text = translation);
-            this.Invoke(() => {
+            this.Invoke(() =>
+            {
                 var label = new Label() { Text = $"{translation}\n\n" };
                 label.Font = modelLabel.Font;
 
@@ -197,5 +198,8 @@ namespace TranslateWordsGui
                 translationFlowLayoutPanel.ScrollControlIntoView(label);
             });
         }
+
+        private void hideButton_Click(object sender, EventArgs e)
+            => this.WindowState = FormWindowState.Minimized;
     }
 }

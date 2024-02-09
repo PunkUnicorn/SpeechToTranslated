@@ -101,7 +101,7 @@ namespace SpeechToTranslated
             if (process is not null && !process.HasExited)
                 process.Kill();
 
-            var program = forceConsole || OperatingSystem.IsLinux()
+            var program = forceConsole || !OperatingSystem.IsWindows()
                 ? "TranslateWordsConsole.exe"
                 : "TranslateWordsGui.exe";
 
