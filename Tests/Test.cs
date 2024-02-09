@@ -6,7 +6,7 @@ namespace Tests
     public class Test
     {
         [TestMethod]
-        public void CatchesSwearing1()
+        public void CatchesSinglePurposeSwearing1()
         {
             var sf = new SwearingFilter();
 
@@ -56,11 +56,21 @@ namespace Tests
         }
 
         [TestMethod]
-        public void CatchesSwearing2()
+        public void CatchesSinglePurposeSwearing2()
         {
             var sf = new SwearingFilter();
 
             var actual = sf.IsSweary(" Shitty");
+
+            Assert.IsTrue(actual);
+        }
+
+        [TestMethod]
+        public void CatchesSinglePurposeSwearing3()
+        {
+            var sf = new SwearingFilter();
+
+            var actual = sf.IsSweary("Pissy");
 
             Assert.IsTrue(actual);
         }

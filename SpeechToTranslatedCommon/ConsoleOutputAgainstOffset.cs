@@ -2,14 +2,14 @@
 {
     public class ConsoleOutputAgainstOffset : IOutputStuffAgainstOffset
     {
-        private class OffsetDetails
-        {
-            public OffsetDetails(ulong offset, List<string> lines) { Offset = offset; Lines = lines; }
-            public ulong Offset { get; set; }
-            public List<string> Lines { get; set; }
-        }
+        //private class OffsetDetails
+        //{
+        //    public OffsetDetails(ulong offset, List<string> lines) { Offset = offset; Lines = lines; }
+        //    public ulong Offset { get; set; }
+        //    public List<string> Lines { get; set; }
+        //}
 
-        private List<OffsetDetails> offsetDetails = new List<OffsetDetails>();
+        //private List<OffsetDetails> offsetDetails = new List<OffsetDetails>();
         //private KeyValuePair<ulong/*offset*/, KeyValuePair<int/*x*/, int/*y*/>> origin;
         public ConsoleOutputAgainstOffset()
         {
@@ -25,7 +25,10 @@
 
         public void OutputFlow(bool isFinalParagraph, bool isAddTo, ulong offset, string translatedWords)
         {
-            Console.WriteLine(translatedWords);
+            if (!isAddTo)
+                Console.WriteLine();
+
+            Console.Write(translatedWords);
 
             if (isFinalParagraph)
                 Console.WriteLine();
