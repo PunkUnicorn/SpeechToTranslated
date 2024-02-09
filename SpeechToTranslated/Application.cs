@@ -26,7 +26,7 @@ namespace ChurchSpeechToTranslated
         private readonly List<TranslationSubProcess> translationSubProcesses = new List<TranslationSubProcess>();
         public const string logpath = ".\\Logs\\";
 
-        public Application(string[] outputLanguages)
+        public Application(string[] outputLanguages, bool forceConsole)
         {
             speechToText = new MicrosoftSpeechToText2(config); //new NAudioToGoogleSpeechToText(config); //
             speechToText.WordsReady += SpeechToText_WordsReady;
@@ -41,7 +41,7 @@ namespace ChurchSpeechToTranslated
                 Directory.CreateDirectory(logpath);
 
             foreach (var language in outputLanguages)
-                translationSubProcesses.Add(new TranslationSubProcess(language));
+                translationSubProcesses.Add(new TranslationSubProcess(language, forceConsole));
 
             outputter = new ConsoleOutputAgainstOffset();
         }

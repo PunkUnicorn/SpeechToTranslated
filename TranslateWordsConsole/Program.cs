@@ -1,25 +1,23 @@
 ﻿using Pastel;
-using Spectre.Console;
 using SpeechToTranslatedCommon;
+using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
-using System.Text.RegularExpressions;
 using TranslateWordsProcess;
 
 namespace TranslateWordsConsole
 {
     internal class Program
     {
-        private static TranslatorHelper translatorHelper;
-        private static string languageCode;
-        private static int nextFreeLine=0;
-        private static System.Drawing.Color baseColour = System.Drawing.Color.FromArgb(160, 160, 160);
+        private static TranslatorHelper? translatorHelper;
+        private static string? languageCode;
+        private static int nextFreeLine = 0;
+        private static Color baseColour = Color.FromArgb(160, 160, 160);
         private static FunkyColours funkyColours = new FunkyColours();
-        private const int topTranslationRow = 5;
-        private static System.Drawing.Color previewColour = System.Drawing.Color.DarkGray;
+        private static Color previewColour = Color.DarkGray;
 
-        static async Task<int> Main(string[] args)
+        static async Task Main(string[] args)
         {
             if ((args?.Length ?? 0) == 0) throw new ArgumentException("Need parameter of the language code e.g. es");
             languageCode = args?[0] ?? throw new ArgumentException("Need parameter of the language code e.g. es");
@@ -38,61 +36,6 @@ namespace TranslateWordsConsole
             client.Connect();
             Console.WriteLine($"{DateTime.Now.ToShortTimeString()} Connected to server!");
             Console.Clear();
-
-            #region Spectre.Console
-            //await AnsiConsole.Progress()
-            //    .StartAsync(async ctx =>
-            //    {
-            //        //ctx.Spinner();
-            //        //ctx.Spinner = Spinner.Known.Noise;
-            //        //ctx.SpinnerStyle(new Style(Color.Black));
-            //        ctx.AddTask("wut", new ProgressTaskSettings() { AutoStart = true, MaxValue = 100 });
-            //        // Simulate some work
-            //        AnsiConsole.MarkupLine("Doing some more work...");
-            //        Thread.Sleep(2000);
-
-            //        for (int i = 0; i < 40; i++)
-            //        {
-            //            AnsiConsole.Write(new Text($"This and that {i}", new Style(MakeFunkyColur(c, f))).LeftJustified());
-            //            AnsiConsole.WriteLine();
-            //            AnsiConsole.WriteLine();
-            //            Thread.Sleep(3000);
-            //        }
-            //        ctx.Refresh();
-            //    });
-
-
-            //await AnsiConsole.Live(layout)
-            //    .StartAsync(async ctx =>
-            //    {
-            //        //var c = System.Drawing.Color.FromArgb(160, 160, 160);
-            //        //var f = new FunkyColours();
-
-            //        Text[] texts = new Text[]{ }; 
-            //        for (int i = 0; i<40; i++)
-            //        {
-
-            //            Grid grid = new Grid();
-            //            grid.AddColumn();
-            //            //for (int x=0; x<i+1; x++)
-            //                texts = texts
-            //                    .Concat(new [] { 
-            //                        new Text($"This and that {i}", new Style(MakeFunkyColur(c, f))).LeftJustified() })
-            //                    .ToArray();
-
-
-            //            layout["Left"].Update(grid.Expand());
-
-            //            layout["Right"]["Bottom"].Update(
-            //                new Panel(
-            //                    new Text($"Hello {i}", new Style(Color.DarkSlateGray1))));
-
-            //            ctx.Refresh();
-
-            //            await Task.Delay(1000);
-            //        }
-            //    });
-            #endregion 
 
             try
             {
@@ -144,11 +87,10 @@ namespace TranslateWordsConsole
             }
             catch (Exception ex)
             {
+                Console.Error.WriteLine("".PadLeft(Console.WindowWidth, '-'));
                 Console.Error.WriteLine(ex.Message);
-                return 1;
+                Console.Error.WriteLine("".PadLeft(Console.WindowWidth, '-'));
             }
-
-            return 0;
         }
 
         private static void UpdateIncremental(string words, string translation)
@@ -186,6 +128,10 @@ namespace TranslateWordsConsole
 
                 Console.Write(word.Pastel(color));
             }
+
+            var x = Console.CursorLeft;
+            Console.Write("".PadLeft(Console.WindowWidth - Console.CursorLeft));
+            Console.CursorLeft = x;
         }
 
         private static void SetupConsoleToOverwriteWords()

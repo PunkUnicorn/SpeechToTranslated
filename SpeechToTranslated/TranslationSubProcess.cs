@@ -12,10 +12,12 @@ namespace SpeechToTranslated
         private NamedPipeServerStream namedPipeServer;
         private MessageStreamer namedPipeServerWriter;
         private readonly string languageCode;
+        private readonly bool forceConsole;
 
-        public TranslationSubProcess(string languageCode)
+        public TranslationSubProcess(string languageCode, bool forceConsole)
         {
             this.languageCode = languageCode;
+            this.forceConsole = forceConsole;
             CreateProcess();
             CreateNamedPipe();
         }
@@ -99,7 +101,7 @@ namespace SpeechToTranslated
             if (process is not null && !process.HasExited)
                 process.Kill();
 
-            var program = true || OperatingSystem.IsLinux()
+            var program = forceConsole || OperatingSystem.IsLinux()
                 ? "TranslateWordsConsole.exe"
                 : "TranslateWordsGui.exe";
 
