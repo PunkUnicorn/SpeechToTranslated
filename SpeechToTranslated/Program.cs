@@ -19,5 +19,7 @@ class Program
 
         await app.RunAsync();
     }
-
+    /*
+xcopy ..\TranslateWordsGui\bin\Debug\net6.0-windows\*.* $(OutDir) /S /Y
+xcopy ..\TranslateWordsConsole\bin\Debug\net6.0\*.* $(OutDir) /S /Y*/
 }

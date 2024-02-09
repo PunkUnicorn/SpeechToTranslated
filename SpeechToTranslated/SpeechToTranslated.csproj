@@ -44,8 +44,4 @@
     </None>
   </ItemGroup>
 
-  <Target Name="PreBuild" BeforeTargets="PreBuildEvent">
-    <Exec Command="xcopy ..\TranslateWordsGui\bin\Debug\net6.0-windows\*.* $(OutDir) /S /Y&#xD;&#xA;xcopy ..\TranslateWordsConsole\bin\Debug\net6.0\*.* $(OutDir) /S /Y" />
-  </Target>
-
 </Project>
