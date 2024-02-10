@@ -102,11 +102,11 @@
             // 
             // translationFlowLayoutPanel
             // 
-            translationFlowLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             translationFlowLayoutPanel.AutoScroll = true;
+            translationFlowLayoutPanel.Dock = DockStyle.Fill;
             translationFlowLayoutPanel.Location = new Point(0, 0);
             translationFlowLayoutPanel.Name = "translationFlowLayoutPanel";
-            translationFlowLayoutPanel.Size = new Size(800, 328);
+            translationFlowLayoutPanel.Size = new Size(800, 325);
             translationFlowLayoutPanel.TabIndex = 10;
             // 
             // flowLayoutPanel7

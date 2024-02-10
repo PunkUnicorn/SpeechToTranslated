@@ -131,7 +131,7 @@ namespace TranslateWordsGui
 
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset);
+                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words, out var isIncremental, out var isFinalParagraph, out var offset);
 
                     if (!isTranslationMessage)
                     {
@@ -182,10 +182,10 @@ namespace TranslateWordsGui
                 return false;
 
             var sc = Screen.GetWorkingArea(this);
-            this.Width = sc.Width/count;
+            this.Width = sc.Width / count;
             this.Height = sc.Height;
-            this.Top=0;
-            this.Left=this.Width*(index-1);
+            this.Top = 0;
+            this.Left = this.Width * (index - 1);
             return true;
         }
 
