@@ -36,10 +36,4 @@
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </None>
   </ItemGroup>
-
-  <Target Name="PostBuild" AfterTargets="PostBuildEvent">
-    <Exec Command="if $(ConfigurationName) == Debug xcopy ..\TranslateWordsGui\bin\Debug\net6.0-windows\*.* $(OutDir) /S /Y" />
-    <Exec Command="if $(ConfigurationName) == Debug xcopy ..\TranslateWordsConsole\bin\Debug\net6.0\*.* $(OutDir) /S /Y" />
-  </Target>
-
 </Project>
