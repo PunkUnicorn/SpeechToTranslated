@@ -15,7 +15,7 @@ namespace TranslateWordsConsole
         private static int nextFreeLine = 0;
         private static Color baseColour = Color.FromArgb(160, 160, 160);
         private static FunkyColours funkyColours = new FunkyColours();
-        private static Color previewColour = Color.DarkGray;
+        private static Color previewColour = Color.FromArgb(0, 100, 100, 100);//Color.DarkGray;
 
         static async Task Main(string[] args)
         {
@@ -101,18 +101,14 @@ namespace TranslateWordsConsole
 
         private static bool ProcessLayoutMessage(string message)
         {
-            /*
-             Unhandled exception. System.MissingMethodException: Method not found: 'System.String SpeechToTranslatedCommon.MessageStreamer.DecodeMessage(System.String, Boolean ByRef, Boolean ByRef, UInt64 ByRef)'.
-   at TranslateWordsConsole.Program.Main(String[] args)
-   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
-   at TranslateWordsConsole.Program.Main(String[] args)
-   at TranslateWordsConsole.Program.<Main>(String[] args)
-*/
             if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
 
             if (OperatingSystem.IsWindows())
+            {
                 Console.SetWindowSize(Console.LargestWindowWidth/count, Console.LargestWindowHeight);
+                Console.WindowTop = 0;
+            }
 
             return true;
         }
@@ -134,12 +130,13 @@ namespace TranslateWordsConsole
             SetupConsoleToOverwriteWords();
 
             WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour));
-            Console.WriteLine("".PadLeft(Console.WindowWidth));
+            Console.WriteLine("".PadLeft(Console.WindowWidth - Console.CursorLeft));
+
             Console.WriteLine("".PadLeft(Console.WindowWidth));
             nextFreeLine = Console.CursorTop;
         }
 
-        private static void WordWrapWrite(string translation, Color color)
+        private static void WordWrapWrite(string translation, Color color, Func<string, string>? pastelFunc=null)
         {
             foreach (var word in translation.Split())
             {
@@ -148,9 +145,10 @@ namespace TranslateWordsConsole
                     Console.WriteLine("".PadLeft(Console.WindowWidth - left));
 
                 if (Console.CursorLeft > 0 && word.Length > 0 && !word.StartsWith(" "))
-                    Console.Write(" ".PadLeft(Console.WindowWidth - left - 1));
+                    Console.Write(" ");
 
-                Console.Write(word.Pastel(color).PadLeft(Console.WindowWidth - left - word.Length));
+                Console.Write(pastelFunc?.Invoke(word) ?? word.Pastel(color));
+
             }
 
             var x = Console.CursorLeft;

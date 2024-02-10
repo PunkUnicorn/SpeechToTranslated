@@ -67,32 +67,6 @@ namespace SpeechToTranslated
             }
         }
 
-        //public void TranslateWords(string englishWords)
-        //{
-        //    try
-        //    {
-        //        namedPipeServerWriter.WriteString(englishWords);
-        //    }
-        //    catch (Exception e)
-        //    {
-        //        var fg = Console.ForegroundColor;
-        //        try
-        //        {
-        //            Console.ForegroundColor = ConsoleColor.Red;
-        //            Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
-        //            CreateProcess();
-        //            CreateNamedPipe();
-        //        }
-        //        finally
-        //        {
-        //            Console.ForegroundColor = fg;
-        //        }
-        //    }
-        //}
-
-        //public void TranslateGreenWords(string words)
-        //    => TranslateWords($"green:{words}");
-
         internal void Kill()
             => process.Kill();
 

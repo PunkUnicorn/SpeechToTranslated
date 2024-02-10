@@ -3,7 +3,7 @@ using SpeechToTranslatedCommon.WordHelpers;
 namespace Tests
 {
     [TestClass]
-    public class Test
+    public class SwearingTest
     {
         [TestMethod]
         public void CatchesSinglePurposeSwearing1()

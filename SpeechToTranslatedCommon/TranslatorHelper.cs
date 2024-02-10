@@ -10,6 +10,7 @@ namespace TranslateWordsProcess
     {
         private readonly Translator translator;
         private readonly bool deepLLog;
+        private readonly int cacheExpireMinutes;
         private readonly MemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions { });
 
         private readonly string outputLanguage;
@@ -20,6 +21,7 @@ namespace TranslateWordsProcess
             this.outputLanguage = outputLanguage;
             translator = new Translator(appConfig["translate.deepl.key"] ?? throw new InvalidOperationException("Unable to find translate.deepl.key."));
             deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
+            cacheExpireMinutes = int.Parse(appConfig["translate.cache.expiretimeminutes"] ?? "10");
         }
 
         public async Task<string> TranslateWordsAsync(string words)
@@ -33,30 +35,27 @@ namespace TranslateWordsProcess
             if (outputLanguage.StartsWith("en"))
                 return words;
 
-            bool newItem = false;
+            TextResult? result = null;
             var text = await memoryCache.GetOrCreateAsync<string>(words.GetHashCode(), async (c) => 
                 { 
-                    newItem = true;
-                    c.SetSlidingExpiration(TimeSpan.FromMinutes(10));
-                    TextResult result = await translator.TranslateTextAsync(
+                    c.SetSlidingExpiration(TimeSpan.FromMinutes(cacheExpireMinutes));
+                    result = await translator.TranslateTextAsync(
                                     words,
                                     LanguageCode.English,
                                     outputLanguage);
 
-                    if (deepLLog)
-                    {
-                        var dump = new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, Result = result };
-                        File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
-                    }
                     return result.Text;
                 });
 
-                if (deepLLog && !newItem)
-                {
-                    var dump = new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, IsCached = true };
+                if (deepLLog)
+                { 
+                    object dump = result is null
+                        ? new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, IsCached = true }
+                        : new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, Result = result };
+
                     File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
                 }
-            
+
             return text!;
         }
     }

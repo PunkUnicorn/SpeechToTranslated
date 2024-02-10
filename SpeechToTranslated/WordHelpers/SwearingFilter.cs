@@ -20,12 +20,12 @@ namespace SpeechToTranslatedCommon.WordHelpers
                 : throw new InvalidProgramException("No swear filter detected.");
 
             FilterWords = FilterWords.Where(w => w.Length > 0).ToArray();
-            FilterWords = FilterWords.Union(FilterWords).ToArray(); /*de-dup hack*/
-            Array.Sort(FilterWords);
+            FilterWords = FilterWords.Union(FilterWords).OrderBy(ob => ob.Length).ToArray(); /*de-dup hack*/
         }
 
         public bool IsSweary(string swearyCheck) => swearyCheck.Length > 0
             ? FilterWords.Contains(swearyCheck.Trim().ToLower())
             : false;
+
     }
 }
