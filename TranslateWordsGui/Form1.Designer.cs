@@ -36,6 +36,7 @@
             modelLabel = new Label();
             flowLayoutPanel2 = new FlowLayoutPanel();
             forcedRestartButton = new Button();
+            hideButton = new Button();
             checkBox1 = new CheckBox();
             label1 = new Label();
             previewNumericUpDown2 = new NumericUpDown();
@@ -44,7 +45,6 @@
             errorLabel = new Label();
             debugPreviewLabel = new Label();
             label3b = new Label();
-            hideButton = new Button();
             ((System.ComponentModel.ISupportInitialize)splitContainer1).BeginInit();
             splitContainer1.Panel1.SuspendLayout();
             splitContainer1.Panel2.SuspendLayout();
@@ -97,7 +97,7 @@
             // 
             splitContainer2.Panel2.Controls.Add(flowLayoutPanel7);
             splitContainer2.Size = new Size(800, 421);
-            splitContainer2.SplitterDistance = 392;
+            splitContainer2.SplitterDistance = 325;
             splitContainer2.TabIndex = 0;
             // 
             // translationFlowLayoutPanel
@@ -106,7 +106,7 @@
             translationFlowLayoutPanel.AutoScroll = true;
             translationFlowLayoutPanel.Location = new Point(0, 0);
             translationFlowLayoutPanel.Name = "translationFlowLayoutPanel";
-            translationFlowLayoutPanel.Size = new Size(800, 395);
+            translationFlowLayoutPanel.Size = new Size(800, 328);
             translationFlowLayoutPanel.TabIndex = 10;
             // 
             // flowLayoutPanel7
@@ -115,7 +115,7 @@
             flowLayoutPanel7.Controls.Add(previewLabel);
             flowLayoutPanel7.Dock = DockStyle.Bottom;
             flowLayoutPanel7.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
-            flowLayoutPanel7.Location = new Point(0, 5);
+            flowLayoutPanel7.Location = new Point(0, 72);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
             flowLayoutPanel7.Size = new Size(800, 20);
             flowLayoutPanel7.TabIndex = 9;
@@ -163,22 +163,37 @@
             // forcedRestartButton
             // 
             forcedRestartButton.AutoSize = true;
+            forcedRestartButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             forcedRestartButton.Location = new Point(3, 1);
             forcedRestartButton.Margin = new Padding(3, 1, 3, 3);
             forcedRestartButton.Name = "forcedRestartButton";
-            forcedRestartButton.Size = new Size(92, 25);
+            forcedRestartButton.Size = new Size(91, 25);
             forcedRestartButton.TabIndex = 4;
             forcedRestartButton.Text = "Forced Restart";
             forcedRestartButton.UseVisualStyleBackColor = true;
+            // 
+            // hideButton
+            // 
+            hideButton.AutoSize = true;
+            hideButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            hideButton.Location = new Point(100, 1);
+            hideButton.Margin = new Padding(3, 1, 3, 3);
+            hideButton.Name = "hideButton";
+            hideButton.Size = new Size(41, 25);
+            hideButton.TabIndex = 6;
+            hideButton.Text = "Hide";
+            hideButton.UseVisualStyleBackColor = true;
+            hideButton.Click += hideButton_Click;
             // 
             // checkBox1
             // 
             checkBox1.AutoSize = true;
             checkBox1.Checked = true;
             checkBox1.CheckState = CheckState.Checked;
-            checkBox1.Location = new Point(149, 3);
+            checkBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBox1.Location = new Point(147, 3);
             checkBox1.Name = "checkBox1";
-            checkBox1.Size = new Size(101, 19);
+            checkBox1.Size = new Size(99, 17);
             checkBox1.TabIndex = 5;
             checkBox1.Text = "Multicoloured";
             checkBox1.UseVisualStyleBackColor = true;
@@ -186,43 +201,47 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Location = new Point(256, 5);
+            label1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            label1.Location = new Point(252, 5);
             label1.Margin = new Padding(3, 5, 3, 0);
             label1.Name = "label1";
-            label1.Size = new Size(101, 15);
+            label1.Size = new Size(99, 13);
             label1.TabIndex = 3;
             label1.Text = "Preview Font Size:";
             // 
             // previewNumericUpDown2
             // 
             previewNumericUpDown2.AutoSize = true;
-            previewNumericUpDown2.Location = new Point(363, 3);
+            previewNumericUpDown2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            previewNumericUpDown2.Location = new Point(357, 3);
             previewNumericUpDown2.Name = "previewNumericUpDown2";
-            previewNumericUpDown2.Size = new Size(41, 23);
+            previewNumericUpDown2.Size = new Size(41, 22);
             previewNumericUpDown2.TabIndex = 2;
             // 
             // staticLabel4
             // 
             staticLabel4.AutoSize = true;
-            staticLabel4.Location = new Point(410, 5);
+            staticLabel4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            staticLabel4.Location = new Point(404, 5);
             staticLabel4.Margin = new Padding(3, 5, 3, 0);
             staticLabel4.Name = "staticLabel4";
-            staticLabel4.Size = new Size(117, 15);
+            staticLabel4.Size = new Size(117, 13);
             staticLabel4.TabIndex = 3;
             staticLabel4.Text = "Translation Font Size:";
             // 
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
-            numericUpDown1.Location = new Point(533, 3);
+            numericUpDown1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            numericUpDown1.Location = new Point(527, 3);
             numericUpDown1.Name = "numericUpDown1";
-            numericUpDown1.Size = new Size(41, 23);
+            numericUpDown1.Size = new Size(41, 22);
             numericUpDown1.TabIndex = 2;
             // 
             // errorLabel
             // 
             errorLabel.AutoSize = true;
-            errorLabel.Location = new Point(580, 0);
+            errorLabel.Location = new Point(574, 0);
             errorLabel.Name = "errorLabel";
             errorLabel.Size = new Size(0, 15);
             errorLabel.TabIndex = 1;
@@ -230,7 +249,7 @@
             // debugPreviewLabel
             // 
             debugPreviewLabel.AutoSize = true;
-            debugPreviewLabel.Location = new Point(586, 0);
+            debugPreviewLabel.Location = new Point(580, 0);
             debugPreviewLabel.Name = "debugPreviewLabel";
             debugPreviewLabel.Size = new Size(0, 15);
             debugPreviewLabel.TabIndex = 0;
@@ -238,22 +257,10 @@
             // label3b
             // 
             label3b.AutoSize = true;
-            label3b.Location = new Point(592, 0);
+            label3b.Location = new Point(586, 0);
             label3b.Name = "label3b";
             label3b.Size = new Size(0, 15);
             label3b.TabIndex = 2;
-            // 
-            // hideButton
-            // 
-            hideButton.AutoSize = true;
-            hideButton.Location = new Point(101, 1);
-            hideButton.Margin = new Padding(3, 1, 3, 3);
-            hideButton.Name = "hideButton";
-            hideButton.Size = new Size(42, 25);
-            hideButton.TabIndex = 6;
-            hideButton.Text = "Hide";
-            hideButton.UseVisualStyleBackColor = true;
-            hideButton.Click += hideButton_Click;
             // 
             // Form1
             // 
