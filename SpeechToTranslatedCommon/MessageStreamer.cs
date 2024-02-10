@@ -47,7 +47,7 @@ namespace SpeechToTranslatedCommon
             return outBuffer.Length + 2;
         }
 
-        public void EncodeMessage(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
+        public void EncodeTranslationMessage(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
         {
             var codeChar = isAddTo
                 ? "i"
@@ -58,15 +58,45 @@ namespace SpeechToTranslatedCommon
             WriteString($"{codeChar}:offset:{offset}:{englishWords}");
         }
 
-        public static string DecodeMessage(string message, out bool isIncremental, out bool isFinalParagraph, out ulong offset)
+        public static bool DecodeTranslationMessage(string message, out string words, out bool isIncremental, out bool isFinalParagraph, out ulong offset)
         {
             var offsetRegex = new Regex("^([i|f|p]):offset:(\\d*):(.*$)", RegexOptions.Compiled);
             var offsetCapture = offsetRegex.Match(message);
+            if (!offsetCapture.Success)
+            {
+                words = "";
+                offset = 0;
+                isFinalParagraph = false;
+                isIncremental = false;
+                return false;
+            }
             offset = ulong.Parse(offsetCapture.Groups[2].Value);
-            var words = offsetCapture.Groups[3].Value;
+            words = offsetCapture.Groups[3].Value;
             isIncremental = offsetCapture.Groups[1].ToString() == "i";
             isFinalParagraph = offsetCapture.Groups[1].ToString() == "p";
-            return words;
+            return true;
+        }
+
+        public void EncodeLayoutMessage(int count, int index)
+        {
+            WriteString($":layout:{count}:{index}");
+        }
+
+        public static bool DecodeLayoutMessage(string message, out int count, out int index)
+        {
+            var layoutRegex = new Regex("^:layout:(\\d*):(\\d*)", RegexOptions.Compiled);
+            var layoutCapture = layoutRegex.Match(message);
+            if (!layoutCapture.Success)
+            {
+                count = -1;
+                index = -1;
+                return false;
+            }
+
+            count = int.Parse(layoutCapture.Groups[1].Value);
+            index = int.Parse(layoutCapture.Groups[2].Value);
+
+            return true;
         }
     }
 }

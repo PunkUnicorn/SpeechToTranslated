@@ -50,7 +50,13 @@ namespace TranslateWordsConsole
                 Console.WriteLine();
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var words = MessageStreamer.DecodeMessage(message, out var isIncremental, out var isFinalParagraph, out var offset);
+                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words, out var isIncremental, out var isFinalParagraph, out var offset);
+
+                    if (!isTranslationMessage)
+                    {
+                        ProcessLayoutMessage(message);
+                        continue;
+                    }
 
                     if (words == null || words.Length == 0)
                         continue;
@@ -91,6 +97,24 @@ namespace TranslateWordsConsole
                 Console.Error.WriteLine(ex.Message.PadLeft(Console.WindowWidth-ex.Message.Length));
                 Console.Error.WriteLine("".PadLeft(Console.WindowWidth, '-'));
             }
+        }
+
+        private static bool ProcessLayoutMessage(string message)
+        {
+            /*
+             Unhandled exception. System.MissingMethodException: Method not found: 'System.String SpeechToTranslatedCommon.MessageStreamer.DecodeMessage(System.String, Boolean ByRef, Boolean ByRef, UInt64 ByRef)'.
+   at TranslateWordsConsole.Program.Main(String[] args)
+   at System.Runtime.CompilerServices.AsyncMethodBuilderCore.Start[TStateMachine](TStateMachine& stateMachine)
+   at TranslateWordsConsole.Program.Main(String[] args)
+   at TranslateWordsConsole.Program.<Main>(String[] args)
+*/
+            if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
+                return false;
+
+            if (OperatingSystem.IsWindows())
+                Console.SetWindowSize(Console.LargestWindowWidth/count, Console.LargestWindowHeight);
+
+            return true;
         }
 
         private static void UpdateIncremental(string words, string translation)

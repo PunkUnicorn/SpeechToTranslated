@@ -1,6 +1,7 @@
 using SpeechToTranslatedCommon;
 using System.Globalization;
 using System.IO.Pipes;
+using System.Windows.Forms;
 using TranslateWordsProcess;
 
 namespace TranslateWordsGui
@@ -130,7 +131,13 @@ namespace TranslateWordsGui
 
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var words = MessageStreamer.DecodeMessage(message, out var isIncremental, out var isFinalParagraph, out var offset);
+                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset);
+
+                    if (!isTranslationMessage)
+                    {
+                        ProcessLayoutMessage(message);
+                        continue;
+                    }
 
                     if (words == null || words.Length == 0)
                         continue;
@@ -167,6 +174,19 @@ namespace TranslateWordsGui
             {
                 this.Invoke(() => errorLabel.Text = $"\n\n{ex.Message}\n\n");
             }
+        }
+
+        private bool ProcessLayoutMessage(string message)
+        {
+            if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
+                return false;
+
+            var sc = Screen.GetWorkingArea(this);
+            this.Width = sc.Width/count;
+            this.Height = sc.Height;
+            this.Top=0;
+            this.Left=this.Width*(index-1);
+            return true;
         }
 
         private void UpdateIncremental(string words, string translation)

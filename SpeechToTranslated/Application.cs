@@ -91,7 +91,30 @@ namespace ChurchSpeechToTranslated
             }
         }
 
-        public async Task RunAsync() => await speechToText.RunSpeechToTextForeverAsync();
+        public async Task RunAsync()
+        {
+            var keyListener = Task.Factory.StartNew(() => 
+            {
+                while (true)
+                {
+                    if (Console.KeyAvailable)
+                    {
+                        ConsoleKeyInfo key = Console.ReadKey(true);
+                        switch (key.Key)
+                        {
+                            case ConsoleKey.F5:
+                                foreach (var proc in translationSubProcesses)
+                                    proc.LayoutShift(translationSubProcesses.Count, translationSubProcesses.IndexOf(proc)+1);
+                                break;
+                            default:
+                                break;
+                        }
+                    }
+                }
+            });
+            //keyListener.Start();
+            await speechToText.RunSpeechToTextForeverAsync();
+        }
 
         private bool EvenWorthBothering(string words)
         {

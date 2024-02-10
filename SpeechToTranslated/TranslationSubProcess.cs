@@ -48,7 +48,7 @@ namespace SpeechToTranslated
         {
             try
             {
-                namedPipeServerWriter.EncodeMessage(isFinalParagraph, isAddTo, offset, englishWords);
+                namedPipeServerWriter.EncodeTranslationMessage(isFinalParagraph, isAddTo, offset, englishWords);
             }
             catch (Exception e)
             {
@@ -67,31 +67,31 @@ namespace SpeechToTranslated
             }
         }
 
-        public void TranslateWords(string englishWords)
-        {
-            try
-            {
-                namedPipeServerWriter.WriteString(englishWords);
-            }
-            catch (Exception e)
-            {
-                var fg = Console.ForegroundColor;
-                try
-                {
-                    Console.ForegroundColor = ConsoleColor.Red;
-                    Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
-                    CreateProcess();
-                    CreateNamedPipe();
-                }
-                finally
-                {
-                    Console.ForegroundColor = fg;
-                }
-            }
-        }
+        //public void TranslateWords(string englishWords)
+        //{
+        //    try
+        //    {
+        //        namedPipeServerWriter.WriteString(englishWords);
+        //    }
+        //    catch (Exception e)
+        //    {
+        //        var fg = Console.ForegroundColor;
+        //        try
+        //        {
+        //            Console.ForegroundColor = ConsoleColor.Red;
+        //            Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
+        //            CreateProcess();
+        //            CreateNamedPipe();
+        //        }
+        //        finally
+        //        {
+        //            Console.ForegroundColor = fg;
+        //        }
+        //    }
+        //}
 
-        public void TranslateGreenWords(string words)
-            => TranslateWords($"green:{words}");
+        //public void TranslateGreenWords(string words)
+        //    => TranslateWords($"green:{words}");
 
         internal void Kill()
             => process.Kill();
@@ -125,6 +125,29 @@ namespace SpeechToTranslated
             Console.WriteLine($"Waiting for client connection for {languageCode}...");
             namedPipeServer.WaitForConnection();
             Console.WriteLine($"Client connected for {languageCode}.");
+        }
+
+        internal void LayoutShift(int count, int index)
+        {
+            try
+            {
+                namedPipeServerWriter.EncodeLayoutMessage(count, index);
+            }
+            catch (Exception e)
+            {
+                var fg = Console.ForegroundColor;
+                try
+                {
+                    Console.ForegroundColor = ConsoleColor.Red;
+                    Console.Error.WriteLine($"{e.Message} for {languageCode}. Recreating...");
+                    CreateProcess();
+                    CreateNamedPipe();
+                }
+                finally
+                {
+                    Console.ForegroundColor = fg;
+                }
+            }
         }
     }
 }
