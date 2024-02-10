@@ -1,1 +1,1 @@
-SpeechToTranslated.exe bg es pl en
+SpeechToTranslated.exe bg es pl ro
