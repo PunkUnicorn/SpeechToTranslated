@@ -27,8 +27,8 @@ jobs:
       run: dotnet build --no-restore -c Release
     - name: Test
       run: dotnet test
-    - name: Publish -c Release
-      run: dotnet publish -r win-x64 --self-contained --output ./Publish
+    - name: Publish 
+      run: dotnet publish -r win-x64 --self-contained -c Release --output ./Publish
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
