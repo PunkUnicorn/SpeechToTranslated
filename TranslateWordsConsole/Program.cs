@@ -13,9 +13,9 @@ namespace TranslateWordsConsole
         private static TranslatorHelper? translatorHelper;
         private static string? languageCode;
         private static int nextFreeLine = 0;
-        private static Color baseColour = Color.FromArgb(160, 160, 160);
+        private static Color baseColour = Color.FromArgb(180, 180, 180);
         private static FunkyColours funkyColours = new FunkyColours();
-        private static Color previewColour = Color.FromArgb(0, 100, 100, 100);//Color.DarkGray;
+        private static Color previewColour = Color.FromArgb(0, 100, 100, 100);
 
         static async Task Main(string[] args)
         {
@@ -39,8 +39,8 @@ namespace TranslateWordsConsole
 
             try
             {
-               // Read data through the pipe
-               var ss = new MessageStreamer(client);
+                // Read data through the pipe
+                var ss = new MessageStreamer(client);
 
                 string GetTicks()
                     => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);

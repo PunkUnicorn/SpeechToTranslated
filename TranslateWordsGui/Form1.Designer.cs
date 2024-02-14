@@ -30,7 +30,7 @@
         {
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
-            translationFlowLayoutPanel = new FlowLayoutPanel();
+            translationFlowLayoutPanel = new FlowLayoutPanelNoScrollbars();
             flowLayoutPanel7 = new FlowLayoutPanel();
             previewLabel = new Label();
             modelLabel = new Label();
@@ -38,8 +38,10 @@
             forcedRestartButton = new Button();
             hideButton = new Button();
             checkBox1 = new CheckBox();
+            panel1 = new Panel();
             label1 = new Label();
             previewNumericUpDown2 = new NumericUpDown();
+            panel2 = new Panel();
             staticLabel4 = new Label();
             numericUpDown1 = new NumericUpDown();
             errorLabel = new Label();
@@ -55,7 +57,9 @@
             splitContainer2.SuspendLayout();
             flowLayoutPanel7.SuspendLayout();
             flowLayoutPanel2.SuspendLayout();
+            panel1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)previewNumericUpDown2).BeginInit();
+            panel2.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).BeginInit();
             SuspendLayout();
             // 
@@ -102,11 +106,11 @@
             // 
             // translationFlowLayoutPanel
             // 
-            translationFlowLayoutPanel.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
             translationFlowLayoutPanel.AutoScroll = true;
+            translationFlowLayoutPanel.Dock = DockStyle.Fill;
             translationFlowLayoutPanel.Location = new Point(0, 0);
             translationFlowLayoutPanel.Name = "translationFlowLayoutPanel";
-            translationFlowLayoutPanel.Size = new Size(800, 328);
+            translationFlowLayoutPanel.Size = new Size(800, 325);
             translationFlowLayoutPanel.TabIndex = 10;
             // 
             // flowLayoutPanel7
@@ -114,7 +118,7 @@
             flowLayoutPanel7.AutoSize = true;
             flowLayoutPanel7.Controls.Add(previewLabel);
             flowLayoutPanel7.Dock = DockStyle.Bottom;
-            flowLayoutPanel7.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
+            flowLayoutPanel7.Font = new Font("Segoe UI", 14.25F);
             flowLayoutPanel7.Location = new Point(0, 72);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
             flowLayoutPanel7.Size = new Size(800, 20);
@@ -124,7 +128,7 @@
             // 
             previewLabel.AutoSize = true;
             previewLabel.Dock = DockStyle.Top;
-            previewLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            previewLabel.Font = new Font("Segoe UI", 11.25F);
             previewLabel.ForeColor = SystemColors.ControlDarkDark;
             previewLabel.Location = new Point(3, 0);
             previewLabel.Name = "previewLabel";
@@ -134,7 +138,7 @@
             // modelLabel
             // 
             modelLabel.AutoSize = true;
-            modelLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            modelLabel.Font = new Font("Segoe UI", 11.25F);
             modelLabel.Location = new Point(6, 37);
             modelLabel.Name = "modelLabel";
             modelLabel.Size = new Size(88, 20);
@@ -147,10 +151,8 @@
             flowLayoutPanel2.Controls.Add(forcedRestartButton);
             flowLayoutPanel2.Controls.Add(hideButton);
             flowLayoutPanel2.Controls.Add(checkBox1);
-            flowLayoutPanel2.Controls.Add(label1);
-            flowLayoutPanel2.Controls.Add(previewNumericUpDown2);
-            flowLayoutPanel2.Controls.Add(staticLabel4);
-            flowLayoutPanel2.Controls.Add(numericUpDown1);
+            flowLayoutPanel2.Controls.Add(panel1);
+            flowLayoutPanel2.Controls.Add(panel2);
             flowLayoutPanel2.Controls.Add(errorLabel);
             flowLayoutPanel2.Controls.Add(debugPreviewLabel);
             flowLayoutPanel2.Controls.Add(label3b);
@@ -163,7 +165,7 @@
             // forcedRestartButton
             // 
             forcedRestartButton.AutoSize = true;
-            forcedRestartButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            forcedRestartButton.Font = new Font("Segoe UI", 8.25F);
             forcedRestartButton.Location = new Point(3, 1);
             forcedRestartButton.Margin = new Padding(3, 1, 3, 3);
             forcedRestartButton.Name = "forcedRestartButton";
@@ -175,7 +177,7 @@
             // hideButton
             // 
             hideButton.AutoSize = true;
-            hideButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            hideButton.Font = new Font("Segoe UI", 8.25F);
             hideButton.Location = new Point(100, 1);
             hideButton.Margin = new Padding(3, 1, 3, 3);
             hideButton.Name = "hideButton";
@@ -190,7 +192,7 @@
             checkBox1.AutoSize = true;
             checkBox1.Checked = true;
             checkBox1.CheckState = CheckState.Checked;
-            checkBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
+            checkBox1.Font = new Font("Segoe UI", 8.25F);
             checkBox1.Location = new Point(147, 3);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(99, 17);
@@ -198,11 +200,22 @@
             checkBox1.Text = "Multicoloured";
             checkBox1.UseVisualStyleBackColor = true;
             // 
+            // panel1
+            // 
+            panel1.AutoSize = true;
+            panel1.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel1.Controls.Add(label1);
+            panel1.Controls.Add(previewNumericUpDown2);
+            panel1.Location = new Point(252, 3);
+            panel1.Name = "panel1";
+            panel1.Size = new Size(152, 25);
+            panel1.TabIndex = 7;
+            // 
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            label1.Location = new Point(252, 5);
+            label1.Font = new Font("Segoe UI", 8.25F);
+            label1.Location = new Point(3, 1);
             label1.Margin = new Padding(3, 5, 3, 0);
             label1.Name = "label1";
             label1.Size = new Size(99, 13);
@@ -212,17 +225,28 @@
             // previewNumericUpDown2
             // 
             previewNumericUpDown2.AutoSize = true;
-            previewNumericUpDown2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            previewNumericUpDown2.Location = new Point(357, 3);
+            previewNumericUpDown2.Font = new Font("Segoe UI", 8.25F);
+            previewNumericUpDown2.Location = new Point(108, 0);
             previewNumericUpDown2.Name = "previewNumericUpDown2";
             previewNumericUpDown2.Size = new Size(41, 22);
             previewNumericUpDown2.TabIndex = 2;
             // 
+            // panel2
+            // 
+            panel2.AutoSize = true;
+            panel2.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            panel2.Controls.Add(staticLabel4);
+            panel2.Controls.Add(numericUpDown1);
+            panel2.Location = new Point(410, 3);
+            panel2.Name = "panel2";
+            panel2.Size = new Size(170, 25);
+            panel2.TabIndex = 8;
+            // 
             // staticLabel4
             // 
             staticLabel4.AutoSize = true;
-            staticLabel4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            staticLabel4.Location = new Point(404, 5);
+            staticLabel4.Font = new Font("Segoe UI", 8.25F);
+            staticLabel4.Location = new Point(3, 2);
             staticLabel4.Margin = new Padding(3, 5, 3, 0);
             staticLabel4.Name = "staticLabel4";
             staticLabel4.Size = new Size(117, 13);
@@ -232,8 +256,8 @@
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
-            numericUpDown1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
-            numericUpDown1.Location = new Point(527, 3);
+            numericUpDown1.Font = new Font("Segoe UI", 8.25F);
+            numericUpDown1.Location = new Point(126, 0);
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(41, 22);
             numericUpDown1.TabIndex = 2;
@@ -241,7 +265,7 @@
             // errorLabel
             // 
             errorLabel.AutoSize = true;
-            errorLabel.Location = new Point(574, 0);
+            errorLabel.Location = new Point(586, 0);
             errorLabel.Name = "errorLabel";
             errorLabel.Size = new Size(0, 15);
             errorLabel.TabIndex = 1;
@@ -249,7 +273,7 @@
             // debugPreviewLabel
             // 
             debugPreviewLabel.AutoSize = true;
-            debugPreviewLabel.Location = new Point(580, 0);
+            debugPreviewLabel.Location = new Point(592, 0);
             debugPreviewLabel.Name = "debugPreviewLabel";
             debugPreviewLabel.Size = new Size(0, 15);
             debugPreviewLabel.TabIndex = 0;
@@ -257,7 +281,7 @@
             // label3b
             // 
             label3b.AutoSize = true;
-            label3b.Location = new Point(586, 0);
+            label3b.Location = new Point(598, 0);
             label3b.Name = "label3b";
             label3b.Size = new Size(0, 15);
             label3b.TabIndex = 2;
@@ -287,7 +311,11 @@
             flowLayoutPanel7.PerformLayout();
             flowLayoutPanel2.ResumeLayout(false);
             flowLayoutPanel2.PerformLayout();
+            panel1.ResumeLayout(false);
+            panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)previewNumericUpDown2).EndInit();
+            panel2.ResumeLayout(false);
+            panel2.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)numericUpDown1).EndInit();
             ResumeLayout(false);
         }
@@ -303,12 +331,14 @@
         private Button forcedRestartButton;
         private Label previewLabel;
         private FlowLayoutPanel flowLayoutPanel7;
-        private FlowLayoutPanel translationFlowLayoutPanel;
+        private FlowLayoutPanelNoScrollbars translationFlowLayoutPanel;
         private Label modelLabel;
         private SplitContainer splitContainer2;
         private CheckBox checkBox1;
         private Label label1;
         private NumericUpDown previewNumericUpDown2;
         private Button hideButton;
+        private Panel panel1;
+        private Panel panel2;
     }
 }

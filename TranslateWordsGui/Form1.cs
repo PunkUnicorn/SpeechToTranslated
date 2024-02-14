@@ -1,7 +1,7 @@
 using SpeechToTranslatedCommon;
 using System.Globalization;
 using System.IO.Pipes;
-using System.Windows.Forms;
+using System.Text;
 using TranslateWordsProcess;
 
 namespace TranslateWordsGui
@@ -20,7 +20,6 @@ namespace TranslateWordsGui
         private NamedPipeClientStream client;
         private string languageCode;
         private Task listenerTask;
-        private bool verticalScrollbarAdded = false;
         private FunkyColours funkyColours = new FunkyColours();
 
         public Form1()
@@ -40,40 +39,18 @@ namespace TranslateWordsGui
 
             forcedRestartButton.Click += ControlsButton1_Click;
 
-            translationFlowLayoutPanel.ControlAdded += FlowLayoutPanel8_ControlAdded;
-            translationFlowLayoutPanel.AutoScroll = true;
-            translationFlowLayoutPanel.VerticalScroll.Enabled = true;
-            translationFlowLayoutPanel.HorizontalScroll.Enabled = true;
-
-            this.Resize += Form1_Resize;
-
+            MakeDebugContents(false);
         }
 
-        private void Form1_Resize(object sender, EventArgs e) => HideScrollbar();
-
-        private void FlowLayoutPanel8_ControlAdded(object sender, ControlEventArgs e) => HideScrollbar();
-
-
-        private void HideScrollbar()
+        private void MakeDebugContents(bool debug)
         {
-            if (verticalScrollbarAdded)
-            {
-                if (!translationFlowLayoutPanel.VerticalScroll.Visible)
-                {
-                    verticalScrollbarAdded = false;
-                    translationFlowLayoutPanel.Size = new Size(translationFlowLayoutPanel.Size.Width - SystemInformation.VerticalScrollBarWidth, translationFlowLayoutPanel.Size.Height - SystemInformation.HorizontalScrollBarHeight);
-                    translationFlowLayoutPanel.Invalidate();
-                }
+            if (!debug)
                 return;
-            }
 
-
-            if (translationFlowLayoutPanel.VerticalScroll.Visible)
-            {
-                verticalScrollbarAdded = true;
-                translationFlowLayoutPanel.Size = new Size(translationFlowLayoutPanel.Size.Width + SystemInformation.VerticalScrollBarWidth, translationFlowLayoutPanel.Size.Height + SystemInformation.HorizontalScrollBarHeight);
-                translationFlowLayoutPanel.Invalidate();
-            }
+            var sb = new StringBuilder();
+            for (int i = 0; i < 100; i++)
+                sb.Append($"ipsom lorum {i} ");
+            translationFlowLayoutPanel.Controls.Add(new Label { Text = sb.ToString(), Font = modelLabel.Font, AutoSize = true });
         }
 
         private void ControlsButton1_Click(object sender, EventArgs e) => Close();
