@@ -13,7 +13,7 @@ namespace TranslateWordsConsole
         private static TranslatorHelper? translatorHelper;
         private static string? languageCode;
         private static int nextFreeLine = 0;
-        private static Color baseColour = Color.FromArgb(180, 180, 180);
+        private static Color baseColour = Color.FromArgb(160, 160, 160);
         private static FunkyColours funkyColours = new FunkyColours();
         private static Color previewColour = Color.FromArgb(0, 100, 100, 100);
 
