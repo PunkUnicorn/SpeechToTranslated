@@ -153,22 +153,6 @@ namespace TranslateWordsGui
             }
         }
 
-        private void showOnMonitor(int showOnMonitor)
-        {
-            Screen[] sc;
-            sc = Screen.AllScreens;
-            if (showOnMonitor >= sc.Length)
-            {
-                showOnMonitor = 0;
-            }
-
-            this.StartPosition = FormStartPosition.Manual;
-            this.Location = new Point(sc[showOnMonitor].Bounds.Left, sc[showOnMonitor].Bounds.Top);
-            // If you intend the form to be maximized, change it to normal then maximized.
-            this.WindowState = FormWindowState.Normal;
-            this.WindowState = FormWindowState.Maximized;
-        }
-
         private bool ProcessLayoutMessage(string message)
         {
             if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
@@ -182,7 +166,7 @@ namespace TranslateWordsGui
             //return true;
             var screen = Screen.FromControl(this);
             var sc = screen.Bounds;
-            Point p = new Point(sc.Location.X, sc.Location.Y * (index - 1));
+            Point p = new Point(sc.Location.X * (index - 1), sc.Location.Y);
             this.Location = p;
             this.Width = sc.Width/count;
             this.Height = sc.Height;
