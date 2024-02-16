@@ -157,21 +157,12 @@ namespace TranslateWordsGui
         {
             if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
-            //var myScreen = Screen.FromControl(this);
-            ////var otherScreen = Screen.AllScreens.FirstOrDefault(s => s.Equals(myScreen));
-            //this.Left = myScreen.WorkingArea.Left + 120;
-            //this.Top = myScreen.WorkingArea.Top + 120;
-            //this.Width = myScreen.WorkingArea.Width / count;
-            //this.Height = myScreen.WorkingArea.Height;
-            //return true;
-            var screen = Screen.FromControl(this);
-            var sc = screen.WorkingArea;
-            Point p = new Point(sc.Location.X + (sc.Width * (index - 1)), sc.Location.Y);
-            this.Location = p;
-            this.Width = sc.Width/count;
+
+            var sc = Screen.GetWorkingArea(this);
+            this.Width = sc.Width / count;
             this.Height = sc.Height;
-            //this.Top = sc.Top;
-            //this.Left = sc.Width*(index-1);
+            this.Top = 0;
+            this.Left = this.Width * (index - 1);
             return true;
         }
 
