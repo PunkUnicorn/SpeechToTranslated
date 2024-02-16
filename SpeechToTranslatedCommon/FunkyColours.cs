@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using static System.Math;
+﻿using System.Drawing;
 using static System.Drawing.Color;
+using static System.Math;
 
 namespace SpeechToTranslatedCommon
 {
@@ -28,16 +23,16 @@ namespace SpeechToTranslatedCommon
             var wildcardR = random.Next(3) - 1;
             var wildcardG = random.Next(3) - 1;
             var wildcardB = random.Next(3) - 1;
-            var r = Math.Max(50, Math.Min(255, wildcardR * colourAdd + rVal + random.Next(127) - 65));
-            var g = Math.Max(50, Math.Min(255, wildcardG * colourAdd + gVal + random.Next(127) - 65));
-            var b = Math.Max(50, Math.Min(255, wildcardB * colourAdd + bVal + random.Next(127) - 65));
+            var r = Max(50, Min(255, wildcardR * colourAdd + rVal + random.Next(127) - 65));
+            var g = Max(50, Min(255, wildcardG * colourAdd + gVal + random.Next(127) - 65));
+            var b = Max(50, Min(255, wildcardB * colourAdd + bVal + random.Next(127) - 65));
 
             var sum = r + g + b;
             var list = new[] {r, g, b};
             while ((list.Count(n => n>=80) < 2) || list.Count(n => n>=110) == 0)
             {
-                r = Math.Max(50, Math.Min(255, r + random.Next(100)));
-                g = Math.Max(50, Math.Min(255, g + random.Next(100)));
+                r = Max(50, Min(255, r + random.Next(100)));
+                g = Max(50, Min(255, g + random.Next(100)));
                 sum = r + g + b;
                 list = new[] { r, g, b };
             }
