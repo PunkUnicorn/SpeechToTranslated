@@ -157,12 +157,12 @@ namespace TranslateWordsGui
         {
             if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
-
-            var sc = Screen.GetWorkingArea(this);
+            var screen = Screen.FromControl(this);
+            var sc = screen.WorkingArea;
             this.Width = sc.Width/count;
             this.Height = sc.Height;
-            this.Top=0;
-            this.Left=this.Width*(index-1);
+            this.Top = sc.Top;
+            this.Left = sc.Width*(index-1);
             return true;
         }
 
