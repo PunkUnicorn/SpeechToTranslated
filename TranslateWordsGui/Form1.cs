@@ -182,7 +182,7 @@ namespace TranslateWordsGui
             //return true;
 
             var screen = Screen.FromControl(this);
-            var sc = screen.WorkingArea;
+            var sc = screen.Bounds;
             this.Width = sc.Width/count;
             this.Height = sc.Height;
             this.Top = sc.Top;
