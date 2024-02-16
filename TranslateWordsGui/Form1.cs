@@ -187,7 +187,6 @@ namespace TranslateWordsGui
                 var label = new Label() { Text = $"{translation}\n\n" };
                 label.Font = modelLabel.Font;
 
-                funkyColours.SetSeed(words.GetHashCode());
                 if (checkBox1.Checked)
                     label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor);
 

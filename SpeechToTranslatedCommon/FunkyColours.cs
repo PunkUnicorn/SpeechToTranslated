@@ -51,10 +51,5 @@ namespace SpeechToTranslatedCommon
             previous = FromArgb(aVal, r, g, b);
             return previous;
         }
-
-        public void SetSeed(int seed)
-        {
-            random = new Random(seed);
-        }
     }
 }
