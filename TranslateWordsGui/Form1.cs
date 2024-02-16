@@ -191,6 +191,8 @@ namespace TranslateWordsGui
                     label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor);
 
                 label.AutoSize = true;
+                if (translationFlowLayoutPanel.Controls.Count > 20)
+                    translationFlowLayoutPanel.Controls.Remove(translationFlowLayoutPanel.Controls[0]);
                 translationFlowLayoutPanel.Controls.Add(label);
                 translationFlowLayoutPanel.ScrollControlIntoView(label);
             });
