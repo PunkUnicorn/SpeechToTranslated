@@ -13,13 +13,13 @@ namespace SpeechToTranslatedCommon
     {
         private int colourAdd = 0;
         private Color previous = Color.Empty;
+        private Random random = new Random();
 
         public Color MakeFunkyColour(Color @base)
         {
             colourAdd += 50;
             if (colourAdd > 200)
                 colourAdd = 0;
-            var random = new Random();
             byte[] bytes = BitConverter.GetBytes(@base.ToArgb());
             byte aVal = bytes[0];
             byte rVal = bytes[1];
@@ -55,6 +55,11 @@ namespace SpeechToTranslatedCommon
 
             previous = FromArgb(aVal, r, g, b);
             return previous;
+        }
+
+        public void SetSeed(int seed)
+        {
+            random = new Random(seed);
         }
     }
 }
