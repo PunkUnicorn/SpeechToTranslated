@@ -153,10 +153,34 @@ namespace TranslateWordsGui
             }
         }
 
+        private void showOnMonitor(int showOnMonitor)
+        {
+            Screen[] sc;
+            sc = Screen.AllScreens;
+            if (showOnMonitor >= sc.Length)
+            {
+                showOnMonitor = 0;
+            }
+
+            this.StartPosition = FormStartPosition.Manual;
+            this.Location = new Point(sc[showOnMonitor].Bounds.Left, sc[showOnMonitor].Bounds.Top);
+            // If you intend the form to be maximized, change it to normal then maximized.
+            this.WindowState = FormWindowState.Normal;
+            this.WindowState = FormWindowState.Maximized;
+        }
+
         private bool ProcessLayoutMessage(string message)
         {
             if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
+            //var myScreen = Screen.FromControl(this);
+            ////var otherScreen = Screen.AllScreens.FirstOrDefault(s => s.Equals(myScreen));
+            //this.Left = myScreen.WorkingArea.Left + 120;
+            //this.Top = myScreen.WorkingArea.Top + 120;
+            //this.Width = myScreen.WorkingArea.Width / count;
+            //this.Height = myScreen.WorkingArea.Height;
+            //return true;
+
             var screen = Screen.FromControl(this);
             var sc = screen.WorkingArea;
             this.Width = sc.Width/count;

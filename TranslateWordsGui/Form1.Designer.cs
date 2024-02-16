@@ -118,7 +118,7 @@
             flowLayoutPanel7.AutoSize = true;
             flowLayoutPanel7.Controls.Add(previewLabel);
             flowLayoutPanel7.Dock = DockStyle.Bottom;
-            flowLayoutPanel7.Font = new Font("Segoe UI", 14.25F);
+            flowLayoutPanel7.Font = new Font("Segoe UI", 14.25F, FontStyle.Regular, GraphicsUnit.Point);
             flowLayoutPanel7.Location = new Point(0, 72);
             flowLayoutPanel7.Name = "flowLayoutPanel7";
             flowLayoutPanel7.Size = new Size(800, 20);
@@ -128,7 +128,7 @@
             // 
             previewLabel.AutoSize = true;
             previewLabel.Dock = DockStyle.Top;
-            previewLabel.Font = new Font("Segoe UI", 11.25F);
+            previewLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
             previewLabel.ForeColor = SystemColors.ControlDarkDark;
             previewLabel.Location = new Point(3, 0);
             previewLabel.Name = "previewLabel";
@@ -138,7 +138,7 @@
             // modelLabel
             // 
             modelLabel.AutoSize = true;
-            modelLabel.Font = new Font("Segoe UI", 11.25F);
+            modelLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
             modelLabel.Location = new Point(6, 37);
             modelLabel.Name = "modelLabel";
             modelLabel.Size = new Size(88, 20);
@@ -165,7 +165,7 @@
             // forcedRestartButton
             // 
             forcedRestartButton.AutoSize = true;
-            forcedRestartButton.Font = new Font("Segoe UI", 8.25F);
+            forcedRestartButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             forcedRestartButton.Location = new Point(3, 1);
             forcedRestartButton.Margin = new Padding(3, 1, 3, 3);
             forcedRestartButton.Name = "forcedRestartButton";
@@ -177,7 +177,7 @@
             // hideButton
             // 
             hideButton.AutoSize = true;
-            hideButton.Font = new Font("Segoe UI", 8.25F);
+            hideButton.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             hideButton.Location = new Point(100, 1);
             hideButton.Margin = new Padding(3, 1, 3, 3);
             hideButton.Name = "hideButton";
@@ -192,7 +192,7 @@
             checkBox1.AutoSize = true;
             checkBox1.Checked = true;
             checkBox1.CheckState = CheckState.Checked;
-            checkBox1.Font = new Font("Segoe UI", 8.25F);
+            checkBox1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             checkBox1.Location = new Point(147, 3);
             checkBox1.Name = "checkBox1";
             checkBox1.Size = new Size(99, 17);
@@ -214,7 +214,7 @@
             // label1
             // 
             label1.AutoSize = true;
-            label1.Font = new Font("Segoe UI", 8.25F);
+            label1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             label1.Location = new Point(3, 1);
             label1.Margin = new Padding(3, 5, 3, 0);
             label1.Name = "label1";
@@ -225,7 +225,7 @@
             // previewNumericUpDown2
             // 
             previewNumericUpDown2.AutoSize = true;
-            previewNumericUpDown2.Font = new Font("Segoe UI", 8.25F);
+            previewNumericUpDown2.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             previewNumericUpDown2.Location = new Point(108, 0);
             previewNumericUpDown2.Name = "previewNumericUpDown2";
             previewNumericUpDown2.Size = new Size(41, 22);
@@ -245,7 +245,7 @@
             // staticLabel4
             // 
             staticLabel4.AutoSize = true;
-            staticLabel4.Font = new Font("Segoe UI", 8.25F);
+            staticLabel4.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             staticLabel4.Location = new Point(3, 2);
             staticLabel4.Margin = new Padding(3, 5, 3, 0);
             staticLabel4.Name = "staticLabel4";
@@ -256,7 +256,7 @@
             // numericUpDown1
             // 
             numericUpDown1.AutoSize = true;
-            numericUpDown1.Font = new Font("Segoe UI", 8.25F);
+            numericUpDown1.Font = new Font("Segoe UI", 8.25F, FontStyle.Regular, GraphicsUnit.Point);
             numericUpDown1.Location = new Point(126, 0);
             numericUpDown1.Name = "numericUpDown1";
             numericUpDown1.Size = new Size(41, 22);
@@ -296,6 +296,7 @@
             DoubleBuffered = true;
             Name = "Form1";
             ShowIcon = false;
+            StartPosition = FormStartPosition.Manual;
             Load += Form1_Load;
             splitContainer1.Panel1.ResumeLayout(false);
             splitContainer1.Panel1.PerformLayout();
