@@ -33,6 +33,7 @@ public class FlowLayoutPanelNoScrollbars : FlowLayoutPanel, IMessageFilter
     protected override void WndProc(ref Message m)
     {
         base.WndProc(ref m);
+        SuspendLayout();
         switch (m.Msg)
         {
             case WM_PAINT:
@@ -48,6 +49,7 @@ public class FlowLayoutPanelNoScrollbars : FlowLayoutPanel, IMessageFilter
                 ShowScrollBar(this.Handle, SB_SHOW_BOTH, false);
                 break;
         }
+        ResumeLayout();
     }
 
     public bool PreFilterMessage(ref Message m)
