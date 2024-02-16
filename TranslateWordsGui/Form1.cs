@@ -180,13 +180,14 @@ namespace TranslateWordsGui
             //this.Width = myScreen.WorkingArea.Width / count;
             //this.Height = myScreen.WorkingArea.Height;
             //return true;
-
             var screen = Screen.FromControl(this);
             var sc = screen.Bounds;
+            Point p = new Point(sc.Location.X, sc.Location.Y * (index - 1));
+            this.Location = p;
             this.Width = sc.Width/count;
             this.Height = sc.Height;
-            this.Top = sc.Top;
-            this.Left = sc.Width*(index-1);
+            //this.Top = sc.Top;
+            //this.Left = sc.Width*(index-1);
             return true;
         }
 
