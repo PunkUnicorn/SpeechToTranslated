@@ -166,7 +166,7 @@ namespace TranslateWordsGui
             //return true;
             var screen = Screen.FromControl(this);
             var sc = screen.Bounds;
-            Point p = new Point(sc.Location.X * (index - 1), sc.Location.Y);
+            Point p = new Point(sc.Location.X + (sc.Width * (index - 1)), sc.Location.Y);
             this.Location = p;
             this.Width = sc.Width/count;
             this.Height = sc.Height;
