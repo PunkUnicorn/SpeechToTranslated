@@ -75,8 +75,9 @@ namespace SpeechToTranslated
             if (process is not null && !process.HasExited)
                 process.Kill();
 
+            var ext = OperatingSystem.IsWindows() ? "exe" : "dll";
             var program = forceConsole || !OperatingSystem.IsWindows()
-                ? "TranslateWordsConsole.exe"
+                ? $"TranslateWordsConsole.{ext}"
                 : "TranslateWordsGui.exe";
 
             var psi = new ProcessStartInfo(program)
