@@ -183,23 +183,20 @@ namespace TranslateWordsGui
 
         private void UpdateFinalParagraph(string words, string translation)
         {
-            using (new SuspendLayout(translationFlowLayoutPanel))
+            this.Invoke(() => debugPreviewLabel.Text = words);
+            this.Invoke(() => previewLabel.Text = translation);
+
+            this.Invoke(() =>
             {
-                this.Invoke(() => debugPreviewLabel.Text = words);
-                this.Invoke(() => previewLabel.Text = translation);
+                var label = new Label() { Text = $"{translation}\n\n" };
+                label.Font = modelLabel.Font;
 
-                this.Invoke(() =>
-                {
-                    var label = new Label() { Text = $"{translation}\n\n" };
-                    label.Font = modelLabel.Font;
+                if (checkBox1.Checked)
+                    label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor, FunkyColours.GetWordsSeed(words));
 
-                    if (checkBox1.Checked)
-                        label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor, FunkyColours.GetWordsSeed(words));
-
-                    label.AutoSize = true;
-                    translationFlowLayoutPanel.Controls.Add(label);                
-                });
-            }
+                label.AutoSize = true;
+                translationFlowLayoutPanel.Controls.Add(label);                
+            });
         }
 
         private void TranslationFlowLayoutPanel_ControlAdded(object sender, ControlEventArgs e)
