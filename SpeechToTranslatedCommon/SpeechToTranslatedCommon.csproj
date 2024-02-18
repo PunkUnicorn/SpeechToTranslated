@@ -6,9 +6,6 @@
     <Nullable>enable</Nullable>
     <Configurations>Debug;Release;ReleaseLinux;DebugLinux</Configurations>
   </PropertyGroup>
-  <PropertyGroup>
-    <PublishTrimmed>true</PublishTrimmed>
-  </PropertyGroup>  
 
   <ItemGroup>
     <PackageReference Include="DeepL.net" Version="1.8.0" />
