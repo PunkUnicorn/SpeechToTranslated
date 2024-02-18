@@ -10,8 +10,14 @@ namespace SpeechToTranslatedCommon
         private Color previous = Color.Empty;
         private Random random = new Random();
 
-        public Color MakeFunkyColour(Color @base)
+        public static int GetWordsSeed(string words) 
+            => (int)words.ToArray().Select(c => (decimal)(short)c).Sum();
+
+        public Color MakeFunkyColour(Color @base, int? seed = null)
         {
+            if (seed is not null)
+                random = new Random(seed.Value);
+
             colourAdd += 50;
             if (colourAdd > 200)
                 colourAdd = 0;

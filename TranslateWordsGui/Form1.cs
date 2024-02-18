@@ -60,13 +60,14 @@ namespace TranslateWordsGui
             var me = (NumericUpDown)sender;
 
             modelLabel.Font = new Font(modelLabel.Font.FontFamily, (float)me.Value);
-            translationFlowLayoutPanel.SuspendLayout();
-            foreach (var label in translationFlowLayoutPanel.Controls)
-            {
-                if (label is Label)
-                    ((Label)label).Font = new Font(((Label)label).Font.FontFamily, (float)me.Value);
+            using (new SuspendLayout(translationFlowLayoutPanel))
+            { 
+                foreach (var label in translationFlowLayoutPanel.Controls)
+                {
+                    if (label is Label)
+                        ((Label)label).Font = new Font(((Label)label).Font.FontFamily, (float)me.Value);
+                }
             }
-            translationFlowLayoutPanel.ResumeLayout();
         }
 
         private void PreviewNumericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -168,32 +169,35 @@ namespace TranslateWordsGui
 
         private void UpdateIncremental(string words, string translation)
         {
-            this.Invoke(() => previewLabel.Text += translation);
-            this.Invoke(() => debugPreviewLabel.Text += words);
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text += translation));
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => debugPreviewLabel.Text += words));
         }
 
         private void UpdateAbsolute(string words, string translation)
         {
-            this.Invoke(() => previewLabel.Text = translation);
-            this.Invoke(() => debugPreviewLabel.Text = words);
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text = translation));
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => debugPreviewLabel.Text = words));
         }
 
         private void UpdateFinalParagraph(string words, string translation)
         {
-            this.Invoke(() => debugPreviewLabel.Text = words);
-            this.Invoke(() => previewLabel.Text = translation);
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel , () => debugPreviewLabel.Text = words));
+            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text = translation));
             this.Invoke(() =>
             {
                 var label = new Label() { Text = $"{translation}\n\n" };
-                label.Font = modelLabel.Font;
+                using (new SuspendLayout(translationFlowLayoutPanel))
+                { 
+                    label.Font = modelLabel.Font;
 
-                if (checkBox1.Checked)
-                    label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor);
+                    if (checkBox1.Checked)
+                        label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor, FunkyColours.GetWordsSeed(words));
 
-                label.AutoSize = true;
-                //if (translationFlowLayoutPanel.Controls.Count > 20)
-                //    translationFlowLayoutPanel.Controls.Remove(translationFlowLayoutPanel.Controls[0]);
-                translationFlowLayoutPanel.Controls.Add(label);
+                    //label.Text += $" {words.GetHashCode()} \n\n{words}\n\n";
+
+                    label.AutoSize = true;
+                    translationFlowLayoutPanel.Controls.Add(label);
+                }
                 translationFlowLayoutPanel.ScrollControlIntoView(label);
             });
         }

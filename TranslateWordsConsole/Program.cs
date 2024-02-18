@@ -129,7 +129,7 @@ namespace TranslateWordsConsole
         {
             SetupConsoleToOverwriteWords();
 
-            WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour));
+            WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour, FunkyColours.GetWordsSeed(words)));
             Console.WriteLine("".PadLeft(Console.WindowWidth - Console.CursorLeft));
 
             Console.WriteLine("".PadLeft(Console.WindowWidth));

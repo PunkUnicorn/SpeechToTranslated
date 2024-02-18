@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using System.Runtime.InteropServices;
+using TranslateWordsGui;
 
 [DesignerCategory("code")]
 public class FlowLayoutPanelNoScrollbars : FlowLayoutPanel, IMessageFilter
@@ -33,23 +34,24 @@ public class FlowLayoutPanelNoScrollbars : FlowLayoutPanel, IMessageFilter
     protected override void WndProc(ref Message m)
     {
         base.WndProc(ref m);
-        SuspendLayout();
-        switch (m.Msg)
-        {
-            case WM_PAINT:
-            case WM_ERASEBKGND:
-            case WM_NCCALCSIZE:
-                if (DesignMode || !AutoScroll) break;
-                ShowScrollBar(this.Handle, SB_SHOW_BOTH, false);
-                break;
-            case WM_MOUSEWHEEL:
-                // Handle Mouse Wheel for other specific cases
-                int delta = (int)(m.WParam.ToInt64() >> 16);
-                int direction = Math.Sign(delta);
-                ShowScrollBar(this.Handle, SB_SHOW_BOTH, false);
-                break;
+        using (new SuspendLayout(this))
+        { 
+            switch (m.Msg)
+            {
+                case WM_PAINT:
+                case WM_ERASEBKGND:
+                case WM_NCCALCSIZE:
+                    if (DesignMode || !AutoScroll) break;
+                    ShowScrollBar(this.Handle, SB_SHOW_BOTH, false);
+                    break;
+                case WM_MOUSEWHEEL:
+                    // Handle Mouse Wheel for other specific cases
+                    int delta = (int)(m.WParam.ToInt64() >> 16);
+                    int direction = Math.Sign(delta);
+                    ShowScrollBar(this.Handle, SB_SHOW_BOTH, false);
+                    break;
+            }
         }
-        ResumeLayout();
     }
 
     public bool PreFilterMessage(ref Message m)
@@ -63,7 +65,10 @@ public class FlowLayoutPanelNoScrollbars : FlowLayoutPanel, IMessageFilter
                 // Should also check whether the ForegroundWindow matches the parent Form.
                 if (RectangleToScreen(ClientRectangle).Contains(MousePosition))
                 {
-                    SendMessage(this.Handle, WM_MOUSEWHEEL, m.WParam, m.LParam);
+                    using (new SuspendLayout(this))
+                    { 
+                        SendMessage(this.Handle, WM_MOUSEWHEEL, m.WParam, m.LParam);
+                    }
                     return true;
                 }
                 break;
