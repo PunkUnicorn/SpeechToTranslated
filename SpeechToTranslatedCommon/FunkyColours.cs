@@ -11,7 +11,7 @@ namespace SpeechToTranslatedCommon
         private Random random = new Random();
 
         public static int GetWordsSeed(string words) 
-            => (int)words.ToArray().Select(c => (decimal)(short)c).Sum();
+            => (int)words.ToArray().Select(c => (decimal)(short)c).Sum() << words.Split().Length;
 
         public Color MakeFunkyColour(Color @base, int? seed = null)
         {

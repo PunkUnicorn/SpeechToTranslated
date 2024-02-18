@@ -39,6 +39,8 @@ namespace TranslateWordsGui
 
             forcedRestartButton.Click += ControlsButton1_Click;
 
+
+            translationFlowLayoutPanel.ControlAdded += TranslationFlowLayoutPanel_ControlAdded;
             MakeDebugContents(false);
         }
 
@@ -169,26 +171,27 @@ namespace TranslateWordsGui
 
         private void UpdateIncremental(string words, string translation)
         {
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text += translation));
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => debugPreviewLabel.Text += words));
+            this.Invoke(() => previewLabel.Text += translation);
+            this.Invoke(() => debugPreviewLabel.Text += words);
         }
 
         private void UpdateAbsolute(string words, string translation)
         {
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text = translation));
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => debugPreviewLabel.Text = words));
+            this.Invoke(() => previewLabel.Text = translation);
+            this.Invoke(() => debugPreviewLabel.Text = words);
         }
 
         private void UpdateFinalParagraph(string words, string translation)
         {
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel , () => debugPreviewLabel.Text = words));
-            this.Invoke(() => new SuspendLayout(translationFlowLayoutPanel, () => previewLabel.Text = translation));
+            this.Invoke(() => debugPreviewLabel.Text = words);
+            this.Invoke(() => previewLabel.Text = translation);
+
             this.Invoke(() =>
             {
                 var label = new Label() { Text = $"{translation}\n\n" };
-                using (new SuspendLayout(translationFlowLayoutPanel))
-                { 
-                    label.Font = modelLabel.Font;
+                //using (new SuspendLayout(translationFlowLayoutPanel))
+                //{ 
+                label.Font = modelLabel.Font;
 
                     if (checkBox1.Checked)
                         label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor, FunkyColours.GetWordsSeed(words));
@@ -196,13 +199,16 @@ namespace TranslateWordsGui
                     //label.Text += $" {words.GetHashCode()} \n\n{words}\n\n";
 
                     label.AutoSize = true;
-                    translationFlowLayoutPanel.Controls.Add(label);
-                }
-                translationFlowLayoutPanel.ScrollControlIntoView(label);
+                //}
+                translationFlowLayoutPanel.Controls.Add(label);                
             });
         }
-
+        private void TranslationFlowLayoutPanel_ControlAdded(object sender, ControlEventArgs e)
+        {
+            translationFlowLayoutPanel.ScrollControlIntoView(e.Control);
+        }
         private void hideButton_Click(object sender, EventArgs e)
             => this.WindowState = FormWindowState.Minimized;
     }
+
 }
