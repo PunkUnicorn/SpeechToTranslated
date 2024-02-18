@@ -29,10 +29,15 @@ jobs:
       run: dotnet test -c Release --no-build
     - name: Publish 
       run: dotnet publish -r win-x64 --self-contained -c Release --output ./Publish
-    - name: Publish 
+    - name: Publish Linux
       run: dotnet publish -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
         name: Build result
         path: ./Publish/
+    - name: Upload Linux build artifacts
+      uses: actions/upload-artifact@v3
+      with:
+        name: Linux build result
+        path: ./PublishLinux/
