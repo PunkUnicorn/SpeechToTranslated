@@ -16,7 +16,7 @@ namespace ChurchSpeechToTranslated
     {
         private readonly IConfiguration config = ConfigurationLoader.Load();
 
-        private readonly ISpeechToText speechToText;
+        private readonly IRecogniseSpeech speechToText;
 
         private static string GetTicks() => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);
         private readonly string englishFilename = $"{DateTime.Now.ToShortDateString().Replace('\\', '-').Replace('/', '-')}-{GetTicks()}_en.txt";
@@ -28,7 +28,7 @@ namespace ChurchSpeechToTranslated
 
         public Application(string[] outputLanguages, bool forceConsole)
         {
-            speechToText = new MicrosoftSpeechToText2(config); //new NAudioToGoogleSpeechToText(config); //
+            speechToText = new MicrosoftSpeechToText(config); //new NAudioToGoogleSpeechToText(config); //
             speechToText.WordsReady += SpeechToText_WordsReady;
             speechToText.SentanceReady += SpeechToText_SentanceReady;
 
@@ -68,12 +68,13 @@ namespace ChurchSpeechToTranslated
 
         private void OutputWords(bool isFinalParagraph, bool isAddTo, ulong offset, string words)
         {
+            var sharedRandom = new Random().Next(int.MinValue, int.MaxValue);
             try
             {
                 var cr = isAddTo ? "" : "\n";
                 outputter.OutputFlow(isFinalParagraph, isAddTo, offset, words + cr);
                 foreach (var proc in translationSubProcesses)
-                    proc.TranslateWords(isFinalParagraph, isAddTo, offset, words);
+                    proc.TranslateWords(isFinalParagraph, isAddTo, offset, words, sharedRandom);
 
             }
             catch (Exception e)

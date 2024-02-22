@@ -28,9 +28,10 @@
         /// </summary>
         private void InitializeComponent()
         {
+            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
-            translationFlowLayoutPanel = new FlowLayoutPanelNoScrollbars();
+            messageFlower1 = new MessageFlower();
             flowLayoutPanel7 = new FlowLayoutPanel();
             previewLabel = new Label();
             modelLabel = new Label();
@@ -94,7 +95,7 @@
             // 
             // splitContainer2.Panel1
             // 
-            splitContainer2.Panel1.Controls.Add(translationFlowLayoutPanel);
+            splitContainer2.Panel1.Controls.Add(messageFlower1);
             splitContainer2.Panel1MinSize = 0;
             // 
             // splitContainer2.Panel2
@@ -104,14 +105,13 @@
             splitContainer2.SplitterDistance = 325;
             splitContainer2.TabIndex = 0;
             // 
-            // translationFlowLayoutPanel
+            // messageFlower1
             // 
-            translationFlowLayoutPanel.AutoScroll = true;
-            translationFlowLayoutPanel.Dock = DockStyle.Fill;
-            translationFlowLayoutPanel.Location = new Point(0, 0);
-            translationFlowLayoutPanel.Name = "translationFlowLayoutPanel";
-            translationFlowLayoutPanel.Size = new Size(800, 325);
-            translationFlowLayoutPanel.TabIndex = 10;
+            messageFlower1.Dock = DockStyle.Fill;
+            messageFlower1.Location = new Point(0, 0);
+            messageFlower1.Name = "messageFlower1";
+            messageFlower1.Size = new Size(800, 325);
+            messageFlower1.TabIndex = 11;
             // 
             // flowLayoutPanel7
             // 
@@ -332,7 +332,6 @@
         private Button forcedRestartButton;
         private Label previewLabel;
         private FlowLayoutPanel flowLayoutPanel7;
-        private FlowLayoutPanelNoScrollbars translationFlowLayoutPanel;
         private Label modelLabel;
         private SplitContainer splitContainer2;
         private CheckBox checkBox1;
@@ -341,5 +340,6 @@
         private Button hideButton;
         private Panel panel1;
         private Panel panel2;
+        private MessageFlower messageFlower1;
     }
 }

@@ -14,6 +14,7 @@ namespace SpeechToTranslatedCommon
     {
         private Stream ioStream;
         private UnicodeEncoding streamEncoding;
+        private static Regex offsetRegex = new Regex("^([i|f|p]):offset:(\\d*):([-|0-9]\\d*):(.*)$", RegexOptions.Compiled);
 
         public MessageStreamer(Stream ioStream)
         {
@@ -47,7 +48,7 @@ namespace SpeechToTranslatedCommon
             return outBuffer.Length + 2;
         }
 
-        public void EncodeTranslationMessage(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
+        public void EncodeTranslationMessage(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords, int sharedRandom)
         {
             var codeChar = isAddTo
                 ? "i"
@@ -55,12 +56,11 @@ namespace SpeechToTranslatedCommon
                     ? "p"
                     : "f";
 
-            WriteString($"{codeChar}:offset:{offset}:{englishWords}");
+            WriteString($"{codeChar}:offset:{offset}:{sharedRandom}:{englishWords}");
         }
 
-        public static bool DecodeTranslationMessage(string message, out string words, out bool isIncremental, out bool isFinalParagraph, out ulong offset)
+        public static bool DecodeTranslationMessage(string message, out string words, out bool isIncremental, out bool isFinalParagraph, out ulong offset, out int sharedRandom)
         {
-            var offsetRegex = new Regex("^([i|f|p]):offset:(\\d*):(.*$)", RegexOptions.Compiled);
             var offsetCapture = offsetRegex.Match(message);
             if (!offsetCapture.Success)
             {
@@ -68,12 +68,14 @@ namespace SpeechToTranslatedCommon
                 offset = 0;
                 isFinalParagraph = false;
                 isIncremental = false;
+                sharedRandom = 0;
                 return false;
             }
-            offset = ulong.Parse(offsetCapture.Groups[2].Value);
-            words = offsetCapture.Groups[3].Value;
             isIncremental = offsetCapture.Groups[1].ToString() == "i";
             isFinalParagraph = offsetCapture.Groups[1].ToString() == "p";
+            offset = ulong.Parse(offsetCapture.Groups[2].Value);
+            sharedRandom = int.Parse(offsetCapture.Groups[3].Value);
+            words = offsetCapture.Groups[4].Value;
             return true;
         }
 

@@ -1,4 +1,5 @@
 using SpeechToTranslatedCommon;
+using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
@@ -39,20 +40,28 @@ namespace TranslateWordsGui
 
             forcedRestartButton.Click += ControlsButton1_Click;
 
+            messageFlower1.Font = modelLabel.Font;
 
-            translationFlowLayoutPanel.ControlAdded += TranslationFlowLayoutPanel_ControlAdded;
-            MakeDebugContents(false);
+            if (Program.Args.Contains("test"))
+            {
+                var testTimer = new System.Windows.Forms.Timer();
+                testTimer.Interval = 1000;
+                testTimer.Tick += TestTimer_Tick;
+                testTimer.Start();
+            }
         }
 
-        private void MakeDebugContents(bool debug)
+        private void TestTimer_Tick(object sender, EventArgs e)
         {
-            if (!debug)
-                return;
-
+            var me = (System.Windows.Forms.Timer)sender;
             var sb = new StringBuilder();
-            for (int i = 0; i < 100; i++)
+            for (int i = 0; i < new Random().Next(100); i++)
                 sb.Append($"ipsom lorum {i} ");
-            translationFlowLayoutPanel.Controls.Add(new Label { Text = sb.ToString(), Font = modelLabel.Font, AutoSize = true });
+
+            sb.AppendLine();
+            sb.AppendLine();
+
+            UpdateFinalParagraph("", sb.ToString(), new Random().Next(int.MinValue, int.MaxValue));
         }
 
         private void ControlsButton1_Click(object sender, EventArgs e) => Close();
@@ -62,14 +71,9 @@ namespace TranslateWordsGui
             var me = (NumericUpDown)sender;
 
             modelLabel.Font = new Font(modelLabel.Font.FontFamily, (float)me.Value);
-            using (new SuspendLayout(translationFlowLayoutPanel))
-            { 
-                foreach (var label in translationFlowLayoutPanel.Controls)
-                {
-                    if (label is Label)
-                        ((Label)label).Font = new Font(((Label)label).Font.FontFamily, (float)me.Value);
-                }
-            }
+
+            messageFlower1.Font = modelLabel.Font;
+            messageFlower1.Invalidate();
         }
 
         private void PreviewNumericUpDown1_ValueChanged(object sender, EventArgs e)
@@ -80,8 +84,8 @@ namespace TranslateWordsGui
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            if ((Program.Args?.Length ?? 0) == 0) throw new ArgumentException("Need parameter of the language code e.g. es"); ;
-            languageCode = Program.Args?[0] ?? throw new ArgumentException("Need parameter of the language code e.g. es"); ;
+            if ((Program.Args?.Length ?? 0) == 0) throw new ArgumentException("Need parameter of the language code e.g. es");
+            languageCode = Program.Args?[0] ?? throw new ArgumentException("Need parameter of the language code e.g. es");
 
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
             translatorHelper = new TranslatorHelper(appConfig, languageCode);
@@ -111,7 +115,7 @@ namespace TranslateWordsGui
 
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset);
+                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset, out int sharedRandom);
 
                     if (!isTranslationMessage)
                     {
@@ -133,7 +137,7 @@ namespace TranslateWordsGui
 
                         if (isFinalParagraph)
                         {
-                            UpdateFinalParagraph(words, translation);
+                            UpdateFinalParagraph(words, translation, sharedRandom);
                         }
                         else
                         {
@@ -171,40 +175,47 @@ namespace TranslateWordsGui
 
         private void UpdateIncremental(string words, string translation)
         {
-            this.Invoke(() => previewLabel.Text += translation);
-            this.Invoke(() => debugPreviewLabel.Text += words);
+            try
+            {
+                previewLabel.Invoke(() => previewLabel.Text += translation);
+                debugPreviewLabel.Invoke(() => debugPreviewLabel.Text += words);
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(() => errorLabel.Text = $"\n\n{ex.Message}\n\n");
+            }
         }
 
         private void UpdateAbsolute(string words, string translation)
         {
-            this.Invoke(() => previewLabel.Text = translation);
-            this.Invoke(() => debugPreviewLabel.Text = words);
-        }
-
-        private void UpdateFinalParagraph(string words, string translation)
-        {
-            this.Invoke(() => debugPreviewLabel.Text = words);
-            this.Invoke(() => previewLabel.Text = translation);
-
-            this.Invoke(() =>
+            try
             {
-                var label = new Label() { Text = $"{translation}\n\n" };
-                label.Font = modelLabel.Font;
-
-                if (checkBox1.Checked)
-                    label.ForeColor = funkyColours.MakeFunkyColour(modelLabel.ForeColor, FunkyColours.GetWordsSeed(words));
-
-                label.AutoSize = true;
-                translationFlowLayoutPanel.Controls.Add(label);                
-            });
+                previewLabel.Invoke(() => previewLabel.Text = translation);
+                debugPreviewLabel.Invoke(() => debugPreviewLabel.Text = words);
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(() => errorLabel.Text = $"\n\n{ex.Message}\n\n");
+            }
         }
 
-        private void TranslationFlowLayoutPanel_ControlAdded(object sender, ControlEventArgs e)
+        private void UpdateFinalParagraph(string words, string translation, int sharedRandom)
         {
-            translationFlowLayoutPanel.ScrollControlIntoView(e.Control);
+            try
+            {
+                debugPreviewLabel.Invoke(() => debugPreviewLabel.Text = words);
+                previewLabel.Invoke(() => previewLabel.Text = translation);
+
+                var colour = funkyColours.MakeFunkyColour(modelLabel.ForeColor, sharedRandom);
+                messageFlower1.Invoke(() => messageFlower1.AddParagraph($"{translation}\n\n", colour));
+            }
+            catch (Exception ex)
+            {
+                this.Invoke(() => errorLabel.Text = $"\n\n{ex.Message}\n\n");
+            }
         }
+
         private void hideButton_Click(object sender, EventArgs e)
             => this.WindowState = FormWindowState.Minimized;
     }
-
 }

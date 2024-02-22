@@ -44,11 +44,11 @@ namespace SpeechToTranslated
             }
         }
 
-        public void TranslateWords(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords)
+        public void TranslateWords(bool isFinalParagraph, bool isAddTo, ulong offset, string englishWords, int sharedRandom)
         {
             try
             {
-                namedPipeServerWriter.EncodeTranslationMessage(isFinalParagraph, isAddTo, offset, englishWords);
+                namedPipeServerWriter.EncodeTranslationMessage(isFinalParagraph, isAddTo, offset, englishWords, sharedRandom);
             }
             catch (Exception e)
             {

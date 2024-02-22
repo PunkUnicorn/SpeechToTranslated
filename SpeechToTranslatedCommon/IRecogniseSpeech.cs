@@ -21,7 +21,7 @@
         public delegate void SentanceReadyHandler(WordsEventArgs args);
     }
 
-    public interface ISpeechToText
+    public interface IRecogniseSpeech
     {
         Task RunSpeechToTextForeverAsync();
         event WordsEventArgs.WordsReadyHandler WordsReady;

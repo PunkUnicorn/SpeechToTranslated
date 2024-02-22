@@ -50,7 +50,7 @@ namespace TranslateWordsConsole
                 Console.WriteLine();
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words, out var isIncremental, out var isFinalParagraph, out var offset);
+                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words, out var isIncremental, out var isFinalParagraph, out var offset, out int sharedRandom);
 
                     if (!isTranslationMessage)
                     {
@@ -74,7 +74,7 @@ namespace TranslateWordsConsole
 
                         if (isFinalParagraph)
                         {
-                            UpdateFinalParagraph(words, translation);
+                            UpdateFinalParagraph(words, translation, sharedRandom);
                         }
                         else
                         {
@@ -125,11 +125,11 @@ namespace TranslateWordsConsole
             WordWrapWrite(translation, previewColour);
         }
 
-        private static void UpdateFinalParagraph(string words, string translation)
+        private static void UpdateFinalParagraph(string words, string translation, int sharedRandom)
         {
             SetupConsoleToOverwriteWords();
 
-            WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour, FunkyColours.GetWordsSeed(words)));
+            WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour, sharedRandom));
             Console.WriteLine("".PadLeft(Console.WindowWidth - Console.CursorLeft));
 
             Console.WriteLine("".PadLeft(Console.WindowWidth));

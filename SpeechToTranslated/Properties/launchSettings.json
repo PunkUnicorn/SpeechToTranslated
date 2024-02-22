@@ -2,7 +2,7 @@
   "profiles": {
     "SpeechToTranslated": {
       "commandName": "Project",
-      "commandLineArgs": "en pl es bg"
+      "commandLineArgs": "en pl bg es --force-console"
     }
   }
 }
