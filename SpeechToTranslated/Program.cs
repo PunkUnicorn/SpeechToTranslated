@@ -6,8 +6,9 @@ class Program
 {
     async static Task Main(string[] args)
     {
-        var outputLanguages = args.Where(a => !a.StartsWith("--")).Length > 0
-            ? args.Where(a => !a.StartsWith("--")).ToArray()
+        var languageArgs = args.Where(a => !a.StartsWith("--"));
+        var outputLanguages = languageArgs.Any()
+            ? languageArgs.ToArray()
             : new[] { "en-GB" };
 
         var forceConsole = args.Length > 0
