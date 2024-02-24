@@ -33,13 +33,11 @@ namespace SpeechToTranslatedCommon
             var g = Max(50, Min(255, wildcardG * colourAdd + gVal + random.Next(127) - 65));
             var b = Max(50, Min(255, wildcardB * colourAdd + bVal + random.Next(127) - 65));
 
-            var sum = r + g + b;
             var list = new[] {r, g, b};
             while ((list.Count(n => n>=80) < 2) || list.Count(n => n>=110) == 0)
             {
                 r = Max(50, Min(255, r + random.Next(100)));
                 g = Max(50, Min(255, g + random.Next(100)));
-                sum = r + g + b;
                 list = new[] { r, g, b };
             }
 
@@ -48,14 +46,13 @@ namespace SpeechToTranslatedCommon
 
             var group1 = new[] { r, g, b };
             var group2 = new[] { previous.R, previous.G, previous.B };
-            var diffs = group1.Zip(group2, (one, two) => Abs(Max(one, two) - Min(one, two)));
+            var diffs = group1.Zip(group2, (one, two) => Max(one, two) - Min(one, two));
 
             var tooCloseToThePreviousColour = diffs.Sum() < 70;
             if (tooCloseToThePreviousColour)
                 return MakeFunkyColour(@base);
 
-            previous = FromArgb(aVal, r, g, b);
-            return previous;
+            return previous = FromArgb(aVal, r, g, b);
         }
     }
 }

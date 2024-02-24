@@ -22,7 +22,6 @@ namespace TranslateWordsGui
                 var screen = new Bitmap(this.Size.Width, this.Size.Height);
 
                 Graphics g = Graphics.FromImage(screen);
-
                 g.SmoothingMode = SmoothingMode.AntiAlias;
                 g.InterpolationMode = InterpolationMode.HighQualityBicubic;
                 g.PixelOffsetMode = PixelOffsetMode.HighQuality;

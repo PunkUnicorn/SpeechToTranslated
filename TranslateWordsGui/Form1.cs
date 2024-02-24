@@ -30,12 +30,12 @@ namespace TranslateWordsGui
             splitContainer1.SplitterDistance = splitContainer1.Height;
             numericUpDown1.Value = (decimal)modelLabel.Font.Size;
             numericUpDown1.DecimalPlaces = 1;
-            numericUpDown1.Increment = 0.5m;
+            numericUpDown1.Increment = 0.1m;
             numericUpDown1.ValueChanged += NumericUpDown1_ValueChanged;
 
             previewNumericUpDown2.Value = (decimal)previewLabel.Font.Size;
             previewNumericUpDown2.DecimalPlaces = 1;
-            previewNumericUpDown2.Increment = 0.5m;
+            previewNumericUpDown2.Increment = 0.1m;
             previewNumericUpDown2.ValueChanged += PreviewNumericUpDown1_ValueChanged;
 
             forcedRestartButton.Click += ControlsButton1_Click;
@@ -84,8 +84,9 @@ namespace TranslateWordsGui
 
         private async void Form1_Load(object sender, EventArgs e)
         {
-            if ((Program.Args?.Length ?? 0) == 0) throw new ArgumentException("Need parameter of the language code e.g. es");
-            languageCode = Program.Args?[0] ?? throw new ArgumentException("Need parameter of the language code e.g. es");
+            var paramException = new ArgumentException("Need parameter of at least one language code e.g. es");
+            if ((Program.Args?.Length ?? 0) == 0) throw paramException;
+            languageCode = Program.Args?[0] ?? throw paramException;
 
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
             translatorHelper = new TranslatorHelper(appConfig, languageCode);
@@ -141,10 +142,10 @@ namespace TranslateWordsGui
                         }
                         else
                         {
-                            if (!isIncremental)
-                                UpdateAbsolute(words, translation);
-                            else
+                            if (isIncremental)
                                 UpdateIncremental(words, translation);
+                            else
+                                UpdateAbsolute(words, translation);
                         }
 
                         saveWords = translation;

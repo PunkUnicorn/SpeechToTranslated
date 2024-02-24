@@ -80,12 +80,25 @@ namespace SpeechToTranslated
                 ? $"TranslateWordsConsole.{ext}"
                 : "TranslateWordsGui.exe";
 
-            var psi = new ProcessStartInfo(program)
+            ProcessStartInfo psi;
+            if (OperatingSystem.IsWindows())
+            { 
+                psi = new ProcessStartInfo(program)
+                {
+                    UseShellExecute = true,
+                    WorkingDirectory = Directory.GetCurrentDirectory(),
+                    Arguments = $"{languageCode}"
+                };
+            }
+            else
             {
-                UseShellExecute = true,
-                WorkingDirectory = Directory.GetCurrentDirectory(),
-                Arguments = $"{languageCode}"
-            };
+                psi = new ProcessStartInfo("dotnet")
+                {
+                    UseShellExecute = true,
+                    WorkingDirectory = Directory.GetCurrentDirectory(),
+                    Arguments = $"{program} {languageCode}"
+                };
+            }
             process = new Process { StartInfo = psi };
             process.Start();
         }

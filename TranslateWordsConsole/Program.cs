@@ -74,7 +74,7 @@ namespace TranslateWordsConsole
 
                         if (isFinalParagraph)
                         {
-                            UpdateFinalParagraph(words, translation, sharedRandom);
+                            UpdateFinalParagraph(translation, sharedRandom);
                         }
                         else
                         {
@@ -125,7 +125,7 @@ namespace TranslateWordsConsole
             WordWrapWrite(translation, previewColour);
         }
 
-        private static void UpdateFinalParagraph(string words, string translation, int sharedRandom)
+        private static void UpdateFinalParagraph(string translation, int sharedRandom)
         {
             SetupConsoleToOverwriteWords();
 
@@ -136,7 +136,7 @@ namespace TranslateWordsConsole
             nextFreeLine = Console.CursorTop;
         }
 
-        private static void WordWrapWrite(string translation, Color color, Func<string, string>? pastelFunc=null)
+        private static void WordWrapWrite(string translation, Color color)
         {
             foreach (var word in translation.Split())
             {
@@ -147,7 +147,7 @@ namespace TranslateWordsConsole
                 if (Console.CursorLeft > 0 && word.Length > 0 && !word.StartsWith(" "))
                     Console.Write(" ");
 
-                Console.Write(pastelFunc?.Invoke(word) ?? word.Pastel(color));
+                Console.Write( word.Pastel(color));
 
             }
 

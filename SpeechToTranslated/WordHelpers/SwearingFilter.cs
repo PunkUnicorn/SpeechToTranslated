@@ -11,13 +11,14 @@ namespace SpeechToTranslatedCommon.WordHelpers
 
         public SwearingFilter()
         {
+            const string swearwordFilterFilename = "Swearwords.txt";
             // https://www.indy100.com/viral/british-swear-word-ranked-offensiveness-2659905092
-            FilterWords = File.Exists("Swearwords.txt")
-                ? File.ReadAllText("Swearwords.txt")
+            FilterWords = File.Exists(swearwordFilterFilename)
+                ? File.ReadAllText(swearwordFilterFilename)
                     .Split(new[] { ' ', '\n' }, StringSplitOptions.RemoveEmptyEntries)
                     .Select(word => word.Trim().ToLower())
                     .ToArray()
-                : throw new InvalidProgramException("No swear filter detected.");
+                : throw new InvalidProgramException($"No swear filter file: '{Path.Combine(Directory.GetCurrentDirectory(), swearwordFilterFilename)}'.");
 
             FilterWords = FilterWords.Where(w => w.Length > 0).ToArray();
             FilterWords = FilterWords.Union(FilterWords).OrderBy(ob => ob.Length).ToArray(); /*de-dup hack*/

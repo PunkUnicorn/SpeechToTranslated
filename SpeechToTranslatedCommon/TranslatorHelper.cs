@@ -35,7 +35,6 @@ namespace TranslateWordsProcess
             if (outputLanguage.StartsWith("en"))
                 return words;
 
-            return words;
             TextResult? result = null;
             var text = await memoryCache.GetOrCreateAsync<string>(words.GetHashCode(), async (c) => 
                 { 
