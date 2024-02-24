@@ -6,7 +6,7 @@ class Program
 {
     async static Task Main(string[] args)
     {
-        var outputLanguages = args.Length > 0
+        var outputLanguages = args.Where(a => !a.StartsWith("--")).Length > 0
             ? args.Where(a => !a.StartsWith("--")).ToArray()
             : new[] { "en-GB" };
 
