@@ -21,6 +21,7 @@ namespace SpeechToTranslatedCommon
             colourAdd += 50;
             if (colourAdd > 200)
                 colourAdd = 0;
+
             byte[] bytes = BitConverter.GetBytes(@base.ToArgb());
             byte aVal = bytes[0];
             byte rVal = bytes[1];
@@ -33,6 +34,7 @@ namespace SpeechToTranslatedCommon
             var g = Max(50, Min(255, wildcardG * colourAdd + gVal + random.Next(127) - 65));
             var b = Max(50, Min(255, wildcardB * colourAdd + bVal + random.Next(127) - 65));
 
+            // Pump up the brightness if it's too dark
             var list = new[] {r, g, b};
             while ((list.Count(n => n>=80) < 2) || list.Count(n => n>=110) == 0)
             {
@@ -44,6 +46,7 @@ namespace SpeechToTranslatedCommon
             if (previous == Empty)
                 return previous = FromArgb(aVal, r, g, b);
 
+            // Ensure this is different enough from the previous
             var group1 = new[] { r, g, b };
             var group2 = new[] { previous.R, previous.G, previous.B };
             var diffs = group1.Zip(group2, (one, two) => Max(one, two) - Min(one, two));

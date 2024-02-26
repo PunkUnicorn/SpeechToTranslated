@@ -11,6 +11,7 @@ namespace TranslateWordsProcess
         private readonly Translator translator;
         private readonly bool deepLLog;
         private readonly int cacheExpireMinutes;
+        private readonly string inputLanguage;
         private readonly MemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions { });
 
         private readonly string outputLanguage;
@@ -22,6 +23,7 @@ namespace TranslateWordsProcess
             translator = new Translator(appConfig["translate.deepl.key"] ?? throw new InvalidOperationException("Unable to find translate.deepl.key."));
             deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
             cacheExpireMinutes = int.Parse(appConfig["translate.cache.expiretimeminutes"] ?? "10");
+            inputLanguage = appConfig["speechtotext.input.language"] ?? LanguageCode.English;
         }
 
         public async Task<string> TranslateWordsAsync(string words)
@@ -41,20 +43,20 @@ namespace TranslateWordsProcess
                     c.SetSlidingExpiration(TimeSpan.FromMinutes(cacheExpireMinutes));
                     result = await translator.TranslateTextAsync(
                                     words,
-                                    LanguageCode.English,
+                                    inputLanguage,
                                     outputLanguage);
 
                     return result.Text;
                 });
 
-                if (deepLLog)
-                { 
-                    object dump = result is null
-                        ? new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, IsCached = true }
-                        : new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, Result = result };
+            if (deepLLog)
+            { 
+                object dump = result is null
+                    ? new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, IsCached = true }
+                    : new { Date = DateTime.Now.ToLongDateString(), Time = DateTime.Now.ToLongTimeString(), Input = words, Result = result };
 
-                    File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
-                }
+                File.AppendAllText($"{logpath}deepl_{outputLanguage}.log", $",{JsonConvert.SerializeObject(dump, Formatting.Indented)}");
+            }
 
             return text!;
         }
