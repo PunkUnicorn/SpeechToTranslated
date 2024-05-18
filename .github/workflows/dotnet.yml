@@ -39,8 +39,6 @@ jobs:
       run: dotnet publish SpeechToTranslated/SpeechToTranslated.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
     - name: Publish Linux
       run: dotnet publish TranslateWordsConsole/TranslateWordsConsole.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
-    - name: Publish Linux
-      run: dotnet publish TranslateWordsGui/TranslateWordsGui.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
     
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
