@@ -146,7 +146,7 @@
     <div class="flag_selector container header">
         <ul id="flags">
         </ul>
-        <ul id="fontsize" class="panel"><li><div style='color: white; font-size: larger;' class="btn"><strong>+BIG</strong></div></li><li><div class="btn" style='color: white; margin-left: 40px;'>-small</div></li></ul>
+        <ul id="fontsize" class="panel"><li><div id="bigger" style='color: white;' class="btn">+BIG</div></li><li><div id="smaller" class="btn" style='color: white; margin-left: 40px;'>-small</div></li></ul>
     </div>
     <div id="translation" class="container translation">
     </div>
@@ -182,6 +182,18 @@
                 $(".translation_panel:not(" + translationId + ")").hide();
             });
 
+            $('#bigger').on("click", function () {
+                const sizeTry = $('.translation_panel').css('fontSize');
+                if (sizeTry.length == 0) return;
+                const newSize = parseInt(sizeTry.replace("px", "")) + 5;
+                $('.translation_panel').css('fontSize', newSize.toString()+"px");
+            });
+            $('#smaller').on("click", function () {
+                const sizeTry = $('.translation_panel').css('fontSize');
+                if (sizeTry.length == 0) return;
+                const newSize = parseInt(sizeTry.replace("px", "")) - 5;
+                $('.translation_panel').css('fontSize', newSize.toString()+"px");
+            });
             // Start the SignalR connection.
             var connection = new signalR.HubConnectionBuilder()
                 .withUrl('/chat')
