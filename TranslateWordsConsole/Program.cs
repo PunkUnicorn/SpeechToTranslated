@@ -17,6 +17,7 @@ namespace TranslateWordsConsole
         private static Color baseColour = Color.FromArgb(160, 160, 160);
         private static FunkyColours funkyColours = new FunkyColours();
         private static Color previewColour = Color.FromArgb(0, 100, 100, 100);
+        private static BroadcastHelper broadcastHelper;
 
         // send the colour code only
         // send the recieved time
@@ -35,6 +36,7 @@ namespace TranslateWordsConsole
             Console.OutputEncoding = Encoding.UTF8;
             Console.Title = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
 
+            broadcastHelper = new BroadcastHelper(appConfig, languageCode);
 
             using var client = new NamedPipeClientStream(".", string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.In);
 
@@ -126,13 +128,13 @@ namespace TranslateWordsConsole
 
         private static void UpdateIncremental(string words, string translation)
         {
-            BroadcastHelper.BroadcastIncremental(words, translation);
+            broadcastHelper.BroadcastIncremental(words, translation);
             WordWrapWrite(translation, previewColour);
         }
 
         private static void UpdateAbsolute(string words, string translation)
         {
-            BroadcastHelper.BroadcastAbsolute(words, translation);
+            broadcastHelper.BroadcastAbsolute(words, translation);
 
             SetupConsoleToOverwriteWords();
 
@@ -142,7 +144,7 @@ namespace TranslateWordsConsole
         private static void UpdateFinalParagraph(string translation, int sharedRandom)
         {
             var colour = funkyColours.MakeFunkyColour(baseColour, sharedRandom);
-            BroadcastHelper.BroadcastFinalParagraph(translation, colour);
+            broadcastHelper.BroadcastFinalParagraph(translation, colour);
 
             SetupConsoleToOverwriteWords();
 

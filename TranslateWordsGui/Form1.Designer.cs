@@ -28,7 +28,6 @@
         /// </summary>
         private void InitializeComponent()
         {
-            System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(Form1));
             splitContainer1 = new SplitContainer();
             splitContainer2 = new SplitContainer();
             messageFlower1 = new MessageFlower();
@@ -138,10 +137,10 @@
             // modelLabel
             // 
             modelLabel.AutoSize = true;
-            modelLabel.Font = new Font("Segoe UI", 11.25F, FontStyle.Regular, GraphicsUnit.Point);
+            modelLabel.Font = new Font("Segoe UI", 15.75F, FontStyle.Regular, GraphicsUnit.Point);
             modelLabel.Location = new Point(6, 37);
             modelLabel.Name = "modelLabel";
-            modelLabel.Size = new Size(88, 20);
+            modelLabel.Size = new Size(120, 30);
             modelLabel.TabIndex = 11;
             modelLabel.Text = "modelLabel";
             modelLabel.Visible = false;
