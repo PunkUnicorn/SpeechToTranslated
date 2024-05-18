@@ -10,7 +10,7 @@ namespace SpeechToTranslated
     {
         private Process process;
         private NamedPipeServerStream namedPipeServer;
-        private MessageStreamer namedPipeServerWriter;
+        private InterProcessMessageStreamer namedPipeServerWriter;
         private readonly string languageCode;
         private readonly bool forceConsole;
 
@@ -109,7 +109,7 @@ namespace SpeechToTranslated
                 namedPipeServer.Close();
 
             namedPipeServer = new NamedPipeServerStream(string.Format(NamedMemoryPipe.PipeNameFormatString, languageCode), PipeDirection.Out);
-            namedPipeServerWriter = new MessageStreamer(namedPipeServer);
+            namedPipeServerWriter = new InterProcessMessageStreamer(namedPipeServer);
             Console.WriteLine($"Waiting for client connection for {languageCode}...");
             namedPipeServer.WaitForConnection();
             Console.WriteLine($"Client connected for {languageCode}.");

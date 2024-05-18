@@ -10,13 +10,13 @@ namespace SpeechToTranslatedCommon
 
     // https://learn.microsoft.com/en-us/dotnet/standard/io/how-to-use-named-pipes-for-network-interprocess-communication
     // Defines the data protocol for reading and writing strings on our stream.
-    public class MessageStreamer
+    public class InterProcessMessageStreamer
     {
         private Stream ioStream;
         private UnicodeEncoding streamEncoding;
         private static Regex offsetRegex = new Regex("^([i|f|p]):offset:(\\d*):([-|0-9]\\d*):(.*)$", RegexOptions.Compiled);
 
-        public MessageStreamer(Stream ioStream)
+        public InterProcessMessageStreamer(Stream ioStream)
         {
             this.ioStream = ioStream;
             streamEncoding = new UnicodeEncoding();

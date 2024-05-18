@@ -1,0 +1,240 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>SignalR Simple Chat</title>
+    <style type="text/css">
+
+/*        .pulse {
+            animation: pulse-animation 2s infinite;
+        }
+
+        @keyframes pulse-animation {
+            0% {
+                box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
+            }
+
+            100% {
+                box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
+            }
+        }*/
+
+        body {
+            background-color: #000000;
+            text-align: left;
+            margin: 0; /*full width of content*/
+            padding: 0;
+            font-family: "Open Sans";
+            font-size: 60px;
+            color: #808080;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        .mainwidth {
+            margin: 0% 5%;
+            overflow: hidden;
+            padding: 0% 20px;
+        }
+
+        .header {
+            margin: 0px;
+            padding: 0px;
+        }
+
+        .panel {
+            background-color: #191919;
+            position: sticky; /*removes element from normal flow*/
+            width: 100%; /*reset width*/
+            top: 0px; /*prevent logowrapper from hiding underneath panel*/
+            height: 5%;
+            display: flow;
+        }
+
+        .translation {
+            position: fixed;
+            top: 5%;
+            height: 95%;
+            overflow: hidden;
+            scrollbar-width: thin;
+            display: flow;
+        }
+
+        .panel ul {
+            list-style: none;
+            padding: 0px;
+            margin: 0px;
+            float: right;
+            overflow: hidden;
+        }
+
+        .panel li {
+            display: flow;
+      /*      display: block;*/
+            float: right;
+            margin: 0px;
+            padding: 0px;
+            width: fit-content;
+        }
+
+        .panel a {
+            display: inline;
+            /*      display: block;*/
+            color: inherit;
+            text-decoration: none;
+            padding: 10px;
+            margin: 0px;
+        }
+
+        .flag_selector_item:hover {
+            background-color: #323232;
+            cursor: pointer;
+            width: fit-content;
+        }
+
+/*        .logowrapper {
+            padding-top: 35px;
+            hack to shift out of panel background-color: #0A2F52;
+        }*/
+
+        ul {
+            list-style-type: none;
+            margin: 0;
+            padding: 0;
+            display: flow;
+            /*        float: right;*/
+        }
+
+        .btn {
+            border: 2px solid yellow;
+            width: fit-content;
+            float: right;
+            display: flow;
+        }
+
+        .btn:hover {
+            background-color: #323232;
+            cursor: pointer;
+        }
+
+        /*.container {
+            background-color: black;*/
+            /*border: thick solid #808080;*/
+            /*padding: 1px;
+            margin: 1px;
+        }*/
+
+/*        body {
+            font-family: "Open Sans";
+            color: #808080;
+            -webkit-font-smoothing: antialiased;
+        }
+*/
+        .active {
+            transform: scaleZ(1.5);
+        }
+
+        .flag_selector_item {
+            float: left;
+            width: fit-content;
+            display: flow;
+        }
+    </style>
+    <link rel="stylesheet" href="pulse.css" />
+    <script src="jquery.3.7.1.min.js"></script>
+    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous"> -->
+</head>
+<body>
+    <div class="flag_selector container header">
+        <ul id="flags">
+        </ul>
+        <ul id="fontsize" class="panel"><li><div style='color: white; font-size: larger;' class="btn"><strong>+BIG</strong></div></li><li><div class="btn" style='color: white; margin-left: 40px;'>-small</div></li></ul>
+    </div>
+    <div id="translation" class="container translation">
+    </div>
+    <!--Script references. -->
+    <!--Reference the SignalR library. -->
+    <script type="text/javascript" src="lib/signalr.min.js"></script>
+    <!--Add script to update the page and send messages.-->
+    <script type="text/javascript">
+
+        const languageMap = new Map();
+
+        languageMap.set('en', 'English');
+        languageMap.set('es', 'Español');
+        languageMap.set('bg', 'български');
+        languageMap.set('ro', 'Română');
+        languageMap.set('pl', 'Polski');
+
+        function getFlagEmoji(countryCode) {
+            const codePoints = countryCode
+                .toUpperCase()
+                .split('')
+                .map(char => 127397 + char.charCodeAt());
+            return String.fromCodePoint(...codePoints);
+        }
+
+        document.addEventListener('DOMContentLoaded', function () {
+
+            $('.flag_selector').on("click", ".flag_selector_item", function () {
+                $(this).addClass('active').siblings().removeClass('active');
+                $('.pulse').removeClass('pulse');
+                const translationId = '#translation_' + $('.active')[0].id.split('flag_')[1];
+                $(translationId).show();
+                $(".translation_panel:not(" + translationId + ")").hide();
+            });
+
+            // Start the SignalR connection.
+            var connection = new signalR.HubConnectionBuilder()
+                .withUrl('/chat')
+                .build();
+
+            // Create a function that the SignalR hub can call to broadcast messages.
+            connection.on('translation', function (countryCode, messageJson) {
+
+                const useCode = countryCode.split('-');
+                const message = JSON.parse(messageJson);
+                const colour = message.colour;
+                if (!document.getElementById('flag_' + useCode.join('_'))) {
+
+                    const translationUlElement = document.createElement('ul');
+                    translationUlElement.id = 'translation_' + useCode.join('_');
+                    translationUlElement.style = 'display:none;';
+                    translationUlElement.classList.add('translation_panel');
+                    document.getElementById('translation').appendChild(translationUlElement);
+
+                    const flagLiElement = document.createElement('li');
+                    //flagLiElement.id = 'flag_' + useCode.join('_');
+                    flagLiElement.innerHTML = `<div id=${'flag_' + useCode.join('_')} class="flag_selector_item btn">${languageMap.get(useCode[0])}</div>`;
+                    document.getElementById('flags').appendChild(flagLiElement);
+                }
+                // Html encode display name and message.
+                var encodedName = countryCode;
+                var encodedMsg = message.translation;
+                // Add the message to the page.
+                var liElement = document.createElement('li');
+                liElement.innerHTML = `<p style="color:${colour};">${encodedName}:&nbsp;&nbsp;${encodedMsg}</p>`;
+                document.getElementById('translation_' + useCode.join('_')).appendChild(liElement);
+
+                liElement.scrollIntoView();
+            });
+
+            // Transport fallback functionality is now built into start.
+            connection.start()
+                //    .then(function () {
+                //        console.log('connection started');
+                //        document.getElementById('sendmessage').addEventListener('click', function (event) {
+                //            // Call the Send method on the hub.
+                //            connection.invoke('send', name, messageInput.value);
+
+                //            // Clear text box and reset focus for next comment.
+                //            messageInput.value = '';
+                //            messageInput.focus();
+                //            event.preventDefault();
+                //        });
+                //})
+                .catch(error => {
+                    console.error(error.message);
+                });
+        });
+    </script>
+</body>
+</html>

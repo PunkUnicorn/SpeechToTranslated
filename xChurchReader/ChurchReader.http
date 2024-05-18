@@ -1,0 +1,6 @@
+@ChurchReader_HostAddress = http://localhost:5275
+
+GET {{ChurchReader_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###

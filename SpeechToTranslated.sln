@@ -17,6 +17,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TranslateWordsConsole", "Tr
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "TestColours", "TestColours\TestColours.csproj", "{EAD07BD3-C2EF-4D32-A5DE-E82D200EB6AE}"
 EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "ChurchReaderWebsite", "ChurchReaderWebsite\ChurchReaderWebsite.csproj", "{00427494-3E92-4799-9F55-4072293939FE}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -69,6 +71,14 @@ Global
 		{EAD07BD3-C2EF-4D32-A5DE-E82D200EB6AE}.DebugLinux|Any CPU.Build.0 = DebugLinux|Any CPU
 		{EAD07BD3-C2EF-4D32-A5DE-E82D200EB6AE}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EAD07BD3-C2EF-4D32-A5DE-E82D200EB6AE}.ReleaseLinux|Any CPU.ActiveCfg = Debug|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.DebugLinux|Any CPU.ActiveCfg = Debug|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.DebugLinux|Any CPU.Build.0 = Debug|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.ReleaseLinux|Any CPU.ActiveCfg = Release|Any CPU
+		{00427494-3E92-4799-9F55-4072293939FE}.ReleaseLinux|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -3,6 +3,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
+using TranslateWordsConsole;
 using TranslateWordsProcess;
 
 namespace TranslateWordsGui
@@ -22,6 +23,7 @@ namespace TranslateWordsGui
         private string languageCode;
         private Task listenerTask;
         private FunkyColours funkyColours = new FunkyColours();
+        private BroadcastHelper broadcastHelper;
 
         public Form1()
         {
@@ -90,10 +92,14 @@ namespace TranslateWordsGui
 
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
             translatorHelper = new TranslatorHelper(appConfig, languageCode);
+            broadcastHelper = new BroadcastHelper(appConfig, languageCode);
+            if (broadcastHelper.IsBroadcastService)
+                await broadcastHelper.WakeupAsync();
 
             this.Text = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
 
             listenerTask = Task.Factory.StartNew(() => BackgroundWorker1_DoWork(null, null!));
+
         }
 
         private async Task BackgroundWorker1_DoWork(object sender, System.ComponentModel.DoWorkEventArgs e)
@@ -107,7 +113,7 @@ namespace TranslateWordsGui
             try
             {
                 // Read data through the pipe
-                var ss = new MessageStreamer(client);
+                var ss = new InterProcessMessageStreamer(client);
 
                 string GetTicks()
                     => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);
@@ -116,7 +122,7 @@ namespace TranslateWordsGui
 
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset, out int sharedRandom);
+                    var isTranslationMessage = InterProcessMessageStreamer.DecodeTranslationMessage(message, out var words,out var isIncremental, out var isFinalParagraph, out var offset, out int sharedRandom);
 
                     if (!isTranslationMessage)
                     {
@@ -163,7 +169,7 @@ namespace TranslateWordsGui
 
         private bool ProcessLayoutMessage(string message)
         {
-            if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
+            if (!InterProcessMessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
 
             var sc = Screen.GetWorkingArea(this);
@@ -202,12 +208,17 @@ namespace TranslateWordsGui
 
         private void UpdateFinalParagraph(string words, string translation, int sharedRandom)
         {
+
             try
             {
                 debugPreviewLabel.Invoke(() => debugPreviewLabel.Text = words);
                 previewLabel.Invoke(() => previewLabel.Text = translation);
 
                 var colour = funkyColours.MakeFunkyColour(modelLabel.ForeColor, sharedRandom);
+
+                if (broadcastHelper.IsBroadcastService)
+                    broadcastHelper.BroadcastFinalParagraph(translation, colour);
+
                 messageFlower1.Invoke(() => messageFlower1.AddParagraph($"{translation}\n\n", colour));
             }
             catch (Exception ex)

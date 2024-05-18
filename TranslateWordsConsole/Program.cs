@@ -4,6 +4,7 @@ using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
+using System.Threading.Tasks.Dataflow;
 using TranslateWordsProcess;
 
 namespace TranslateWordsConsole
@@ -16,6 +17,11 @@ namespace TranslateWordsConsole
         private static Color baseColour = Color.FromArgb(160, 160, 160);
         private static FunkyColours funkyColours = new FunkyColours();
         private static Color previewColour = Color.FromArgb(0, 100, 100, 100);
+
+        // send the colour code only
+        // send the recieved time
+        // use a message queue?
+        // client renders with signalR?
 
         static async Task Main(string[] args)
         {
@@ -40,7 +46,7 @@ namespace TranslateWordsConsole
             try
             {
                 // Read data through the pipe
-                var ss = new MessageStreamer(client);
+                var ss = new InterProcessMessageStreamer(client);
 
                 string GetTicks()
                     => new String(DateTime.Now.Ticks.ToString().Reverse().ToArray()).Substring(0, 5);
@@ -50,7 +56,12 @@ namespace TranslateWordsConsole
                 Console.WriteLine();
                 for (var message = ss.ReadString(); true; message = ss.ReadString())
                 {
-                    var isTranslationMessage = MessageStreamer.DecodeTranslationMessage(message, out var words, out var isIncremental, out var isFinalParagraph, out var offset, out int sharedRandom);
+                    var isTranslationMessage = InterProcessMessageStreamer.DecodeTranslationMessage(message, 
+                        out var words, 
+                        out var isIncremental, 
+                        out var isFinalParagraph, 
+                        out var offset,
+                        out int sharedRandom);
 
                     if (!isTranslationMessage)
                     {
@@ -101,7 +112,7 @@ namespace TranslateWordsConsole
 
         private static bool ProcessLayoutMessage(string message)
         {
-            if (!MessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
+            if (!InterProcessMessageStreamer.DecodeLayoutMessage(message, out var count, out var index))
                 return false;
 
             if (OperatingSystem.IsWindows())
@@ -115,11 +126,14 @@ namespace TranslateWordsConsole
 
         private static void UpdateIncremental(string words, string translation)
         {
+            BroadcastHelper.BroadcastIncremental(words, translation);
             WordWrapWrite(translation, previewColour);
         }
 
         private static void UpdateAbsolute(string words, string translation)
         {
+            BroadcastHelper.BroadcastAbsolute(words, translation);
+
             SetupConsoleToOverwriteWords();
 
             WordWrapWrite(translation, previewColour);
@@ -127,9 +141,12 @@ namespace TranslateWordsConsole
 
         private static void UpdateFinalParagraph(string translation, int sharedRandom)
         {
+            var colour = funkyColours.MakeFunkyColour(baseColour, sharedRandom);
+            BroadcastHelper.BroadcastFinalParagraph(translation, colour);
+
             SetupConsoleToOverwriteWords();
 
-            WordWrapWrite(translation, funkyColours.MakeFunkyColour(baseColour, sharedRandom));
+            WordWrapWrite(translation, colour);
             Console.WriteLine("".PadLeft(Console.WindowWidth - Console.CursorLeft));
 
             Console.WriteLine("".PadLeft(Console.WindowWidth));
