@@ -27,10 +27,19 @@ jobs:
       run: dotnet build --no-restore -c Release
     - name: Test
       run: dotnet test -c Release --no-build
+
     - name: Publish 
-      run: dotnet publish -r win-x64 --self-contained -c Release --output ./Publish
+      run: dotnet publish SpeechToTranslated/SpeechToTranslated.csproj -r win-x64 --self-contained -c Release --output ./Publish
+    - name: Publish 
+      run: dotnet publish TranslateWordsConsole/TranslateWordsConsole.csproj -r win-x64 --self-contained -c Release --output ./Publish
+    - name: Publish 
+      run: dotnet publish TranslateWordsGui/TranslateWordsGui.csproj -r win-x64 --self-contained -c Release --output ./Publish
+
     - name: Publish Linux
-      run: dotnet publish -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
+      run: dotnet publish SpeechToTranslated/SpeechToTranslated.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
+    - name: Publish Linux
+      run: dotnet publish TranslateWordsConsole/TranslateWordsConsole.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
+    
     - name: Upload build artifacts
       uses: actions/upload-artifact@v3
       with:
