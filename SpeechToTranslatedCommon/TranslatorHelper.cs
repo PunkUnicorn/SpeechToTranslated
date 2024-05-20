@@ -23,7 +23,7 @@ namespace TranslateWordsProcess
             translator = new Translator(appConfig["translate.deepl.key"] ?? throw new InvalidOperationException("Unable to find translate.deepl.key."));
             deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
             cacheExpireMinutes = int.Parse(appConfig["translate.cache.expiretimeminutes"] ?? "10");
-            inputLanguage = appConfig["speechtotext.input.language"] ?? LanguageCode.English;
+            inputLanguage = "en"; //appConfig["speechtotext.input.language"] ?? LanguageCode.English;
         }
 
         public async Task<string> TranslateWordsAsync(string words)

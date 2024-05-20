@@ -23,7 +23,7 @@
             text-align: left;
             margin: 0; /*full width of content*/
             padding: 0;
-            font-family: "Open Sans";
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 60px;
             color: #808080;
             -webkit-font-smoothing: antialiased;
@@ -38,6 +38,7 @@
         .header {
             margin: 0px;
             padding: 0px;
+            z-index: 1;
         }
 
         .panel {
@@ -45,17 +46,23 @@
             position: sticky; /*removes element from normal flow*/
             width: 100%; /*reset width*/
             top: 0px; /*prevent logowrapper from hiding underneath panel*/
-            height: 5%;
+            height: 8%;
             display: flow;
         }
 
         .translation {
             position: fixed;
-            top: 5%;
+            top: 96px;
             height: 95%;
             overflow: hidden;
             scrollbar-width: thin;
             display: flow;
+            z-index: 0;
+        }
+
+        p {
+            padding-left: 5px;
+            padding-bottom: 5px;
         }
 
         .panel ul {
@@ -104,10 +111,12 @@
         }
 
         .btn {
+            background-color: black;
             border: 2px solid yellow;
             width: fit-content;
             float: right;
             display: flow;
+            z-index: 1;
         }
 
         .btn:hover {
@@ -136,9 +145,34 @@
             float: left;
             width: fit-content;
             display: flow;
+            margin-top: 5px;
+            margin-left: 15px;
         }
+
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+
+            25% {
+                transform: scale(1.5);
+            }
+
+            100% {
+                transform: scale(1);
+            }
+        }
+
+        .pulse {
+/*            width: 100px;
+            height: 100px;*/
+/*            background-color: #3498db;*/
+/*            border-radius: 50%;
+*/            animation: pulse 1s infinite;
+        }
+
     </style>
-    <link rel="stylesheet" href="pulse.css" />
+    <!--<link rel="stylesheet" href="pulse.css" />-->
     <script src="jquery.3.7.1.min.js"></script>
     <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous"> -->
 </head>
@@ -146,7 +180,7 @@
     <div class="flag_selector container header">
         <ul id="flags">
         </ul>
-        <ul id="fontsize" class="panel"><li><div id="bigger" style='color: white;' class="btn">+BIG</div></li><li><div id="smaller" class="btn" style='color: white; margin-left: 40px;'>-small</div></li></ul>
+        <ul id="fontsize" class="panel"><li><a id="bigger" style='color: white;' class="btn">+BIG</a></li><li><a id="smaller" class="btn" style='color: white; margin-left: 40px;'>-small</a></li></ul>
     </div>
     <div id="translation" class="container translation">
     </div>
@@ -180,20 +214,24 @@
                 const translationId = '#translation_' + $('.active')[0].id.split('flag_')[1];
                 $(translationId).show();
                 $(".translation_panel:not(" + translationId + ")").hide();
+                $(".flag_selector_item:not(.active)").hide();                
             });
 
             $('#bigger').on("click", function () {
                 const sizeTry = $('.translation_panel').css('fontSize');
                 if (sizeTry.length == 0) return;
                 const newSize = parseInt(sizeTry.replace("px", "")) + 5;
-                $('.translation_panel').css('fontSize', newSize.toString()+"px");
+                $('.translation_panel').css('fontSize', newSize.toString() + "px");
             });
+
             $('#smaller').on("click", function () {
                 const sizeTry = $('.translation_panel').css('fontSize');
                 if (sizeTry.length == 0) return;
                 const newSize = parseInt(sizeTry.replace("px", "")) - 5;
-                $('.translation_panel').css('fontSize', newSize.toString()+"px");
+                $('.translation_panel').css('fontSize', newSize.toString() + "px");
+                $('#translation li:last').scrollIntoView();
             });
+
             // Start the SignalR connection.
             var connection = new signalR.HubConnectionBuilder()
                 .withUrl('/chat')
@@ -215,7 +253,7 @@
 
                     const flagLiElement = document.createElement('li');
                     //flagLiElement.id = 'flag_' + useCode.join('_');
-                    flagLiElement.innerHTML = `<div id=${'flag_' + useCode.join('_')} class="flag_selector_item btn">${languageMap.get(useCode[0])}</div>`;
+                    flagLiElement.innerHTML = `<a id=${'flag_' + useCode.join('_')} class="flag_selector_item btn pulse">${languageMap.get(useCode[0])}</a>`;
                     document.getElementById('flags').appendChild(flagLiElement);
                 }
                 // Html encode display name and message.
@@ -223,7 +261,8 @@
                 var encodedMsg = message.translation;
                 // Add the message to the page.
                 var liElement = document.createElement('li');
-                liElement.innerHTML = `<p style="color:${colour};">${encodedName}:&nbsp;&nbsp;${encodedMsg}</p>`;
+                //liElement.innerHTML = `<p style="color:${colour};">${encodedName}:&nbsp;&nbsp;${encodedMsg}</p>`;
+                liElement.innerHTML = `<p style="color:${colour};">${encodedMsg}</p>`;
                 document.getElementById('translation_' + useCode.join('_')).appendChild(liElement);
 
                 liElement.scrollIntoView();
