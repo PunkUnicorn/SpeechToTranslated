@@ -50,7 +50,17 @@ namespace TranslateWordsGui
                 testTimer.Interval = 1000;
                 testTimer.Tick += TestTimer_Tick;
                 testTimer.Start();
+
+                var testTimer2 = new System.Windows.Forms.Timer();
+                testTimer2.Interval = 200;
+                testTimer2.Tick += TestTimer2_Tick;
+                testTimer2.Start();
             }
+        }
+
+        private void TestTimer2_Tick(object sender, EventArgs e)
+        {
+            UpdateIncremental("blah", "blah");
         }
 
         private void TestTimer_Tick(object sender, EventArgs e)
@@ -186,6 +196,9 @@ namespace TranslateWordsGui
             {
                 previewLabel.Invoke(() => previewLabel.Text += translation);
                 debugPreviewLabel.Invoke(() => debugPreviewLabel.Text += words);
+
+                if (broadcastHelper.IsBroadcastService)
+                    broadcastHelper.BroadcastIncremental(words, translation);
             }
             catch (Exception ex)
             {
@@ -199,6 +212,9 @@ namespace TranslateWordsGui
             {
                 previewLabel.Invoke(() => previewLabel.Text = translation);
                 debugPreviewLabel.Invoke(() => debugPreviewLabel.Text = words);
+
+                if (broadcastHelper.IsBroadcastService)
+                    broadcastHelper.BroadcastAbsolute(words, translation);
             }
             catch (Exception ex)
             {

@@ -184,6 +184,8 @@
     </div>
     <div id="translation" class="container translation">
     </div>
+    <div id="realtime" class="container header">        
+    </div>
     <!--Script references. -->
     <!--Reference the SignalR library. -->
     <script type="text/javascript" src="lib/signalr.min.js"></script>
@@ -214,7 +216,7 @@
                 const translationId = '#translation_' + $('.active')[0].id.split('flag_')[1];
                 $(translationId).show();
                 $(".translation_panel:not(" + translationId + ")").hide();
-                $(".flag_selector_item:not(.active)").hide();                
+                $(".flag_selector_item:not(.active)").hide();
             });
 
             $('#bigger').on("click", function () {
@@ -237,12 +239,7 @@
                 .withUrl('/chat')
                 .build();
 
-            // Create a function that the SignalR hub can call to broadcast messages.
-            connection.on('translation', function (countryCode, messageJson) {
-
-                const useCode = countryCode.split('-');
-                const message = JSON.parse(messageJson);
-                const colour = message.colour;
+            var updatePageFunc = function (useCode, message, colour) {
                 if (!document.getElementById('flag_' + useCode.join('_'))) {
 
                     const translationUlElement = document.createElement('ul');
@@ -266,25 +263,44 @@
                 document.getElementById('translation_' + useCode.join('_')).appendChild(liElement);
 
                 liElement.scrollIntoView();
+            };
+
+            var connectionFunc = function (countryCode, messageJson) {
+                const useCode = countryCode.split('-');
+                const message = JSON.parse(messageJson);
+                const colour = message.colour;
+                updatePageFunc(useCode, message, colour);
+            };
+
+            // Create a function that the SignalR hub can call to broadcast messages.
+            connection.on('translation', function (countryCode, messageJson) {
+                connectionFunc(countryCode, messageJson);
+            });
+
+            connection.on('translation2', function (countryCode, messageJson) {
+                connectionFunc(countryCode, messageJson);
+            });
+
+            // Create a function that the SignalR hub can call to broadcast messages.
+            connection.on('incremental', function (countryCode, words) {
+                updatePageFunc(useCode, message, "lightgrey");
+            });
+
+            // Create a function that the SignalR hub can call to broadcast messages.
+            connection.on('incremental', function (countryCode, words) {
+                updatePageFunc(useCode, message, "lightgrey");
             });
 
             // Transport fallback functionality is now built into start.
             connection.start()
-                //    .then(function () {
-                //        console.log('connection started');
-                //        document.getElementById('sendmessage').addEventListener('click', function (event) {
-                //            // Call the Send method on the hub.
-                //            connection.invoke('send', name, messageInput.value);
-
-                //            // Clear text box and reset focus for next comment.
-                //            messageInput.value = '';
-                //            messageInput.focus();
-                //            event.preventDefault();
-                //        });
-                //})
+                .then(function () {
+                    console.log('connection started');
+                    var codes = connection.invoke('hello');
+                    console.log(codes);
+                })
                 .catch(error => {
                     console.error(error.message);
-                });
+                })
         });
     </script>
 </body>

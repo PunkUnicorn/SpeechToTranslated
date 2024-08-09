@@ -8,6 +8,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Text;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace ChurchSpeechToTranslated
@@ -46,6 +47,12 @@ namespace ChurchSpeechToTranslated
                 translationSubProcesses.Add(new TranslationSubProcess(language, forceConsole));
 
             outputter = new ConsoleOutputAgainstOffset();
+
+            new Timer(delegate(object sender) 
+            {
+                foreach (var proc in translationSubProcesses)
+                    proc.LayoutShift(translationSubProcesses.Count, translationSubProcesses.IndexOf(proc) + 1);
+            }, null, TimeSpan.FromSeconds(15), Timeout.InfiniteTimeSpan);
         }
 
         private void SpeechToText_SentanceReady(WordsEventArgs args)
