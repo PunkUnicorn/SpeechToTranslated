@@ -24,6 +24,9 @@
     public interface IRecogniseSpeech
     {
         Task RunSpeechToTextForeverAsync();
+        Task RestartSpeechToTextAsync();
+        Task RunSpeechToTextAsync();
+
         event WordsEventArgs.WordsReadyHandler WordsReady;
         event WordsEventArgs.SentanceReadyHandler SentanceReady;
     }
