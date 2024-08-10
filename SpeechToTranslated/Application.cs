@@ -130,8 +130,8 @@ namespace ChurchSpeechToTranslated
 
             while (true)
             {
-                const int TenSecondsMs = 5*1000;
-                if (Inactivity.ElapsedMilliseconds > TenSecondsMs)
+                const int FiveSecondsMs = 5*1000;
+                if (Inactivity.ElapsedMilliseconds > FiveSecondsMs)
                 { 
                     await speechToText.RestartSpeechToTextAsync();
                     Inactivity.Restart();
