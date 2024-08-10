@@ -132,9 +132,11 @@ namespace ChurchSpeechToTranslated
             {
                 const int TenSecondsMs = 5*1000;
                 if (Inactivity.ElapsedMilliseconds > TenSecondsMs)
+                { 
                     await speechToText.RestartSpeechToTextAsync();
-
-                Thread.Sleep(1000);
+                    Inactivity.Restart();
+                }
+                Thread.Sleep(0);
             }
         }
 
