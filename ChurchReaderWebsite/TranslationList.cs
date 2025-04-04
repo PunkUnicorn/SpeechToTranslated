@@ -4,8 +4,8 @@ using System.Linq;
 
 namespace ChatSample
 {
-    public class TranslationList : ConcurrentDictionary<string, string>, ITranslationList
+    public class TranslationList : List<string>, ITranslationList
     {
-        public List<string> Translations { get => ToArray().Select(s => s.Key).ToList(); }
+        public List<string> Translations { get => this; }
     }
 }

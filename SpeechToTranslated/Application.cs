@@ -5,6 +5,7 @@ using SpeechToTranslated.WordHelpers;
 using SpeechToTranslatedCommon;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -25,6 +26,7 @@ namespace ChurchSpeechToTranslated
         private const string version = "0.0.0.9";
         private readonly IOutputStuffAgainstOffset outputter;
         private readonly List<TranslationSubProcess> translationSubProcesses = new List<TranslationSubProcess>();
+        private Stopwatch Inactivity = new Stopwatch();
         public const string logpath = ".\\Logs\\";
 
         public Application(string[] outputLanguages, bool forceConsole)
@@ -53,12 +55,17 @@ namespace ChurchSpeechToTranslated
                 foreach (var proc in translationSubProcesses)
                     proc.LayoutShift(translationSubProcesses.Count, translationSubProcesses.IndexOf(proc) + 1);
             }, null, TimeSpan.FromSeconds(15), Timeout.InfiniteTimeSpan);
+
+            Inactivity.Start();
         }
 
         private void SpeechToText_SentanceReady(WordsEventArgs args)
         {
             var words = args.Words;
             consicrationHelper.Consicrate(ref words);
+
+            if (words.Length > 0) 
+                Inactivity.Restart();
 
             OutputWords(true, false, args.Offset, words);
             File.AppendAllText($"{logpath}{englishFilename}", $"{words}\n\n");
@@ -71,6 +78,8 @@ namespace ChurchSpeechToTranslated
 
             if (!EvenWorthBothering(words))
                 return;
+
+            Inactivity.Restart();
 
             OutputWords(false, args.IsAddTo, args.Offset, words);
         }
@@ -120,9 +129,22 @@ namespace ChurchSpeechToTranslated
                                 break;
                         }
                     }
+                    Thread.Sleep(0);
                 }
             });
-            await speechToText.RunSpeechToTextForeverAsync();
+
+            await speechToText.RunSpeechToTextAsync();
+
+            while (true)
+            {
+                const int FiveSecondsMs = 5*1000;
+                if (Inactivity.ElapsedMilliseconds > FiveSecondsMs)
+                { 
+                    await speechToText.RestartSpeechToTextAsync();
+                    Inactivity.Restart();
+                }
+                Thread.Sleep(0);
+            }
         }
 
         private bool EvenWorthBothering(string words)

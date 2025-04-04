@@ -40,12 +40,13 @@ namespace TranslateWordsGui
             previewNumericUpDown2.Increment = 0.1m;
             previewNumericUpDown2.ValueChanged += PreviewNumericUpDown1_ValueChanged;
 
-            forcedRestartButton.Click += ControlsButton1_Click;
+            forcedRestartButton.Click += forcedRestartButton_Click;
 
             messageFlower1.Font = modelLabel.Font;
 
             if (Program.Args.Contains("test"))
             {
+                Program.Args = string.Join(" ", Program.Args).Replace("test", "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 var testTimer = new System.Windows.Forms.Timer();
                 testTimer.Interval = 1000;
                 testTimer.Tick += TestTimer_Tick;
@@ -60,7 +61,8 @@ namespace TranslateWordsGui
 
         private void TestTimer2_Tick(object sender, EventArgs e)
         {
-            UpdateIncremental("blah", "blah");
+            var blah = $"Blah {new Random().Next(10)+1} {"#".PadRight('#')}";
+            UpdateIncremental(blah, blah);
         }
 
         private void TestTimer_Tick(object sender, EventArgs e)
@@ -76,7 +78,7 @@ namespace TranslateWordsGui
             UpdateFinalParagraph("", sb.ToString(), new Random().Next(int.MinValue, int.MaxValue));
         }
 
-        private void ControlsButton1_Click(object sender, EventArgs e) => Close();
+        private void forcedRestartButton_Click(object sender, EventArgs e) => Close();
 
         private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
         {

@@ -3,26 +3,41 @@
 <head>
     <title>SignalR Simple Chat</title>
     <style type="text/css">
-
-/*        .pulse {
-            animation: pulse-animation 2s infinite;
+        html, body {
+            top: 0;
+            width: 100%;
+            height: 100%;
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-size: 60px;
         }
 
-        @keyframes pulse-animation {
-            0% {
-                box-shadow: 0 0 0 0px rgba(0, 0, 0, 0.2);
-            }
+        .top {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            height: 100px;
+            background: yellow;
+        }
 
-            100% {
-                box-shadow: 0 0 0 20px rgba(0, 0, 0, 0);
-            }
-        }*/
+        .bottom {
+            position: fixed;
+            bottom: 0;
+            width: 100%;
+            height: 300px;
+            background: grey;
+        }
 
-        body {
+        .middle {
+            padding-top: 100px;
+            padding-bottom: 300px
+        }
+        /*body {
             background-color: #000000;
             text-align: left;
-            margin: 0; /*full width of content*/
-            padding: 0;
+            margin: 0;*/ /*full width of content*/
+            /*padding: 0;
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             font-size: 60px;
             color: #808080;
@@ -43,10 +58,10 @@
 
         .panel {
             background-color: #191919;
-            position: sticky; /*removes element from normal flow*/
-            width: 100%; /*reset width*/
-            top: 0px; /*prevent logowrapper from hiding underneath panel*/
-            height: 8%;
+            position: sticky;*/ /*removes element from normal flow*/
+            /*width: 100%;*/ /*reset width*/
+            /*top: 0px;*/ /*prevent logowrapper from hiding underneath panel*/
+            /*height: 8%;
             display: flow;
         }
 
@@ -75,7 +90,6 @@
 
         .panel li {
             display: flow;
-      /*      display: block;*/
             float: right;
             margin: 0px;
             padding: 0px;
@@ -84,12 +98,11 @@
 
         .panel a {
             display: inline;
-            /*      display: block;*/
             color: inherit;
             text-decoration: none;
             padding: 10px;
             margin: 0px;
-        }
+        }*/
 
         .flag_selector_item:hover {
             background-color: #323232;
@@ -97,21 +110,16 @@
             width: fit-content;
         }
 
-/*        .logowrapper {
-            padding-top: 35px;
-            hack to shift out of panel background-color: #0A2F52;
-        }*/
-
         ul {
             list-style-type: none;
             margin: 0;
             padding: 0;
             display: flow;
-            /*        float: right;*/
         }
 
         .btn {
-            background-color: black;
+            background-color: dimgrey;
+            color: white;
             border: 2px solid yellow;
             width: fit-content;
             float: right;
@@ -124,19 +132,6 @@
             cursor: pointer;
         }
 
-        /*.container {
-            background-color: black;*/
-            /*border: thick solid #808080;*/
-            /*padding: 1px;
-            margin: 1px;
-        }*/
-
-/*        body {
-            font-family: "Open Sans";
-            color: #808080;
-            -webkit-font-smoothing: antialiased;
-        }
-*/
         .active {
             transform: scaleZ(1.5);
         }
@@ -164,27 +159,25 @@
         }
 
         .pulse {
-/*            width: 100px;
-            height: 100px;*/
-/*            background-color: #3498db;*/
-/*            border-radius: 50%;
-*/            animation: pulse 1s infinite;
+            animation: pulse 1s infinite;
         }
 
     </style>
-    <!--<link rel="stylesheet" href="pulse.css" />-->
     <script src="jquery.3.7.1.min.js"></script>
-    <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.2/css/fontawesome.min.css" integrity="sha384-BY+fdrpOd3gfeRvTSMT+VUZmA728cfF9Z2G42xpaRkUGu2i3DyzpTURDo5A6CaLK" crossorigin="anonymous"> -->
-</head>
+ </head>
 <body>
-    <div class="flag_selector container header">
+    <!--<div class="flag_selector container header">-->
+    <div class="flag_selector container top">
         <ul id="flags">
         </ul>
         <ul id="fontsize" class="panel"><li><a id="bigger" style='color: white;' class="btn">+BIG</a></li><li><a id="smaller" class="btn" style='color: white; margin-left: 40px;'>-small</a></li></ul>
     </div>
-    <div id="translation" class="container translation">
+    <!--<div id="translation" class="container translation">-->
+    <div id="translation" class="container middle">
     </div>
-    <div id="realtime" class="container header">        
+    <!--<div id="realtime" class="container header">-->        
+    <div id="realtime" class="container bottom">
+        <p id="realtime_sentance"></p>
     </div>
     <!--Script references. -->
     <!--Reference the SignalR library. -->
@@ -213,10 +206,13 @@
             $('.flag_selector').on("click", ".flag_selector_item", function () {
                 $(this).addClass('active').siblings().removeClass('active');
                 $('.pulse').removeClass('pulse');
-                const translationId = '#translation_' + $('.active')[0].id.split('flag_')[1];
+                const countryCode = $('.active')[0].id.split('flag_')[1];
+                const translationId = '#translation_' + countryCode;
                 $(translationId).show();
                 $(".translation_panel:not(" + translationId + ")").hide();
                 $(".flag_selector_item:not(.active)").hide();
+
+                connection.invoke('iwanttranslationsfor', countryCode.replace('_', '-'));
             });
 
             $('#bigger').on("click", function () {
@@ -224,6 +220,8 @@
                 if (sizeTry.length == 0) return;
                 const newSize = parseInt(sizeTry.replace("px", "")) + 5;
                 $('.translation_panel').css('fontSize', newSize.toString() + "px");
+                $('.realtime').css('fontSize', newSize.toString() + "px");
+                $('#translation li:last').scrollIntoView();
             });
 
             $('#smaller').on("click", function () {
@@ -231,7 +229,9 @@
                 if (sizeTry.length == 0) return;
                 const newSize = parseInt(sizeTry.replace("px", "")) - 5;
                 $('.translation_panel').css('fontSize', newSize.toString() + "px");
-                $('#translation li:last').scrollIntoView();
+                $('.realtime').css('fontSize', newSize.toString() + "px");
+                //$('#translation li:last').scrollIntoView();
+                //$('#translation li:last').scrollIntoView();
             });
 
             // Start the SignalR connection.
@@ -239,64 +239,107 @@
                 .withUrl('/chat')
                 .build();
 
-            var updatePageFunc = function (useCode, message, colour) {
-                if (!document.getElementById('flag_' + useCode.join('_'))) {
+            var updatePageFunc = function (countryCode, messageJson, colour) {
+                const message = JSON.parse(messageJson);
+                if (typeof colour == 'undefined')
+                    colour = message.colour;
 
-                    const translationUlElement = document.createElement('ul');
-                    translationUlElement.id = 'translation_' + useCode.join('_');
-                    translationUlElement.style = 'display:none;';
-                    translationUlElement.classList.add('translation_panel');
-                    document.getElementById('translation').appendChild(translationUlElement);
+                //if (!document.getElementById('flag_' + useCode.join('_'))) {
 
-                    const flagLiElement = document.createElement('li');
-                    //flagLiElement.id = 'flag_' + useCode.join('_');
-                    flagLiElement.innerHTML = `<a id=${'flag_' + useCode.join('_')} class="flag_selector_item btn pulse">${languageMap.get(useCode[0])}</a>`;
-                    document.getElementById('flags').appendChild(flagLiElement);
-                }
+                //    const translationUlElement = document.createElement('ul');
+                //    translationUlElement.id = 'translation_' + useCode.join('_');
+                //    translationUlElement.style = 'display:none;';
+                //    translationUlElement.classList.add('translation_panel');
+                //    document.getElementById('translation').appendChild(translationUlElement);
+
+                //    const flagLiElement = document.createElement('li');
+                //    //flagLiElement.id = 'flag_' + useCode.join('_');
+                //    flagLiElement.innerHTML = `<a id=${'flag_' + useCode.join('_')} class="flag_selector_item btn pulse">${languageMap.get(useCode[0])}</a>`;
+                //    document.getElementById('flags').appendChild(flagLiElement);
+                //}
                 // Html encode display name and message.
-                var encodedName = countryCode;
                 var encodedMsg = message.translation;
                 // Add the message to the page.
                 var liElement = document.createElement('li');
-                //liElement.innerHTML = `<p style="color:${colour};">${encodedName}:&nbsp;&nbsp;${encodedMsg}</p>`;
                 liElement.innerHTML = `<p style="color:${colour};">${encodedMsg}</p>`;
+                const useCode = countryCode.split('-');
                 document.getElementById('translation_' + useCode.join('_')).appendChild(liElement);
 
                 liElement.scrollIntoView();
+
+                document.getElementById('realtime_sentance').innerHTML="";
             };
 
-            var connectionFunc = function (countryCode, messageJson) {
-                const useCode = countryCode.split('-');
+            var updateIncrementalFunc = function (countryCode, messageJson, colour) {
                 const message = JSON.parse(messageJson);
-                const colour = message.colour;
-                updatePageFunc(useCode, message, colour);
+                if (typeof colour == 'undefined')
+                    colour = message.colour;
+
+                // Html encode display name and message.
+                var encodedMsg = message.translation;
+                // Add the message to the page.
+                var realtimeSentance = document.getElementById('realtime_sentance');
+                realtimeSentance.innerHTML = realtimeSentance.innerHTML + ' ' + `<span style="color:${colour};">${encodedMsg}</span>`;
+                const useCode = countryCode.split('-');
             };
+
+            //var connectionFunc = function (countryCode, messageJson) {
+            //    //const useCode = countryCode.split('-');
+            //    const message = JSON.parse(messageJson);
+            //    const colour = message.colour;
+            //    updatePageFunc(countryCode, message, colour);
+            //};
+
+
+            connection.on('languages', function (languages) {
+                languages.forEach(function (rawCode, i, a) {
+                    const useCode = rawCode.split('-');
+                    if (!document.getElementById('flag_' + useCode.join('_'))) {
+
+                        const translationUlElement = document.createElement('ul');
+                        translationUlElement.id = 'translation_' + useCode.join('_');
+                        translationUlElement.style = 'display:none;';
+                        translationUlElement.classList.add('translation_panel');
+                        document.getElementById('translation').appendChild(translationUlElement);
+
+                        const flagLiElement = document.createElement('li');
+                        //flagLiElement.id = 'flag_' + useCode.join('_');
+                        flagLiElement.innerHTML = `<a id=${'flag_' + useCode.join('_')} class="flag_selector_item btn pulse">${languageMap.get(useCode[0])}</a>`;
+                        document.getElementById('flags').appendChild(flagLiElement);
+                    }
+                });
+            });
 
             // Create a function that the SignalR hub can call to broadcast messages.
             connection.on('translation', function (countryCode, messageJson) {
-                connectionFunc(countryCode, messageJson);
+                //connectionFunc(countryCode, messageJson);
             });
 
             connection.on('translation2', function (countryCode, messageJson) {
-                connectionFunc(countryCode, messageJson);
+                updatePageFunc(countryCode, messageJson);
             });
 
             // Create a function that the SignalR hub can call to broadcast messages.
-            connection.on('incremental', function (countryCode, words) {
-                updatePageFunc(useCode, message, "lightgrey");
-            });
-
-            // Create a function that the SignalR hub can call to broadcast messages.
-            connection.on('incremental', function (countryCode, words) {
-                updatePageFunc(useCode, message, "lightgrey");
+            connection.on('incremental', function (useCode, messageJson) {
+                updateIncrementalFunc(useCode, messageJson, "lightgrey");
             });
 
             // Transport fallback functionality is now built into start.
             connection.start()
                 .then(function () {
                     console.log('connection started');
-                    var codes = connection.invoke('hello');
-                    console.log(codes);
+                    //https://learn.microsoft.com/en-us/aspnet/signalr/overview/guide-to-the-api/hubs-api-guide-javascript-client#callserver
+
+                    //var chatHubProxy = $.connection.ChatHub;
+                    //chatHubProxy.server.hello().done(function (res) { console.log(res); })
+
+                    var codes = connection.invoke('hello')
+                        .then(function (newCodes) {
+                            console.log(newCodes);
+                        })
+                        .catch(error => {
+                            console.error(error.message);
+                        })
                 })
                 .catch(error => {
                     console.error(error.message);
