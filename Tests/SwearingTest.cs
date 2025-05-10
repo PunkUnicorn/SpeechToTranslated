@@ -36,13 +36,13 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AllowsTheWordCock()
+        public void BlocksTheWordCock()
         {
             var sf = new SwearingFilter();
 
             var actual = sf.IsSweary("Cock");
 
-            Assert.IsFalse(actual);
+            Assert.IsTrue(actual);
         }
 
         [TestMethod]
