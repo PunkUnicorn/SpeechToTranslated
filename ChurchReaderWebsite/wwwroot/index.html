@@ -164,7 +164,7 @@
                 const translationId = 'translation_' + useCode.join('_');
                 const scrollIntoViewElements = $('#' + translationId + " > li:last-child");
                 if (scrollIntoViewElements.length > 0)
-                    scrollIntoViewElements[0].scrollIntoView();
+                    scrollIntoViewElements[0].scrollIntoView({ behavior: "smooth" });
             });
 
             $('.flag_selector').on("click", ".flag_selector_item", function () {
