@@ -6,7 +6,7 @@ using System.IO.Pipes;
 
 namespace SpeechToTranslated
 {
-    public class TranslationSubProcess : ITranslate
+    public class TranslationSubProcess
     {
         private Process process;
         private NamedPipeServerStream namedPipeServer;

@@ -31,6 +31,8 @@ namespace ChurchSpeechToTranslated
 
         public Application(string[] outputLanguages, bool forceConsole)
         {
+            Thread.Sleep(15 * 1000);
+
             speechToText = new MicrosoftSpeechToText(config); //new NAudioToGoogleSpeechToText(config); //
             speechToText.WordsReady += SpeechToText_WordsReady;
             speechToText.SentanceReady += SpeechToText_SentanceReady;
