@@ -1,10 +1,9 @@
 using SpeechToTranslatedCommon;
-using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
+using Translate;
 using TranslateWordsConsole;
-using TranslateWordsProcess;
 
 namespace TranslateWordsGui
 {
@@ -18,7 +17,7 @@ namespace TranslateWordsGui
             public string Translation { get; private set; }
         }
 
-        private TranslatorHelper translatorHelper;
+        private TranslateService translatorHelper;
         private NamedPipeClientStream client;
         private string languageCode;
         private Task listenerTask;
@@ -40,19 +39,20 @@ namespace TranslateWordsGui
             previewNumericUpDown2.Increment = 0.1m;
             previewNumericUpDown2.ValueChanged += PreviewNumericUpDown1_ValueChanged;
 
-            forcedRestartButton.Click += ControlsButton1_Click;
+            forcedRestartButton.Click += forcedRestartButton_Click;
 
             messageFlower1.Font = modelLabel.Font;
 
             if (Program.Args.Contains("test"))
             {
+                Program.Args = string.Join(" ", Program.Args).Replace("test", "").Split(' ', StringSplitOptions.RemoveEmptyEntries);
                 var testTimer = new System.Windows.Forms.Timer();
-                testTimer.Interval = 1000;
+                testTimer.Interval = 5600 + new Random().Next(8000);
                 testTimer.Tick += TestTimer_Tick;
                 testTimer.Start();
 
                 var testTimer2 = new System.Windows.Forms.Timer();
-                testTimer2.Interval = 200;
+                testTimer2.Interval = 170+new Random().Next(170);
                 testTimer2.Tick += TestTimer2_Tick;
                 testTimer2.Start();
             }
@@ -60,23 +60,21 @@ namespace TranslateWordsGui
 
         private void TestTimer2_Tick(object sender, EventArgs e)
         {
-            UpdateIncremental("blah", "blah");
+            var blah = $"Blah {"#".PadRight(new Random().Next(10)+1,'#')}";
+            UpdateIncremental(blah, blah);
         }
 
         private void TestTimer_Tick(object sender, EventArgs e)
         {
             var me = (System.Windows.Forms.Timer)sender;
-            var sb = new StringBuilder();
-            for (int i = 0; i < new Random().Next(100); i++)
-                sb.Append($"ipsom lorum {i} ");
 
-            sb.AppendLine();
-            sb.AppendLine();
+            var sb = new StringBuilder();
+            sb.Append(debugPreviewLabel.Text);
 
             UpdateFinalParagraph("", sb.ToString(), new Random().Next(int.MinValue, int.MaxValue));
         }
 
-        private void ControlsButton1_Click(object sender, EventArgs e) => Close();
+        private void forcedRestartButton_Click(object sender, EventArgs e) => Close();
 
         private void NumericUpDown1_ValueChanged(object sender, EventArgs e)
         {
@@ -100,13 +98,16 @@ namespace TranslateWordsGui
             if ((Program.Args?.Length ?? 0) == 0) throw paramException;
             languageCode = Program.Args?[0] ?? throw paramException;
 
+            Thread.Sleep(25 * 1000);
+
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
-            translatorHelper = new TranslatorHelper(appConfig, languageCode);
+            translatorHelper = new TranslateService(appConfig, languageCode);
             broadcastHelper = new BroadcastHelper(appConfig, languageCode);
             if (broadcastHelper.IsBroadcastService)
                 await broadcastHelper.WakeupAsync();
 
-            this.Text = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
+            var translationResult = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
+            this.Text = translationResult.Words;
 
             listenerTask = Task.Factory.StartNew(() => BackgroundWorker1_DoWork(null, null!));
 
@@ -154,21 +155,21 @@ namespace TranslateWordsGui
 
                         if (isFinalParagraph)
                         {
-                            UpdateFinalParagraph(words, translation, sharedRandom);
+                            UpdateFinalParagraph(words, translation.Words, sharedRandom);
                         }
                         else
                         {
                             if (isIncremental)
-                                UpdateIncremental(words, translation);
+                                UpdateIncremental(words, translation.Words);
                             else
-                                UpdateAbsolute(words, translation);
+                                UpdateAbsolute(words, translation.Words);
                         }
 
-                        saveWords = translation;
+                        saveWords = translation.Words;
                     }
 
                     if (isFinalParagraph)
-                        File.AppendAllText(string.Format($"{TranslatorHelper.logpath}{otherLanguageFilenameFormatString}", languageCode), $"{saveWords}\n\n");
+                        File.AppendAllText(string.Format($"{TranslateService.logpath}{otherLanguageFilenameFormatString}", languageCode), $"{saveWords}\n\n");
                 }
             }
             catch (Exception ex)

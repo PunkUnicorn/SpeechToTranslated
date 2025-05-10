@@ -23,7 +23,7 @@ namespace SpeechToTranslated.WordHelpers
              * — Acts 2:4.
              */
 
-            // Speech to text makes speaking in tounges come out as blah blah blah. Technically this makes sense... but is too irreverent, so tweak this.
+            // Speech to text makes speaking in tounges come out as "blah blah blah". Technically this makes sense... but is too irreverent, so tweak this.
             if (word == "blah")
                 if (words.IndexOf("blah") > -1)
                     words = words.Replace("blah", "(utterance)");

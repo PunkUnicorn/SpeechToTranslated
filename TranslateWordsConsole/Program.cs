@@ -4,14 +4,14 @@ using System.Drawing;
 using System.Globalization;
 using System.IO.Pipes;
 using System.Text;
-using System.Threading.Tasks.Dataflow;
+using Translate;
 using TranslateWordsProcess;
 
 namespace TranslateWordsConsole
 {
     internal class Program
     {
-        private static TranslatorHelper? translatorHelper;
+        private static ITranslateService? translateService;
         private static string? languageCode;
         private static int nextFreeLine = 0;
         private static Color baseColour = Color.FromArgb(160, 160, 160);
@@ -30,11 +30,12 @@ namespace TranslateWordsConsole
             languageCode = args?[0] ?? throw new ArgumentException("Need parameter of the language code e.g. es");
 
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
-            translatorHelper = new TranslatorHelper(appConfig, languageCode);
+            translateService = new TranslateService(appConfig, languageCode);
 
             Console.Title = "";
             Console.OutputEncoding = Encoding.UTF8;
-            Console.Title = await translatorHelper.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
+            var result = await translateService.TranslateWordsAsync($"Translation into {new CultureInfo(languageCode).DisplayName}");
+            Console.Title = result.Words;
 
             broadcastHelper = new BroadcastHelper(appConfig, languageCode);
 
@@ -81,9 +82,16 @@ namespace TranslateWordsConsole
                     }
                     else
                     {
-                        var translation = words.Length > 0
-                            ? await translatorHelper.TranslateWordsAsync(words)
-                            : words;
+                        string translation;
+                        if (words.Length > 0)
+                        { 
+                            var translateResult = await translateService.TranslateWordsAsync(words);
+                            translation = translateResult.Words;
+                        }
+                        else
+                        {
+                            translation = words;
+                        }
 
                         if (isFinalParagraph)
                         {
@@ -101,7 +109,7 @@ namespace TranslateWordsConsole
                     }
 
                     if (isFinalParagraph)
-                        File.AppendAllText(string.Format($"{TranslatorHelper.logpath}{otherLanguageFilenameFormatString}", languageCode), $"{saveWords}\n\n");
+                        File.AppendAllText(string.Format($"{TranslateService.logpath}{otherLanguageFilenameFormatString}", languageCode), $"{saveWords}\n\n");
                 }
             }
             catch (Exception ex)
@@ -168,6 +176,12 @@ namespace TranslateWordsConsole
 
                 Console.Write( word.Pastel(color));
 
+                // If the 'Pastel' extension method is not available, you need to install the Pastel NuGet package.
+                // Run the following command in the NuGet Package Manager Console:
+                // Install-Package Pastel -Version 3.0.0
+
+                // Alternatively, if you are using .NET CLI, run:
+                // dotnet add package Pastel --version 3.0.0
             }
 
             var x = Console.CursorLeft;

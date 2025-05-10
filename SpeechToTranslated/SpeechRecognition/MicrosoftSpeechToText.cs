@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 
 namespace SpeechToTranslated.SpeechRecognition
 {
+
     public class MicrosoftSpeechToText : IDisposable, IRecogniseSpeech
     {
         public event WordsEventArgs.WordsReadyHandler WordsReady;
@@ -42,6 +43,26 @@ namespace SpeechToTranslated.SpeechRecognition
             speechConfig.OutputFormat = OutputFormat.Detailed;
 
             return speechConfig;
+        }
+
+        public async Task RunSpeechToTextAsync()
+        {
+            speechRecognizer = new SpeechRecognizer(MakeSpeechConfig(), AudioConfig.FromDefaultMicrophoneInput());
+            speechRecognizer.Recognizing += SpeechRecognizer_Recognizing;
+            speechRecognizer.Recognized += SpeechRecognizer_Recognized;
+
+            await speechRecognizer.StartContinuousRecognitionAsync();
+        }
+
+        public async Task RestartSpeechToTextAsync()
+        {
+            await speechRecognizer.StopContinuousRecognitionAsync();
+
+            speechRecognizer = new SpeechRecognizer(MakeSpeechConfig(), AudioConfig.FromDefaultMicrophoneInput());
+            speechRecognizer.Recognizing += SpeechRecognizer_Recognizing;
+            speechRecognizer.Recognized += SpeechRecognizer_Recognized;
+
+            await speechRecognizer.StartContinuousRecognitionAsync();
         }
 
         public async Task RunSpeechToTextForeverAsync()
