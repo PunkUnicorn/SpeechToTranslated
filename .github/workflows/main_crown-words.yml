@@ -12,22 +12,21 @@ on:
 jobs:
   build:
     runs-on: ubuntu-latest
-    permissions:
-      contents: read #This is required for actions/checkout
 
     steps:
       - uses: actions/checkout@v4
 
       - name: Set up .NET Core
-        uses: actions/setup-dotnet@v4
+        uses: actions/setup-dotnet@v1
         with:
-          dotnet-version: '6.0'
+          dotnet-version: '6.0.x'
+          include-prerelease: true
 
       - name: Build with dotnet
-        run: dotnet build --configuration Release
+        run: dotnet build --configuration Release /target:ChurchReaderWebsite:Rebuild 
 
       - name: dotnet publish
-        run: dotnet publish -c Release -o ${{env.DOTNET_ROOT}}/myapp
+        run: dotnet publish ChurchReaderWebsite/ChurchReaderWebsite.csproj -c Release -o ${{env.DOTNET_ROOT}}/myapp
 
       - name: Upload artifact for deployment job
         uses: actions/upload-artifact@v4
@@ -43,7 +42,6 @@ jobs:
       url: ${{ steps.deploy-to-webapp.outputs.webapp-url }}
     permissions:
       id-token: write #This is required for requesting the JWT
-      contents: read #This is required for actions/checkout
 
     steps:
       - name: Download artifact from build job
@@ -52,15 +50,15 @@ jobs:
           name: .net-app
       
       - name: Login to Azure
-        uses: azure/login@v2
+        uses: azure/login@v1
         with:
-          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_746C3EF787904F35930E94E2ECE656CB }}
-          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_D3BCD1C48B784581B98A9627B65BD2B3 }}
-          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_856DB155DC7E4A9CA8BA987E12C012B3 }}
+          client-id: ${{ secrets.AZUREAPPSERVICE_CLIENTID_5F6A6F15F1034371B8E609F5E3B62BB5 }}
+          tenant-id: ${{ secrets.AZUREAPPSERVICE_TENANTID_08AC32F4E78C4FDBB989175DA495A4A7 }}
+          subscription-id: ${{ secrets.AZUREAPPSERVICE_SUBSCRIPTIONID_2F9E59C5D9BD43A28AA4BAE457C12A8F }}
 
       - name: Deploy to Azure Web App
         id: deploy-to-webapp
-        uses: azure/webapps-deploy@v3
+        uses: azure/webapps-deploy@v2
         with:
           app-name: 'crown-words'
           slot-name: 'Production'
