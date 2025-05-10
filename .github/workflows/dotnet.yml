@@ -40,7 +40,7 @@ jobs:
       run: dotnet publish TranslateWordsConsole/TranslateWordsConsole.csproj -r linux-x64 --self-contained -c ReleaseLinux --output ./PublishLinux
     
     - name: Upload build artifacts
-      uses: actions/upload-artifact@v3
+      uses: actions/upload-artifact@v4
       with:
         name: Build result
         path: ./Publish/
