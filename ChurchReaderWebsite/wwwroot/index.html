@@ -217,7 +217,7 @@
                 document.getElementById(translationId).appendChild(liElement);
 
                 if (liElement && doScroll)
-                    liElement.scrollIntoView();
+                    liElement.scrollIntoView({ behavior: "smooth" });
 
                 document.getElementById('realtime_sentance').innerHTML = "";
             };
