@@ -45,22 +45,33 @@ namespace TranslateWordsConsole
 
         public void BroadcastFinalParagraph(string translation, Color colour)
         {
-            var str = "#" + colour.R.ToString("X2") + colour.G.ToString("X2") + colour.B.ToString("X2");
-            using HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, configuration["online.broadcast.url"]);
-            message.Content = JsonContent.Create(new { translation, colour = str });
+            /// ?????????????????????????????????????????????
+            Task.Factory.StartNew(delegate() { 
+                var str = "#" + colour.R.ToString("X2") + colour.G.ToString("X2") + colour.B.ToString("X2");
+                using HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, configuration["online.broadcast.url"]);
+                message.Content = JsonContent.Create(new { translation, colour = str });
 
-            using HttpContent content = message.Content;
-            var resp = client.PostAsync($"/newtranslation/{countryCode}", content).Result;
+                using HttpContent content = message.Content;
+                var resp = client.PostAsync($"/newtranslation/{countryCode}", content).Result;
+            });
         }
 
         public void BroadcastIncremental(string words, string translation)
         {
+            using HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, configuration["online.broadcast.url"]);
+            message.Content = JsonContent.Create(new { words, translation });
 
+            using HttpContent content = message.Content;
+            var resp = client.PostAsync($"/newincremental/{countryCode}", content).Result;
         }
 
         public void BroadcastAbsolute(string words, string translation)
         {
+            using HttpRequestMessage message = new HttpRequestMessage(HttpMethod.Post, configuration["online.broadcast.url"]);
+            message.Content = JsonContent.Create(new { words, translation });
 
+            using HttpContent content = message.Content;
+            var resp = client.PostAsync($"/newabsolute/{countryCode}", content).Result;
         }
     }
 }

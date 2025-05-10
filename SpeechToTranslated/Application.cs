@@ -49,6 +49,13 @@ namespace ChurchSpeechToTranslated
                 translationSubProcesses.Add(new TranslationSubProcess(language, forceConsole));
 
             outputter = new ConsoleOutputAgainstOffset();
+
+            new Timer(delegate(object sender) 
+            {
+                foreach (var proc in translationSubProcesses)
+                    proc.LayoutShift(translationSubProcesses.Count, translationSubProcesses.IndexOf(proc) + 1);
+            }, null, TimeSpan.FromSeconds(15), Timeout.InfiniteTimeSpan);
+
             Inactivity.Start();
         }
 
