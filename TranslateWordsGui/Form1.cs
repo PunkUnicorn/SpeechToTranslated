@@ -98,8 +98,6 @@ namespace TranslateWordsGui
             if ((Program.Args?.Length ?? 0) == 0) throw paramException;
             languageCode = Program.Args?[0] ?? throw paramException;
 
-            Thread.Sleep(25 * 1000);
-
             var appConfig = ConfigurationLoader.Load() ?? throw new InvalidProgramException("Unable to read appsettings.json");
             translatorHelper = new TranslateService(appConfig, languageCode);
             broadcastHelper = new BroadcastHelper(appConfig, languageCode);

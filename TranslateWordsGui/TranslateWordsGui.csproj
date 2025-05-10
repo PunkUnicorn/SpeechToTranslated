@@ -12,7 +12,6 @@
 
   <ItemGroup>
     <ProjectReference Include="..\SpeechToTranslatedCommon\SpeechToTranslatedCommon.csproj" />
-    <ProjectReference Include="..\SpeechToTranslated\SpeechToTranslated.csproj" />
   </ItemGroup>
 
   <ItemGroup>
