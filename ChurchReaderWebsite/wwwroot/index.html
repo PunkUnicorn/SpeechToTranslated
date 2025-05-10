@@ -162,7 +162,7 @@
                 const countryCode = countryCodeElement[0].id.split('flag_')[1];
                 const useCode = countryCode.split('-');
                 const translationId = 'translation_' + useCode.join('_');
-                const scrollIntoViewElements = $('#' + translationId + ":first-child > li:last-child");
+                const scrollIntoViewElements = $('#' + translationId + " > li:last-child");
                 if (scrollIntoViewElements.length > 0)
                     scrollIntoViewElements[0].scrollIntoView();
             });
