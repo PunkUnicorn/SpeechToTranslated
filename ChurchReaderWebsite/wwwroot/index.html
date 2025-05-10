@@ -185,7 +185,7 @@
                 const newSize = parseInt(sizeTry.replace("px", "")) + 5;
                 $('.translation_panel').css('fontSize', newSize.toString() + "px");
                 $('#realtime').css('fontSize', newSize.toString() + "px");
-                $('#translation li:last').scrollIntoView();
+                $('#translation li:last').scrollIntoView({ behavior: "smooth" });
             });
 
             $('#smaller').on("click", function () {
