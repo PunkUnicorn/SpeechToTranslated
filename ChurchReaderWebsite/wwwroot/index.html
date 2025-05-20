@@ -137,7 +137,7 @@
     <script type="text/javascript">
 
         const languageMap = new Map();
-
+        languageMap.set('en', 'English');
         languageMap.set('en', 'English');
         languageMap.set('es', 'Español');
         languageMap.set('bg', 'български');
@@ -164,7 +164,7 @@
                 const translationId = 'translation_' + useCode.join('_');
                 const scrollIntoViewElements = $('#' + translationId + " > li:last-child");
                 if (scrollIntoViewElements.length > 0)
-                    scrollIntoViewElements[0].scrollIntoView({ behavior: "smooth" });
+                    scrollIntoViewElements[0].scrollIntoView({ behavior: "smooth"});
             });
 
             $('.flag_selector').on("click", ".flag_selector_item", function () {
@@ -211,13 +211,17 @@
                 // Add the message to the page.
                 var liElement = document.createElement('li');
                 liElement.innerHTML = `<p style="color:${colour};">${encodedMsg}</p>`;
-                const doScroll = document.documentElement.scrollTop + document.documentElement.getBoundingClientRect().height + 1 >= document.documentElement.scrollHeight;
+                const doScrollMarginPercent = 2;
+
+                const height = document.documentElement.scrollTop + document.documentElement.getBoundingClientRect().height;
+                const boundry = height / 100 * doScrollMarginPercent;
+                const doScroll = height + boundry >= document.documentElement.scrollHeight;
                 const useCode = countryCode.split('-');
                 const translationId = 'translation_' + useCode.join('_');
                 document.getElementById(translationId).appendChild(liElement);
 
                 if (liElement && doScroll)
-                    liElement.scrollIntoView({ behavior: "smooth" });
+                    liElement.scrollIntoView({ behavior: "smooth"});
 
                 document.getElementById('realtime_sentance').innerHTML = "";
             };

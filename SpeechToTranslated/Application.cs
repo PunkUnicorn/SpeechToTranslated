@@ -40,7 +40,7 @@ namespace ChurchSpeechToTranslated
             Console.WriteLine(File.ReadAllText("OpeningPicture.txt"));
             Console.WriteLine($"Church Translator, version {version}\nConfiguration: {config["configuration_description"]}\nTranslation language: {string.Join(",", outputLanguages)}\n\nListening...");
 
-            Console.WriteLine("\nWarning! Mishears And Then Translates Into Several Other Languages (MATTISOL)");
+            Console.WriteLine("\nWarning! Mishears And Then Translates Into Several Other Languages");
 
             if (!Directory.Exists(logpath))
                 Directory.CreateDirectory(logpath);

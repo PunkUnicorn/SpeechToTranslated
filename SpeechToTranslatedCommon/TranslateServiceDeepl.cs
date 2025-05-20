@@ -7,13 +7,8 @@ namespace Translate
     public class TranslateServiceDeepl : ITranslateService
     {
         private readonly Translator translator;
-        //private readonly bool deepLLog;
-        //private readonly int cacheExpireMinutes;
-        //private readonly string inputLanguage;
-        //private readonly MemoryCache memoryCache = new MemoryCache(new MemoryCacheOptions { });
 
         private readonly string outputLanguage;
-        //public const string logpath = ".\\Logs\\";
 
         private class DeepLTranslateResult : ITranslateResult
         {
@@ -26,9 +21,6 @@ namespace Translate
         {
             this.outputLanguage = outputLanguage;
             translator = new Translator(appConfig["translate.deepl.key"] ?? throw new InvalidOperationException("Unable to find translate.deepl.key."));
-            //deepLLog = bool.Parse(appConfig["translate.log"] ?? false.ToString());
-            //cacheExpireMinutes = int.Parse(appConfig["translate.cache.expiretimeminutes"] ?? "10");
-            //inputLanguage = "en"; //appConfig["speechtotext.input.language"] ?? LanguageCode.English;
         }
 
         public async Task<ITranslateResult> TranslateWordsAsync(string words)

@@ -29,7 +29,7 @@ namespace ChatSample
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env/*, IHubContext<ChatHub> hubContext, ITranslationList translationList, IClientList clientList*/)
         {
             if (env.IsDevelopment())
             {
@@ -45,7 +45,7 @@ namespace ChatSample
                 //https://learn.microsoft.com/en-us/aspnet/core/tutorials/min-web-api?view=aspnetcore-8.0&tabs=visual-studio
                 endpoints.MapPost("/newtranslation/{countryCode}", async delegate(string countryCode, HttpContext context) {
                     Console.WriteLine($"/newtranslation/{countryCode}");
-                   
+
                     var hubContext = (IHubContext<ChatHub>)context.RequestServices.GetService(typeof(IHubContext<ChatHub>));
                     var translationList = (ITranslationList)context.RequestServices.GetService(typeof(ITranslationList));
                     var clientList = (IClientList)context.RequestServices.GetService(typeof(IClientList));
