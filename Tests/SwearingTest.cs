@@ -46,13 +46,13 @@ namespace Tests
         }
 
         [TestMethod]
-        public void AllowsTheWordPussy()
+        public void BlocksTheWordPussy()
         {
             var sf = new SwearingFilter();
 
             var actual = sf.IsSweary("Pussy");
 
-            Assert.IsFalse(actual);
+            Assert.IsTrue(actual);
         }
 
         [TestMethod]
