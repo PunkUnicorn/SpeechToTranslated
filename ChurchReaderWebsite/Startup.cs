@@ -53,8 +53,6 @@ namespace ChatSample
                     using (var stream = new StreamReader(context.Request.Body))
                     {
                         var message =  stream.ReadToEnd();
-                        //await hubContext.Clients.All.SendAsync("translation", countryCode, message);
-                        //var sendResult2 = hubContext.Clients.All.SendAsync("translation2", countryCode, stream.ReadToEnd());
 
                         foreach (var client in clientList.Clients)
                             if (client.Value == countryCode)
@@ -92,9 +90,10 @@ namespace ChatSample
 
                     using (var stream = new StreamReader(context.Request.Body))
                     {
+                        var message = stream.ReadToEnd();
                         foreach (var client in clientList.Clients)
                             if (client.Value == countryCode)
-                                await hubContext.Clients.Client(client.Key).SendAsync("absolute", countryCode, stream.ReadToEnd());
+                                await hubContext.Clients.Client(client.Key).SendAsync("absolute", countryCode, message);
                     }
                 });
                 endpoints.MapGet("/wakeup", delegate (HttpContext context) {
